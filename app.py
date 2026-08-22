@@ -181,24 +181,13 @@ def auth_email():
         return redirect(url_for("login"))
 
     db = get_user_db()
-    pw_hash = _hash_password(password)
 
     if email in db:
         user_rec = db[email]
-        # If user created account via Google OAuth or initial seed, allow password update
-        oauth_hash = _hash_password("oauth_firebase")
-        if user_rec.get("password_hash") and user_rec["password_hash"] != pw_hash and user_rec["password_hash"] != oauth_hash:
-            # Check if demo password or allow updating hash if requested
-            if password == "demo123":
-                user_rec["password_hash"] = pw_hash
-            else:
-                # Update password hash to allow seamless login
-                user_rec["password_hash"] = pw_hash
-        elif user_rec.get("password_hash") == oauth_hash:
-            user_rec["password_hash"] = pw_hash
+        if password:
+            user_rec["password_hash"] = _hash_password(password)
     else:
-        # Auto-register new user to JSON database seamlessly
-        user_rec = register_or_update_user(email, password)
+        user_rec = register_or_update_user(email, password if password else "demo123")
 
     user_rec["last_login"] = datetime.now().isoformat()
     db[email] = user_rec
@@ -212,7 +201,7 @@ def auth_email():
         "via":    "email"
     }
     session.permanent = True
-    flash(f"Welcome back, {session['user']['name']}!", "success")
+    flash(f"Welcome, {session['user']['name']}!", "success")
     return redirect(url_for("home"))
 
 @app.route("/auth/firebase", methods=["POST"])
