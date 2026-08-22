@@ -112,14 +112,21 @@
         <li><a href="{{ url_for('dashboard') }}#chart-peaks"><span class="icon">🔥</span> Peak Periods</a></li>
       </ul>
       <hr class="sidebar-divider"/>
+      <div class="sidebar-section-label">Dataset</div>
+      <ul class="sidebar-nav">
+        <li><a href="{{ url_for('api_export_csv') }}"><span class="icon">📥</span> Export Report CSV</a></li>
+      </ul>
+
+      {% if user and user.role == 'Operator' %}
+      <hr class="sidebar-divider"/>
       <div class="sidebar-section-label">Operator Portal</div>
       <ul class="sidebar-nav">
         <li><a href="{{ url_for('admin_users') }}" class="{{ 'active' if active_page == 'admin_users' else '' }}">
           <span class="icon">👥</span> User Database DB
         </a></li>
         <li><a href="{{ url_for('api_export_users_csv') }}"><span class="icon">📥</span> Export Users CSV</a></li>
-        <li><a href="{{ url_for('api_export_csv') }}"><span class="icon">📥</span> Export Report CSV</a></li>
       </ul>
+      {% endif %}
       <div class="sidebar-bottom">
         {% if user %}
         <div class="sidebar-user">

@@ -396,29 +396,37 @@ def api_export_csv():
 @app.route("/admin/users")
 @login_required
 def admin_users():
+    u = session.get("user", {})
+    if u.get("role") != "Operator":
+        flash("Access restricted to Grid Operators only.", "error")
+        return redirect(url_for("home"))
     db = get_user_db()
     users_list = list(db.values())
     return render_template("users_admin.html",
                            show_sidebar=True,
-                           user=session.get("user"),
+                           user=u,
                            active_page="admin_users",
                            users_list=users_list)
 
 @app.route("/api/export-users-csv")
 @login_required
 def api_export_users_csv():
+    u = session.get("user", {})
+    if u.get("role") != "Operator":
+        flash("Access restricted to Grid Operators only.", "error")
+        return redirect(url_for("home"))
     import csv, io
     db = get_user_db()
     buf = io.StringIO()
     w = csv.DictWriter(buf, fieldnames=["name", "email", "role", "created_at", "last_login"])
     w.writeheader()
-    for u in db.values():
+    for u_rec in db.values():
         w.writerow({
-            "name": u.get("name", ""),
-            "email": u.get("email", ""),
-            "role": u.get("role", "User"),
-            "created_at": u.get("created_at", ""),
-            "last_login": u.get("last_login", "")
+            "name": u_rec.get("name", ""),
+            "email": u_rec.get("email", ""),
+            "role": u_rec.get("role", "User"),
+            "created_at": u_rec.get("created_at", ""),
+            "last_login": u_rec.get("last_login", "")
         })
     return Response(buf.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment;filename=registered_users_database.csv"})
