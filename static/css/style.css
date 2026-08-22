@@ -125,10 +125,17 @@ body::after {
   transition: grid-template-columns 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .layout-sidebar.sidebar-collapsed {
-  grid-template-columns: 0px 1fr;
+  grid-template-columns: 0px 1fr !important;
 }
 .layout-sidebar.sidebar-collapsed .sidebar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+.layout-sidebar.sidebar-collapsed .main-content {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
 }
 
 .btn-sidebar-toggle {
@@ -720,20 +727,27 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 18px rgba(16,1
 .model-status.ready { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:var(--emerald-lt); }
 .model-status.training { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#fbbf24; animation: pulse-live 1.5s infinite; }
 
-/* ── Responsive ── */
+/* ── Responsive Mobile & Laptop Design ── */
 @media (max-width: 1024px) {
   .layout-sidebar { grid-template-columns: 200px 1fr; }
   .charts-row-2 { grid-template-columns: 1fr; }
   .input-grid { grid-template-columns: 1fr 1fr; }
-  .dash-stats { grid-template-columns: repeat(3,1fr); }
+  .dash-stats { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 768px) {
-  .layout-sidebar { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
-  .layout-sidebar .main-content { padding: 1rem; }
-  .input-grid, .input-grid-2 { grid-template-columns: 1fr; }
-  .preset-grid { grid-template-columns: repeat(2,1fr); }
-  .stat-grid-4, .stat-grid-3 { grid-template-columns: repeat(2,1fr); }
-  .peak-windows { grid-template-columns: 1fr; }
-  .dash-stats { grid-template-columns: repeat(2,1fr); }
+  .layout-sidebar { grid-template-columns: 1fr !important; }
+  .sidebar { display: none !important; }
+  .layout-sidebar:not(.sidebar-collapsed) .sidebar {
+    display: flex !important;
+    position: fixed; top: 60px; left: 0; bottom: 0; width: 260px; z-index: 9999;
+    box-shadow: 20px 0 60px rgba(0,0,0,0.9);
+  }
+  .layout-sidebar .main-content { padding: 1rem 0.8rem !important; grid-column: 1 / -1 !important; }
+  .input-grid, .input-grid-2 { grid-template-columns: 1fr !important; }
+  .preset-grid { grid-template-columns: 1fr 1fr !important; }
+  .stat-grid-4, .stat-grid-3 { grid-template-columns: 1fr !important; }
+  .peak-windows { grid-template-columns: 1fr !important; }
+  .dash-stats { grid-template-columns: 1fr !important; }
+  .topbar-sub, .step-bar, .topbar-pill { display: none !important; }
+  .topbar-title { font-size: 0.85rem !important; }
 }
