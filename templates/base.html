@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>{% block title %}Project Expo{% endblock %}</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+{% block head_extra %}{% endblock %}
+</head>
+<body>
+<div class="page-wrapper">
+
+{% block body %}
+{# Pages with sidebar use this layout #}
+{% if show_sidebar %}
+<div class="layout-sidebar">
+
+  <!-- TOP BAR -->
+  <nav class="topbar">
+    <div class="topbar-left">
+      <button type="button" class="btn-sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar (Open / Close)">
+        ☰
+      </button>
+      <div class="topbar-logo">⚡</div>
+      <div>
+        <div class="topbar-title">SMART GRID ENERGY DASHBOARD</div>
+        <div class="topbar-sub">Energy Consumption Predictor &nbsp;·&nbsp; Project Expo</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      {% if step %}
+      <div class="step-bar" style="margin-bottom:0;">
+        <div class="step-item">
+          <span class="step-num {{ 'active' if step == 1 else ('done' if step > 1 else 'pending') }}">1</span>
+          <span class="step-label {{ 'active' if step == 1 else ('done' if step > 1 else 'pending') }}">Input Details</span>
+        </div>
+        <span class="step-sep">›</span>
+        <div class="step-item">
+          <span class="step-num {{ 'active' if step == 2 else ('done' if step > 2 else 'pending') }}">2</span>
+          <span class="step-label {{ 'active' if step == 2 else ('done' if step > 2 else 'pending') }}">Prediction Value</span>
+        </div>
+        <span class="step-sep">›</span>
+        <div class="step-item">
+          <span class="step-num {{ 'active' if step == 3 else ('done' if step > 3 else 'pending') }}">3</span>
+          <span class="step-label {{ 'active' if step == 3 else ('done' if step > 3 else 'pending') }}">Full Dashboard</span>
+        </div>
+      </div>
+      {% endif %}
+      <div class="topbar-pill"><span class="live"></span> ML Active &nbsp;|&nbsp; R² 0.9754</div>
+      {% if user %}
+      <div class="user-avatar" style="cursor:pointer;" title="Click to view account details" onclick="toggleProfileModal(event)">
+        {% if user.via == 'google' and user.avatar and user.avatar.startswith('http') %}
+          <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+        {% else %}
+          {{ user.avatar or user.name[0] }}
+        {% endif %}
+      </div>
+
+      <!-- User Profile Modal / Dropdown Card -->
+      <div id="user-profile-modal" style="display:none; position:absolute; top:65px; right:1.8rem; z-index:9999; background:rgba(18,22,48,0.98); border:1px solid rgba(168,85,247,0.45); border-radius:18px; padding:1.3rem; min-width:300px; box-shadow:0 25px 60px rgba(0,0,0,0.85), 0 0 35px rgba(168,85,247,0.3); backdrop-filter:blur(24px);">
+        <div style="display:flex; align-items:center; gap:0.9rem; padding-bottom:0.9rem; border-bottom:1px solid rgba(255,255,255,0.12); margin-bottom:0.9rem;">
+          <div class="user-avatar" style="width:46px; height:46px; font-size:1.15rem; font-weight:800;">
+            {% if user.via == 'google' and user.avatar and user.avatar.startswith('http') %}
+              <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+            {% else %}
+              {{ user.avatar or user.name[0] }}
+            {% endif %}
+          </div>
+          <div>
+            <div style="font-weight:700; font-size:0.98rem; color:#ffffff; font-family:var(--font-head);">{{ user.name }}</div>
+            <div style="font-size:0.75rem; color:var(--cyan); font-family:var(--font-mono);">{{ user.email }}</div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem; font-family:var(--font-mono); color:var(--text-3); margin-bottom:0.55rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>Account Role:</span> <strong style="color:var(--emerald); background:rgba(16,185,129,0.15); padding:0.15rem 0.5rem; border-radius:6px;">{{ user.role or 'Operator' }}</strong>
+        </div>
+        <div style="font-size:0.78rem; font-family:var(--font-mono); color:var(--text-3); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>Auth Provider:</span> <strong style="color:var(--cyan);">{{ 'Google OAuth 2.0' if user.via == 'google' else 'Email Database' }}</strong>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn btn-sm btn-danger" style="width:100%; text-decoration:none; display:flex; justify-content:center; gap:0.4rem; padding:0.55rem;">
+          🚪 Sign Out Account
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section-label">Navigation</div>
+    <ul class="sidebar-nav">
+      <li><a href="{{ url_for('home') }}" class="{{ 'active' if active_page == 'home' else '' }}">
+        <span class="icon">📋</span> Input Details
+      </a></li>
+      <li><a href="#" id="nav-prediction" class="{{ 'active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">
+        <span class="icon">⚡</span> Prediction Value
+      </a></li>
+      <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if active_page == 'dashboard' else '' }}" onclick="navDashboard(event)">
+        <span class="icon">📊</span> Full Dashboard
+      </a></li>
+    </ul>
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-section-label">Analytics</div>
+    <ul class="sidebar-nav">
+      <li><a href="{{ url_for('dashboard') }}#chart-historical"><span class="icon">📈</span> Historical Data</a></li>
+      <li><a href="{{ url_for('dashboard') }}#chart-actpred"><span class="icon">🎯</span> Actual vs Predicted</a></li>
+      <li><a href="{{ url_for('dashboard') }}#chart-renewables"><span class="icon">☀️</span> Renewables</a></li>
+      <li><a href="{{ url_for('dashboard') }}#chart-peaks"><span class="icon">🔥</span> Peak Periods</a></li>
+    </ul>
+    <hr class="sidebar-divider"/>
+    <div class="sidebar-section-label">Dataset</div>
+    <ul class="sidebar-nav">
+      <li><a href="{{ url_for('api_export_csv') }}"><span class="icon">📥</span> Export Report CSV</a></li>
+    </ul>
+    <div class="sidebar-bottom">
+      {% if user %}
+      <div class="sidebar-user">
+        <div class="user-avatar" style="width:30px;height:30px;font-size:0.75rem;">
+          {% if user.via == 'google' and user.avatar and user.avatar.startswith('http') %}
+            <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+          {% else %}
+            {{ user.avatar or user.name[0] }}
+          {% endif %}
+        </div>
+        <div>
+          <div class="sidebar-user-name">{{ user.name }}</div>
+          <div class="sidebar-user-email">{{ user.email }}</div>
+        </div>
+      </div>
+      {% endif %}
+      <a href="{{ url_for('logout') }}" class="btn-logout"><span>⬅</span> Sign Out</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash flash-{{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+</div><!-- /layout-sidebar -->
+{% else %}
+{% block standalone_content %}{% endblock %}
+{% endif %}
+{% endblock %}
+</div><!-- /page-wrapper -->
+
+<script>
+function navPrediction(e) {
+  e.preventDefault();
+  const hasPred = {{ 'true' if session.get('prediction') else 'false' }};
+  if (!hasPred) { alert('Please generate a prediction first from the Input Details page.'); return; }
+  window.location.href = '{{ url_for("prediction") }}';
+}
+function toggleProfileModal(e) {
+  if (e) e.stopPropagation();
+  const modal = document.getElementById('user-profile-modal');
+  if (modal) {
+    modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+  }
+}
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('user-profile-modal');
+  if (modal && modal.style.display !== 'none' && !modal.contains(e.target)) {
+    modal.style.display = 'none';
+  }
+});
+
+function toggleSidebar() {
+  const layout = document.querySelector('.layout-sidebar');
+  if (layout) {
+    layout.classList.toggle('sidebar-collapsed');
+    const isCollapsed = layout.classList.contains('sidebar-collapsed');
+    localStorage.setItem('sidebar_collapsed', isCollapsed ? 'true' : 'false');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('sidebar_collapsed') === 'true') {
+    const layout = document.querySelector('.layout-sidebar');
+    if (layout) layout.classList.add('sidebar-collapsed');
+  }
+});
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

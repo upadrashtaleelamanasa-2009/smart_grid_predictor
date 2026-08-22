@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% set show_sidebar = true %}
+{% set active_page = 'prediction' %}
+{% set step = 2 %}
+{% block title %}Prediction Result – Project Expo{% endblock %}
+
+{% block content %}
+
+<!-- Back / Nav -->
+<div class="flex-between mb-2">
+  <a href="{{ url_for('home') }}" class="btn btn-ghost btn-sm">← Back to Input</a>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-sm">View Full Dashboard →</a>
+</div>
+
+<!-- ═══ PREDICTION HERO CARD ═══ -->
+<div class="card card-accented mb-2" style="border-color:rgba(16,185,129,0.35);">
+  <!-- Top corners -->
+  <div style="position:absolute;top:0;left:0;width:18px;height:18px;border-top:2px solid #10b981;border-left:2px solid #10b981;border-radius:4px 0 0 0;"></div>
+  <div style="position:absolute;top:0;right:0;width:18px;height:18px;border-top:2px solid #10b981;border-right:2px solid #10b981;border-radius:0 4px 0 0;"></div>
+  <div style="position:absolute;bottom:0;left:0;width:18px;height:18px;border-bottom:2px solid #10b981;border-left:2px solid #10b981;border-radius:0 0 0 4px;"></div>
+  <div style="position:absolute;bottom:0;right:0;width:18px;height:18px;border-bottom:2px solid #10b981;border-right:2px solid #10b981;border-radius:0 0 4px 0;"></div>
+
+  <div class="prediction-hero">
+    <div class="page-tag"><span class="dot"></span> ML ENERGY PREDICTION RESULT</div>
+    <h1 class="h-display grad">Energy Consumption Predictor</h1>
+
+    <!-- Input context pills -->
+    <div class="prediction-pills">
+      <span class="info-pill">📅 {{ from_date }} → {{ to_date }}</span>
+      <span class="info-pill">🕐 {{ '%02d:00'|format(from_hour) }} – {{ '%02d:00'|format(to_hour) }}</span>
+      <span class="info-pill">🌡️ {{ temperature }} °C</span>
+      <span class="info-pill">💧 {{ humidity }} %</span>
+      <span class="info-pill" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3);color:#fbbf24;">
+        {{ r.slot_count }} × 15-min intervals
+      </span>
+    </div>
+
+    <!-- BIG NUMBER -->
+    <div style="margin:1.5rem 0;">
+      <div class="metric-label">Total Predicted Energy Consumption</div>
+      <div class="prediction-kw-row">
+        <span style="font-size:2.5rem;color:var(--emerald);">⚡</span>
+        <span class="metric-hero">{{ r.total_kwh }}</span>
+        <span class="metric-unit">kWh</span>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-3);">
+        Avg {{ r.avg_kw }} kW &nbsp;·&nbsp; Peak {{ r.peak_kw }} kW &nbsp;·&nbsp; Model: {{ r.model_name }}
+      </div>
+    </div>
+
+    <!-- Demand Badge -->
+    <div style="display:flex;justify-content:center;gap:0.8rem;flex-wrap:wrap;">
+      <div class="card-sm" style="display:inline-block;padding:0.7rem 1.2rem;">
+        <div class="label-xs mb-1">Expected Demand Level</div>
+        <span class="badge badge-{{ r.demand.lower().replace(' ','_') }}" style="color:{{ r.color }};background:{{ r.color }}22;border-color:{{ r.color }}66;">{{ r.demand }}</span>
+      </div>
+      <div class="card-sm" style="display:inline-block;padding:0.7rem 1.2rem;">
+        <div class="label-xs mb-1">Grid Stress</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.3rem;color:var(--amber);">
+          {{ ((r.avg_kw / 12.0) * 100)|round(1) }}%
+        </div>
+      </div>
+      <div class="card-sm" style="display:inline-block;padding:0.7rem 1.2rem;">
+        <div class="label-xs mb-1">Model Accuracy</div>
+        <div style="font-family:var(--font-head);font-weight:800;font-size:1.3rem;color:var(--emerald);">
+          {{ (r.model_r2 * 100)|round(1) }}%
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div style="font-size:0.83rem;color:var(--text-3);margin-top:0.8rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.55;">
+      {{ r.desc }}
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STAT ROW ═══ -->
+<div class="stat-grid stat-grid-4 mb-2">
+  <div class="stat-box">
+    <div class="val" style="color:var(--emerald);">{{ r.total_kwh }}</div>
+    <span class="lbl">Total kWh</span>
+    <span class="sub">Full prediction window</span>
+  </div>
+  <div class="stat-box">
+    <div class="val">{{ r.avg_kw }}</div>
+    <span class="lbl">Avg Load (kW)</span>
+    <span class="sub">Per 15-min interval</span>
+  </div>
+  <div class="stat-box">
+    <div class="val" style="color:var(--amber);">{{ r.peak_kw }}</div>
+    <span class="lbl">Peak Load (kW)</span>
+    <span class="sub">Max predicted demand</span>
+  </div>
+  <div class="stat-box">
+    <div class="val">{{ r.slot_count }}</div>
+    <span class="lbl">Time Slots</span>
+    <span class="sub">15-min intervals</span>
+  </div>
+</div>
+
+<!-- ═══ HOURLY BREAKDOWN TABLE ═══ -->
+<div class="card mb-2">
+  <div class="flex-between mb-2">
+    <div>
+      <div class="h-section">📋 Interval-by-Interval Breakdown</div>
+      <div class="label-sm mt-1">Predicted load for every 15-minute slot in the selected window</div>
+    </div>
+    <a href="{{ url_for('api_export_csv') }}" class="btn btn-ghost btn-sm">📥 Export CSV</a>
+  </div>
+  <div style="max-height:380px;overflow-y:auto;">
+    <table class="hourly-table">
+      <thead>
+        <tr>
+          <th>Time Slot</th>
+          <th>Pred. Load (kW)</th>
+          <th>Energy (kWh)</th>
+          <th>Demand Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in r.slots[:96] %}
+        <tr>
+          <td>{{ s.hour_label }}</td>
+          <td style="color:{{ s.color }};font-weight:700;">{{ s.kw }}</td>
+          <td>{{ s.kwh }}</td>
+          <td>
+            <span class="hourly-table .level-dot" style="width:7px;height:7px;border-radius:50%;background:{{ s.color }};display:inline-block;margin-right:4px;"></span>
+            <span style="color:{{ s.color }};font-size:0.72rem;font-weight:700;">{{ s.level }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+        {% if r.slots|length > 96 %}
+        <tr><td colspan="4" style="color:var(--text-4);text-align:center;font-size:0.7rem;">… {{ r.slots|length - 96 }} more intervals. Export CSV for full data.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div style="display:flex; justify-content:center; margin-top:1.5rem;">
+  <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-xl" id="dashboard-btn" onclick="startDashboardLoading(this)">
+    📊 GENERATE DASHBOARD &amp; FULL ANALYTICS →
+  </a>
+</div>
+
+<script>
+function startDashboardLoading(btn) {
+  btn.classList.add('btn-loading');
+  btn.innerHTML = '<span class="spin-icon">⚡</span> GENERATING DASHBOARD &amp; ANALYTICS...';
+}
+</script>
+
+{% endblock %}

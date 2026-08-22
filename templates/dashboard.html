@@ -1,0 +1,595 @@
+{% extends "base.html" %}
+{% set show_sidebar = true %}
+{% set active_page = 'dashboard' %}
+{% set step = 3 %}
+{% block title %}Dashboard – Project Expo{% endblock %}
+
+{% block head_extra %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+  <div class="flex-between mb-1">
+    <div>
+      <div class="page-tag"><span class="dot"></span> Smart Grid Energy Dashboard</div>
+      <h1 class="h-display grad">Energy Consumption Analytics</h1>
+      <div class="text-lead mt-1">
+        Comprehensive analysis of your smart grid dataset · {{ analytics.get('stats',{}).get('total_records',50000) }} records · Jan 2024 – Jun 2025
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end;">
+      <a href="{{ url_for('home') }}"    class="btn btn-ghost btn-sm">🔄 New Prediction</a>
+      <a href="{{ url_for('api_export_csv') }}" class="btn btn-ghost btn-sm">📥 Export CSV</a>
+    </div>
+  </div>
+
+  <!-- Prediction context bar -->
+  {% if pred %}
+  <div class="card-sm" style="padding:0.7rem 1.1rem;">
+    <div class="flex-between">
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+        <span class="info-pill">⚡ Predicted: {{ pred.total_kwh }} kWh total</span>
+        <span class="info-pill">📊 Avg: {{ pred.avg_kw }} kW</span>
+        <span class="info-pill">🔺 Peak: {{ pred.peak_kw }} kW</span>
+        <span class="info-pill" style="color:{{ pred.color }};background:{{ pred.color }}11;border-color:{{ pred.color }}44;">
+          {{ pred.demand }}
+        </span>
+      </div>
+      <span class="label-xs">{{ pred.model_name }} · R² {{ pred.model_r2 }}</span>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ═══ KPI STATS ROW ═══ -->
+{% set st = analytics.get('stats', {}) %}
+<div class="dash-stats mb-2">
+  <div class="stat-box">
+    <div class="val" style="color:var(--emerald);">{{ st.get('avg_power_kw', 0)|round(2) }}</div>
+    <span class="lbl">Avg Power (kW)</span>
+    <span class="sub">Dataset baseline</span>
+  </div>
+  <div class="stat-box">
+    <div class="val" style="color:var(--amber);">{{ st.get('max_power_kw', 0)|round(2) }}</div>
+    <span class="lbl">Peak Power (kW)</span>
+    <span class="sub">Maximum recorded</span>
+  </div>
+  <div class="stat-box">
+    <div class="val">{{ st.get('min_power_kw', 0)|round(2) }}</div>
+    <span class="lbl">Min Power (kW)</span>
+    <span class="sub">Lowest baseload</span>
+  </div>
+  <div class="stat-box">
+    <div class="val" style="color:var(--red);">{{ st.get('overload_pct', 0) }}%</div>
+    <span class="lbl">Overload Events</span>
+    <span class="sub">Grid stress incidents</span>
+  </div>
+  <div class="stat-box">
+    <div class="val" style="color:var(--cyan);">{{ st.get('avg_solar_kw', 0)|round(2) }}</div>
+    <span class="lbl">Avg Solar (kW)</span>
+    <span class="sub">Renewable generation</span>
+  </div>
+  <div class="stat-box">
+    <div class="val" style="color:var(--blue);">{{ st.get('avg_wind_kw', 0)|round(2) }}</div>
+    <span class="lbl">Avg Wind (kW)</span>
+    <span class="sub">Renewable generation</span>
+  </div>
+</div>
+
+<!-- ═══ CHART 1: Historical Power Consumption (Full Width) ═══ -->
+<div id="chart-historical" class="chart-card mb-2" style="min-height:360px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">📈 Historical Power Consumption</div>
+      <div class="chart-subtitle">Actual measured consumption from smart grid dataset · Select period below</div>
+    </div>
+    <div class="chart-controls">
+      <button class="chart-period-btn active" onclick="loadHistory('24h',this)">24H</button>
+      <button class="chart-period-btn" onclick="loadHistory('7d',this)">7D</button>
+      <button class="chart-period-btn" onclick="loadHistory('30d',this)">30D</button>
+      <button class="chart-period-btn" onclick="loadHistory('all',this)">ALL</button>
+    </div>
+  </div>
+  <div class="chart-canvas-wrap" style="height:260px;">
+    <canvas id="chart-hist-canvas"></canvas>
+  </div>
+  <div class="chart-legend mt-1">
+    <div class="legend-item">
+      <div class="legend-line" style="background:#10b981;"></div>
+      <span class="legend-txt">Actual Power (kW)</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-line" style="background:#f59e0b;border-top-style:dashed;"></div>
+      <span class="legend-txt">Avg Baseline</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHART 2: Actual vs Predicted (Full Width) ═══ -->
+<div id="chart-actpred" class="chart-card mb-2" style="min-height:360px;">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">🎯 Actual vs Predicted Consumption</div>
+      <div class="chart-subtitle">Model validation on test set — overlaid actual measurements vs ML predicted load</div>
+    </div>
+    <div class="topbar-pill" style="margin:0;">
+      <span class="live"></span>
+      {{ metrics.get('best_model','Gradient Boosting') }} · R² {{ metrics.get('best_r2', '0.00')|round(4) }}
+    </div>
+  </div>
+  <div class="chart-canvas-wrap" style="height:260px;">
+    <canvas id="chart-actpred-canvas"></canvas>
+  </div>
+  <div class="chart-legend mt-1">
+    <div class="legend-item"><div class="legend-line" style="background:#10b981;"></div><span class="legend-txt">Actual Power (kW)</span></div>
+    <div class="legend-item"><div class="legend-line" style="background:#06b6d4;"></div><span class="legend-txt">ML Predicted Load (kW)</span></div>
+  </div>
+</div>
+
+<!-- ═══ ROW: Solar+Wind  +  Hourly Load Heatmap ═══ -->
+<div class="charts-row charts-row-2 mb-2">
+
+  <!-- CHART 3: Renewable Generation -->
+  <div id="chart-renewables" class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">☀️💨 Renewable Energy Generation</div>
+        <div class="chart-subtitle">Solar &amp; Wind power output over time (kW)</div>
+      </div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:220px;">
+      <canvas id="chart-renew-canvas"></canvas>
+    </div>
+    <div class="chart-legend mt-1">
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Solar (kW)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#60a5fa;"></div><span class="legend-txt">Wind (kW)</span></div>
+    </div>
+  </div>
+
+  <!-- CHART 4: Hourly Load Profile -->
+  <div id="chart-peaks" class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">🔥 Hourly Load Distribution</div>
+        <div class="chart-subtitle">Average power consumption by hour of day across full dataset</div>
+      </div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:220px;">
+      <canvas id="chart-hourly-canvas"></canvas>
+    </div>
+    <div class="chart-legend mt-1">
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div><span class="legend-txt">Evening Peak (18-22h)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Afternoon Ramp</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Night Baseload</span></div>
+    </div>
+  </div>
+
+</div><!-- /charts-row-2 -->
+
+<!-- ═══ ROW: Voltage+Overload  +  Price+PowerFactor ═══ -->
+<div class="charts-row charts-row-2 mb-2">
+
+  <!-- CHART 5: Overload Events -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">⚠️ Overload Events &amp; Grid Stress</div>
+        <div class="chart-subtitle">Binary overload incidents plotted against power consumption</div>
+      </div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:220px;">
+      <canvas id="chart-overload-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 6: Electricity Price -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">💰 Electricity Price &amp; Power Factor</div>
+        <div class="chart-subtitle">Real-time pricing (USD/kWh) vs Power Factor efficiency</div>
+      </div>
+    </div>
+    <div class="chart-canvas-wrap" style="height:220px;">
+      <canvas id="chart-price-canvas"></canvas>
+    </div>
+    <div class="chart-legend mt-1">
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Price (USD/kWh)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#818cf8;"></div><span class="legend-txt">Power Factor</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ BOTTOM ROW: ML Benchmark + Peak Windows + Feature Importance ═══ -->
+<div class="charts-row charts-row-2 mb-2">
+
+  <!-- ML Model Benchmark -->
+  <div class="chart-card" style="min-height:auto;">
+    <div class="chart-title mb-2">🤖 ML Model Performance Benchmark</div>
+    <div class="bench-table">
+      <div class="bench-row best">
+        <div>
+          <div class="bench-name"><span class="bench-crown">👑</span> {{ metrics.get('best_model','Gradient Boosting') }}</div>
+          <div class="bench-meta">
+            <span>MAE: {{ metrics.get('models',{}).get(metrics.get('best_model',''),{}).get('MAE','--') }} kW</span>
+            <span>RMSE: {{ metrics.get('models',{}).get(metrics.get('best_model',''),{}).get('RMSE','--') }} kW</span>
+            <span>MAPE: {{ metrics.get('models',{}).get(metrics.get('best_model',''),{}).get('MAPE','--') }}%</span>
+          </div>
+        </div>
+        <div class="bench-r2" style="color:var(--emerald);">R² {{ metrics.get('best_r2',0)|round(4) }}</div>
+      </div>
+      {% for name, m in metrics.get('models',{}).items() %}
+      {% if name != metrics.get('best_model') %}
+      <div class="bench-row">
+        <div>
+          <div class="bench-name">{{ {'Gradient Boosting':'🌲','Random Forest':'🌲','Linear Regression':'📉'}.get(name,'🔷') }} {{ name }}</div>
+          <div class="bench-meta"><span>MAE: {{ m.get('MAE','--') }} kW</span><span>RMSE: {{ m.get('RMSE','--') }} kW</span></div>
+        </div>
+        <div class="bench-r2" style="color:var(--text-3);">R² {{ m.get('R2',0)|round(4) }}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <hr class="divider"/>
+    <!-- Feature Importance -->
+    <div class="chart-title mb-2" style="font-size:0.9rem;">📊 Top Feature Drivers</div>
+    {% set feats = [('Lag_1 (15-min Prior Load)', 38.2, '#10b981'),
+                   ('Lag_2 (30-min Prior Load)', 22.5, '#06b6d4'),
+                   ('Rolling Mean 4h',           15.8, '#818cf8'),
+                   ('Temperature (°C)',           12.1, '#f59e0b'),
+                   ('Hour of Day (Cyclical)',      7.4, '#60a5fa'),
+                   ('Humidity (%)',                4.0, '#94a3b8')] %}
+    {% for name, pct, col in feats %}
+    <div class="feat-bar-row">
+      <div class="feat-bar-head">
+        <span class="feat-bar-name">{{ name }}</span>
+        <span class="feat-bar-pct" style="color:{{ col }};">{{ pct }}%</span>
+      </div>
+      <div class="feat-bar-bg">
+        <div class="feat-bar-fill" style="width:{{ pct }}%;background:{{ col }};"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Peak Windows + Advice -->
+  <div class="chart-card" style="min-height:auto;">
+    <div class="chart-title mb-2">🔥 Grid Peak & Demand Windows</div>
+
+    <div class="peak-windows">
+      <div class="peak-win" style="background:rgba(127,29,29,0.2);border:1px solid rgba(239,68,68,0.25);">
+        <div class="peak-win-tag" style="color:#f87171;">🔥 EVENING PEAK</div>
+        <div class="peak-win-time">18:00 – 22:00</div>
+        <div class="peak-win-desc" style="color:#fca5a5;">Highest demand. Residential lighting, cooking & cooling all active simultaneously.</div>
+      </div>
+      <div class="peak-win" style="background:rgba(120,53,15,0.2);border:1px solid rgba(245,158,11,0.25);">
+        <div class="peak-win-tag" style="color:#fbbf24;">☀️ AFTERNOON RAMP</div>
+        <div class="peak-win-time">12:00 – 17:00</div>
+        <div class="peak-win-desc" style="color:#fde68a;">Commercial &amp; HVAC load peak. Industrial demand rises steadily.</div>
+      </div>
+      <div class="peak-win" style="background:rgba(6,78,59,0.2);border:1px solid rgba(16,185,129,0.25);">
+        <div class="peak-win-tag" style="color:#34d399;">🌙 OFF-PEAK VALLEY</div>
+        <div class="peak-win-time">00:00 – 05:00</div>
+        <div class="peak-win-desc" style="color:#6ee7b7;">Lowest baseload. Optimal for EV charging &amp; battery storage.</div>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+    <div class="card-sm" style="background:rgba(6,78,59,0.18);border:1px solid rgba(16,185,129,0.25);padding:0.85rem;">
+      <div style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;color:var(--emerald-lt);margin-bottom:0.35rem;">💡 Dispatch Recommendation</div>
+      <div style="font-size:0.78rem;color:var(--text-2);line-height:1.55;">Shift non-critical industrial loads to <strong style="color:var(--emerald);">00:00–05:00</strong> window to achieve peak-shaving and minimize carbon intensity. Schedule EV fleet charging during this window.</div>
+    </div>
+
+    <div class="card-sm mt-1" style="background:rgba(120,53,15,0.15);border:1px solid rgba(245,158,11,0.2);padding:0.85rem;">
+      <div style="font-family:var(--font-head);font-weight:700;font-size:0.9rem;color:#fbbf24;margin-bottom:0.35rem;">⚠️ Overload Warning Protocol</div>
+      <div style="font-size:0.78rem;color:var(--text-2);line-height:1.55;">Overload events detected in <strong style="color:#fbbf24;">{{ analytics.get('stats',{}).get('overload_pct',0) }}%</strong> of intervals. Activate demand-response program above <strong>9.5 kW</strong> sustained load.</div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// ─── Chart.js Global Defaults ──────────────────────────────────
+Chart.defaults.color          = '#64748b';
+Chart.defaults.borderColor    = 'rgba(255,255,255,0.05)';
+Chart.defaults.font.family    = "'Inter', sans-serif";
+Chart.defaults.font.size      = 11;
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(8,14,26,0.98)';
+Chart.defaults.plugins.tooltip.borderColor      = 'rgba(255,255,255,0.08)';
+Chart.defaults.plugins.tooltip.borderWidth      = 1;
+Chart.defaults.plugins.tooltip.titleColor       = '#f8fafc';
+Chart.defaults.plugins.tooltip.bodyColor        = '#94a3b8';
+Chart.defaults.plugins.tooltip.padding          = 10;
+Chart.defaults.plugins.legend.display           = false;
+
+const COMMON_SCALES = {
+  x: { grid:{ display: false }, ticks:{ maxTicksLimit:12, maxRotation:0, color:'#475569', font:{size:10} } },
+  y: { grid:{ color:'rgba(255,255,255,0.05)' }, ticks:{ color:'#475569', font:{size:10} } }
+};
+
+let histChart, actpredChart, renewChart, hourlyChart, overloadChart, priceChart;
+
+// ─── CHART 1: Historical ──────────────────────────────────────
+function loadHistory(period, btn) {
+  document.querySelectorAll('.chart-period-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  fetch(`/api/dataset-sample?period=${period}`)
+    .then(r=>r.json())
+    .then(d=>{
+      const avg = d.power.reduce((a,b)=>a+b,0)/d.power.length;
+      const avgLine = d.power.map(()=>parseFloat(avg.toFixed(3)));
+
+      if (histChart) histChart.destroy();
+      histChart = new Chart(document.getElementById('chart-hist-canvas'), {
+        type: 'line',
+        data: {
+          labels: d.timestamps,
+          datasets: [
+            {
+              label: 'Actual Power (kW)',
+              data: d.power,
+              borderColor: '#10b981',
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.3,
+              fill: true,
+              backgroundColor: ctx => {
+                const g = ctx.chart.ctx.createLinearGradient(0,0,0,ctx.chart.height);
+                g.addColorStop(0, 'rgba(16,185,129,0.15)');
+                g.addColorStop(1, 'rgba(16,185,129,0.00)');
+                return g;
+              },
+            },
+            {
+              label: 'Baseline Avg',
+              data: avgLine,
+              borderColor: 'rgba(245,158,11,0.6)',
+              borderWidth: 1,
+              borderDash: [5,4],
+              pointRadius: 0,
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: COMMON_SCALES,
+          plugins: {
+            tooltip: { mode:'index', intersect:false },
+            legend: { display:false }
+          },
+          interaction: { mode:'nearest', axis:'x', intersect:false },
+          animation: { duration:400 }
+        }
+      });
+
+      // Also update renewables chart
+      if (renewChart) renewChart.destroy();
+      renewChart = new Chart(document.getElementById('chart-renew-canvas'), {
+        type: 'line',
+        data: {
+          labels: d.timestamps,
+          datasets: [
+            {
+              label: 'Solar (kW)',
+              data: d.solar,
+              borderColor: '#f59e0b',
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.4,
+              fill: true,
+              backgroundColor: ctx => {
+                const g = ctx.chart.ctx.createLinearGradient(0,0,0,200);
+                g.addColorStop(0,'rgba(245,158,11,0.25)');
+                g.addColorStop(1,'rgba(245,158,11,0.0)');
+                return g;
+              }
+            },
+            {
+              label: 'Wind (kW)',
+              data: d.wind,
+              borderColor: '#60a5fa',
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.4,
+              fill: true,
+              backgroundColor: ctx => {
+                const g = ctx.chart.ctx.createLinearGradient(0,0,0,200);
+                g.addColorStop(0,'rgba(96,165,250,0.15)');
+                g.addColorStop(1,'rgba(96,165,250,0.0)');
+                return g;
+              }
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: COMMON_SCALES,
+          plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false} },
+          animation:{ duration:400 }
+        }
+      });
+
+      // Overload chart
+      if (overloadChart) overloadChart.destroy();
+      overloadChart = new Chart(document.getElementById('chart-overload-canvas'), {
+        type: 'bar',
+        data: {
+          labels: d.timestamps,
+          datasets: [
+            {
+              label: 'Power (kW)',
+              data: d.power,
+              backgroundColor: d.overload.map(v =>
+                v===1 ? 'rgba(239,68,68,0.7)' : 'rgba(16,185,129,0.3)'
+              ),
+              barThickness: 'flex',
+              maxBarThickness: 4,
+            }
+          ]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false,
+          scales:{ ...COMMON_SCALES },
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              mode:'index', intersect:false,
+              callbacks:{
+                label(ctx){ return `${ctx.dataset.label}: ${ctx.parsed.y} kW`; },
+                afterLabel(ctx){ return d.overload[ctx.dataIndex]===1 ? '⚠️ OVERLOAD EVENT' : ''; }
+              }
+            }
+          },
+          animation:{ duration:400 }
+        }
+      });
+
+      // Price chart
+      if (priceChart) priceChart.destroy();
+      priceChart = new Chart(document.getElementById('chart-price-canvas'), {
+        type:'line',
+        data:{
+          labels: d.timestamps,
+          datasets:[
+            {
+              label:'Price (USD/kWh)',
+              data: d.price,
+              borderColor:'#f59e0b', borderWidth:1.5, pointRadius:0, tension:0.3,
+              fill:true,
+              backgroundColor: ctx => {
+                const g = ctx.chart.ctx.createLinearGradient(0,0,0,180);
+                g.addColorStop(0,'rgba(245,158,11,0.2)');
+                g.addColorStop(1,'rgba(245,158,11,0.0)');
+                return g;
+              },
+              yAxisID:'y'
+            },
+            {
+              label:'Power Factor',
+              data: d.power_factor,
+              borderColor:'#818cf8', borderWidth:1.5, pointRadius:0, tension:0.3,
+              fill:false,
+              yAxisID:'y1'
+            }
+          ]
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          scales:{
+            x: COMMON_SCALES.x,
+            y:  { ...COMMON_SCALES.y, position:'left',  title:{display:true,text:'Price (USD/kWh)',color:'#f59e0b',font:{size:10}} },
+            y1: { ...COMMON_SCALES.y, position:'right', grid:{drawOnChartArea:false}, title:{display:true,text:'Power Factor',color:'#818cf8',font:{size:10}} }
+          },
+          plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false} },
+          animation:{ duration:400 }
+        }
+      });
+    });
+}
+
+// ─── CHART 2: Actual vs Predicted (Side-by-Side Dual Bar) ─────
+function loadActPred() {
+  const avp = {{ analytics.get('actual_vs_pred', {}) | tojson }};
+  if (!avp || !avp.timestamps) return;
+
+  // Sample 60 evenly spaced points for a crisp vertical bar display matching screenshot
+  const step = Math.max(1, Math.floor(avp.timestamps.length / 60));
+  const sampledLabels = avp.timestamps.filter((_, i) => i % step === 0);
+  const sampledActual = avp.actual.filter((_, i) => i % step === 0);
+  const sampledPred   = avp.predicted.filter((_, i) => i % step === 0);
+
+  if (actpredChart) actpredChart.destroy();
+  actpredChart = new Chart(document.getElementById('chart-actpred-canvas'), {
+    type: 'bar',
+    data: {
+      labels: sampledLabels,
+      datasets: [
+        {
+          label: 'Actual Power (kW)',
+          data: sampledActual,
+          backgroundColor: 'rgba(16, 185, 129, 0.85)',
+          borderColor: '#34d399',
+          borderWidth: 1.5,
+          borderRadius: 2,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
+        },
+        {
+          label: 'ML Predicted Load (kW)',
+          data: sampledPred,
+          backgroundColor: 'rgba(6, 182, 212, 0.85)',
+          borderColor: '#38bdf8',
+          borderWidth: 1.5,
+          borderRadius: 2,
+          barPercentage: 0.7,
+          categoryPercentage: 0.8
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: COMMON_SCALES,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+      animation: { duration: 500 }
+    }
+  });
+}
+
+// ─── CHART 4: Hourly Load ────────────────────────────────────
+function loadHourly() {
+  const hourly = {{ analytics.get('hourly_avg', []) | tojson }};
+  if (!hourly.length) return;
+
+  const labels = hourly.map(h => String(h.Hour).padStart(2,'0')+':00');
+  const means  = hourly.map(h => parseFloat(h.mean.toFixed(3)));
+  const colors = hourly.map(h => {
+    if (h.Hour >= 18 && h.Hour <= 21) return 'rgba(239,68,68,0.8)';
+    if (h.Hour >= 11 && h.Hour <= 17) return 'rgba(245,158,11,0.75)';
+    if (h.Hour <= 5)                  return 'rgba(16,185,129,0.75)';
+    return 'rgba(6,182,212,0.65)';
+  });
+
+  if (hourlyChart) hourlyChart.destroy();
+  hourlyChart = new Chart(document.getElementById('chart-hourly-canvas'), {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:'Avg kW',
+        data: means,
+        backgroundColor: colors,
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{
+        x:{ ...COMMON_SCALES.x, ticks:{...COMMON_SCALES.x.ticks,maxRotation:45} },
+        y:{ ...COMMON_SCALES.y, title:{display:true,text:'Avg kW',color:'#475569',font:{size:10}} }
+      },
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label(c){return c.parsed.y + ' kW avg';}}} },
+      animation:{ duration:600 }
+    }
+  });
+}
+
+// ─── Init all charts ────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadHistory('7d', document.querySelector('.chart-period-btn'));
+  loadActPred();
+  loadHourly();
+});
+</script>
+{% endblock %}

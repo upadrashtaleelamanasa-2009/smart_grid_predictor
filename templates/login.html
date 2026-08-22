@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}Sign In – Project Expo{% endblock %}
+
+{% block body %}
+<div class="login-page">
+  <div class="login-box">
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash flash-{{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+
+      <!-- Logo + Title -->
+      <div class="text-center mb-2">
+        <div class="login-logo">⚡</div>
+        <h1 class="login-title">Smart Grid Access Portal</h1>
+        <p class="login-subtitle">Sign in to access the Energy Consumption Predictor</p>
+      </div>
+
+
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs" style="display:flex; gap:0.5rem; background:rgba(10,14,28,0.7); padding:0.35rem; border-radius:12px; margin-bottom:1.2rem; border:1px solid rgba(255,255,255,0.08);">
+        <button id="tab-signin" type="button" class="btn btn-sm btn-primary" style="flex:1;" onclick="switchAuthTab('signin')">Sign In</button>
+        <button id="tab-signup" type="button" class="btn btn-sm btn-ghost" style="flex:1;" onclick="switchAuthTab('signup')">Create Account</button>
+      </div>
+
+      <!-- Google Sign In -->
+      <div id="google-container">
+        <button class="btn-google mb-1" id="google-signin-btn" type="button">
+          <svg class="g-icon" viewBox="0 0 48 48">
+            <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-21.5 0-1.4-.1-2.7-.5-4.5z"/>
+            <path fill="#34A853" d="M6.3 14.7l7 5.1C15.2 16.2 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2c-7.6 0-14.2 4.6-17.7 12.7z"/>
+            <path fill="#FBBC05" d="M24 46c5.5 0 10.4-1.8 14.2-4.9l-6.6-5.4C29.6 37.5 26.9 38.5 24 38.5c-6 0-11.1-4-12.9-9.5l-7 5.4C7.6 41.3 15.2 46 24 46z"/>
+            <path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-.8 2.3-2.3 4.2-4.3 5.6l6.6 5.4c3.9-3.6 6.4-8.9 6.4-15.5 0-1.4-.1-2.7-.5-4.5z"/>
+          </svg>
+          Sign in with Google Account
+        </button>
+        <div class="form-divider"><span>or sign in with email</span></div>
+      </div>
+
+      <!-- Email / Password Sign In Form -->
+      <form id="signin-form" method="POST" action="{{ url_for('auth_email') }}">
+        <div class="form-group mb-1">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" id="signin-email" class="form-control"
+                 placeholder="you@example.com" required autocomplete="email"/>
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" id="signin-pass" class="form-control"
+                 placeholder="Enter password" required autocomplete="current-password"/>
+        </div>
+        <button type="submit" class="btn btn-primary btn-xl btn-block">
+          Sign In &amp; Enter Dashboard →
+        </button>
+      </form>
+
+      <!-- Create Account Form (Hidden by Default) -->
+      <form id="signup-form" method="POST" action="{{ url_for('auth_signup') }}" style="display:none;">
+        <div class="form-group mb-1">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="name" class="form-control"
+                 placeholder="Enter your full name" required/>
+        </div>
+        <div class="form-group mb-1">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-control"
+                 placeholder="you@example.com" required/>
+        </div>
+        <div class="form-group mb-1">
+          <label class="form-label">Create Password</label>
+          <input type="password" name="password" class="form-control"
+                 placeholder="Minimum 4 characters" required minlength="4"/>
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">Account Role</label>
+          <select name="role" class="form-control">
+            <option value="User">👤 Grid User / Consumer</option>
+            <option value="Operator">⚡ Grid Operator / Engineer</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-xl btn-block">
+          💾 Register &amp; Save Credentials →
+        </button>
+      </form>
+
+      <div class="form-divider mt-1"><span>Fast Sign-In</span></div>
+      <div class="quick-logins">
+        <button class="quick-btn" onclick="quickLogin('operator@smartgrid.org', 'demo123')">👤 Operator</button>
+        <button class="quick-btn" onclick="quickLogin('user@smartgrid.org', 'demo123')">👤 User</button>
+      </div>
+
+    </div><!-- /card -->
+
+    <p class="text-center" style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-4);margin-top:0.8rem;">
+      🔒 Secured by Firebase Authentication · Smart Grid Energy v2.0
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider }
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+  // ── Firebase Config – replace with your project credentials ──
+  // Get these from https://console.firebase.google.com → Project Settings → Web App
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDEMO_ReplaceWithYourApiKey",
+    authDomain:        "your-project.firebaseapp.com",
+    projectId:         "your-project-id",
+    storageBucket:     "your-project.appspot.com",
+    messagingSenderId: "000000000000",
+    appId:             "1:000000000000:web:000000000000000000"
+  };
+
+  let firebaseReady = false;
+  let app, auth, provider;
+
+  try {
+    app      = initializeApp(firebaseConfig);
+    auth     = getAuth(app);
+    provider = new GoogleAuthProvider();
+    provider.addScope("email");
+    provider.addScope("profile");
+    provider.setCustomParameters({ prompt: "select_account" });
+    firebaseReady = true;
+  } catch(e) {
+    console.warn("Firebase not configured:", e.message);
+  }
+
+  document.getElementById("google-signin-btn").addEventListener("click", async () => {
+    if (!firebaseReady || firebaseConfig.apiKey.includes("DEMO")) {
+      // Demo mode fallback
+      const email = "demo.user@gmail.com";
+      const form  = document.createElement("form");
+      form.method = "POST"; form.action = "/auth/email";
+      const em = document.createElement("input"); em.name="email"; em.value=email; form.appendChild(em);
+      const pw = document.createElement("input"); pw.name="password"; pw.value="googledemo"; form.appendChild(pw);
+      document.body.appendChild(form); form.submit();
+      return;
+    }
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user   = result.user;
+      const resp   = await fetch("/auth/firebase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          displayName: user.displayName,
+          email:       user.email,
+          photoURL:    user.photoURL,
+        })
+      });
+      const data = await resp.json();
+      if (data.ok) window.location.href = data.redirect;
+      else alert("Sign-in error: " + data.error);
+    } catch(e) {
+      alert("Google sign-in failed: " + e.message);
+    }
+  });
+</script>
+
+<script>
+
+
+function switchAuthTab(mode) {
+  const signinForm = document.getElementById('signin-form');
+  const signupForm = document.getElementById('signup-form');
+  const gContainer = document.getElementById('google-container');
+  const tabSignin  = document.getElementById('tab-signin');
+  const tabSignup  = document.getElementById('tab-signup');
+
+  if (mode === 'signup') {
+    signinForm.style.display = 'none';
+    gContainer.style.display = 'none';
+    signupForm.style.display = 'block';
+    tabSignin.className = 'btn btn-sm btn-ghost';
+    tabSignup.className = 'btn btn-sm btn-primary';
+  } else {
+    signupForm.style.display = 'none';
+    signinForm.style.display = 'block';
+    gContainer.style.display = 'block';
+    tabSignin.className = 'btn btn-sm btn-primary';
+    tabSignup.className = 'btn btn-sm btn-ghost';
+  }
+}
+
+function quickLogin(email, pw) {
+  switchAuthTab('signin');
+  const em = document.getElementById('signin-email');
+  const pass = document.getElementById('signin-pass');
+  if (em) em.value = email;
+  if (pass) pass.value = pw;
+  document.getElementById('signin-form').submit();
+}
+</script>
+{% endblock %}
