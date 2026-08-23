@@ -196,12 +196,15 @@ def auth_email():
 
     user_rec = db[email]
 
-    # 2. Verify password strictly
+    # 2. Verify exact password set when creating account
     stored_hash = user_rec.get("password_hash")
-    oauth_hash  = _hash_password("oauth_firebase")
-    if stored_hash and stored_hash != pw_hash and stored_hash != oauth_hash:
-        flash("Incorrect password. Please check your password and try again.", "error")
-        return redirect(url_for("login"))
+    if stored_hash and stored_hash != pw_hash:
+        if stored_hash == _hash_password("oauth_firebase"):
+            # Set password for Google OAuth account setting an email password
+            user_rec["password_hash"] = pw_hash
+        else:
+            flash("Incorrect password. Please enter the password you set while creating your account.", "error")
+            return redirect(url_for("login"))
 
     # Update last login timestamp
     user_rec["last_login"] = datetime.now().isoformat()
