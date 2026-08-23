@@ -132,9 +132,11 @@ def register_or_update_user(email, password, name=None, role="User"):
 # ══════════════════════════════════════════════════════════════════════
 # PAGE 1 – LOGIN & REGISTRATION
 # ══════════════════════════════════════════════════════════════════════
-@app.route("/", methods=["GET"])
-@app.route("/login", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        return auth_email()
     if request.path == "/login":
         session.clear()
     elif session.get("user"):

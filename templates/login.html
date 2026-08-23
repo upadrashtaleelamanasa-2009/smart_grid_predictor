@@ -179,19 +179,24 @@ function switchAuthTab(mode) {
   const gContainer = document.getElementById('google-container');
   const tabSignin  = document.getElementById('tab-signin');
   const tabSignup  = document.getElementById('tab-signup');
+  const emailInput = document.getElementById('signin-email');
 
-  if (mode === 'signup') {
-    signinForm.style.display = 'none';
-    gContainer.style.display = 'none';
-    signupForm.style.display = 'block';
-    tabSignin.className = 'btn btn-sm btn-ghost';
-    tabSignup.className = 'btn btn-sm btn-primary';
-  } else {
+  if (mode === 'signin') {
+    if (signinForm.style.display !== 'none' && emailInput && emailInput.value.trim().length > 0) {
+      signinForm.submit();
+      return;
+    }
     signupForm.style.display = 'none';
     signinForm.style.display = 'block';
     gContainer.style.display = 'block';
     tabSignin.className = 'btn btn-sm btn-primary';
     tabSignup.className = 'btn btn-sm btn-ghost';
+  } else {
+    signinForm.style.display = 'none';
+    gContainer.style.display = 'none';
+    signupForm.style.display = 'block';
+    tabSignin.className = 'btn btn-sm btn-ghost';
+    tabSignup.className = 'btn btn-sm btn-primary';
   }
 }
 
