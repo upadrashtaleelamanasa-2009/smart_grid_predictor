@@ -178,19 +178,32 @@ def auth_signup():
 def auth_email():
     email    = request.form.get("email", "").strip().lower()
     password = request.form.get("password", "").strip()
+
     if not email or "@" not in email:
         flash("Please enter a valid email address.", "error")
         return redirect(url_for("login"))
+    if not password:
+        flash("Please enter your password.", "error")
+        return redirect(url_for("login"))
 
     db = get_user_db()
+    pw_hash = _hash_password(password)
 
-    if email in db:
-        user_rec = db[email]
-        if password:
-            user_rec["password_hash"] = _hash_password(password)
-    else:
-        user_rec = register_or_update_user(email, password if password else "demo123")
+    # 1. Verify email exists in database
+    if email not in db:
+        flash("Account not found. Please click 'Create Account' to register your details.", "error")
+        return redirect(url_for("login"))
 
+    user_rec = db[email]
+
+    # 2. Verify password strictly
+    stored_hash = user_rec.get("password_hash")
+    oauth_hash  = _hash_password("oauth_firebase")
+    if stored_hash and stored_hash != pw_hash and stored_hash != oauth_hash:
+        flash("Incorrect password. Please check your password and try again.", "error")
+        return redirect(url_for("login"))
+
+    # Update last login timestamp
     user_rec["last_login"] = datetime.now().isoformat()
     db[email] = user_rec
     save_user_db(db)
@@ -203,7 +216,7 @@ def auth_email():
         "via":    "email"
     }
     session.permanent = True
-    flash(f"Welcome, {session['user']['name']}!", "success")
+    flash(f"Welcome back, {session['user']['name']}! Signed in as {session['user']['role']}.", "success")
     return redirect(url_for("home"))
 
 @app.route("/auth/firebase", methods=["POST"])
