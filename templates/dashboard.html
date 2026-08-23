@@ -173,16 +173,20 @@
 <!-- ═══ ROW: Voltage+Overload  +  Price+PowerFactor ═══ -->
 <div class="charts-row charts-row-2 mb-2">
 
-  <!-- CHART 5: Overload Events -->
+  <!-- CHART 5: Grid Health & Overload Gauge (Doughnut Chart) -->
   <div class="chart-card">
     <div class="chart-header">
       <div>
-        <div class="chart-title">⚠️ Overload Events &amp; Grid Stress</div>
-        <div class="chart-subtitle">Binary overload incidents plotted against power consumption</div>
+        <div class="chart-title">⚠️ Grid Health &amp; Overload Distribution</div>
+        <div class="chart-subtitle">Dataset grid stability — Normal operations vs Overload incidents</div>
       </div>
     </div>
-    <div class="chart-canvas-wrap" style="height:220px;">
+    <div class="chart-canvas-wrap" style="height:200px; display:flex; align-items:center; justify-content:center;">
       <canvas id="chart-overload-canvas"></canvas>
+    </div>
+    <div class="chart-legend mt-1">
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Normal Operations</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div><span class="legend-txt">Grid Overload Incidents</span></div>
     </div>
   </div>
 
@@ -420,38 +424,39 @@ function loadHistory(period, btn) {
         }
       });
 
-      // Overload chart
+      // Overload Doughnut Gauge Chart
       if (overloadChart) overloadChart.destroy();
+      const overloadEvents = d.overload.filter(v => v === 1).length;
+      const normalOps = d.overload.length - overloadEvents;
       overloadChart = new Chart(document.getElementById('chart-overload-canvas'), {
-        type: 'bar',
+        type: 'doughnut',
         data: {
-          labels: d.timestamps,
-          datasets: [
-            {
-              label: 'Power (kW)',
-              data: d.power,
-              backgroundColor: d.overload.map(v =>
-                v===1 ? 'rgba(239,68,68,0.7)' : 'rgba(16,185,129,0.3)'
-              ),
-              barThickness: 'flex',
-              maxBarThickness: 4,
-            }
-          ]
+          labels: ['Normal Operations', 'Grid Overload Stress'],
+          datasets: [{
+            data: [normalOps, overloadEvents],
+            backgroundColor: ['#10b981', '#ef4444'],
+            borderColor: 'rgba(10,14,28,0.9)',
+            borderWidth: 4,
+            hoverOffset: 8
+          }]
         },
         options: {
-          responsive:true, maintainAspectRatio:false,
-          scales:{ ...COMMON_SCALES },
-          plugins:{
-            legend:{display:false},
-            tooltip:{
-              mode:'index', intersect:false,
-              callbacks:{
-                label(ctx){ return `${ctx.dataset.label}: ${ctx.parsed.y} kW`; },
-                afterLabel(ctx){ return d.overload[ctx.dataIndex]===1 ? '⚠️ OVERLOAD EVENT' : ''; }
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '72%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label(ctx) {
+                  const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
+                  const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                  return `${ctx.label}: ${ctx.parsed} records (${pct}%)`;
+                }
               }
             }
           },
-          animation:{ duration:400 }
+          animation: { duration: 500 }
         }
       });
 
