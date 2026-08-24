@@ -44,12 +44,20 @@
         <div class="form-divider"><span>or sign in with email</span></div>
       </div>
 
+      <!-- Email Suggestions Datalist -->
+      <datalist id="email-suggestions">
+        <option value="operator@smartgrid.org">⚡ operator@smartgrid.org (Operator Admin)</option>
+        <option value="user@smartgrid.org">👤 user@smartgrid.org (Grid Consumer)</option>
+        <option value="admin@smartgrid.org"></option>
+        <option value="demo.user@gmail.com"></option>
+      </datalist>
+
       <!-- Email / Password Sign In Form -->
       <form id="signin-form" method="POST" action="{{ url_for('auth_email') }}">
         <div class="form-group mb-1">
           <label class="form-label">Email Address</label>
           <input type="email" name="email" id="signin-email" class="form-control"
-                 placeholder="you@example.com" required autocomplete="email" style="border-radius: var(--radius-sm);"/>
+                 placeholder="you@example.com" required autocomplete="email" list="email-suggestions" style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-2">
           <label class="form-label">Password</label>
@@ -71,7 +79,7 @@
         <div class="form-group mb-1">
           <label class="form-label">Email Address</label>
           <input type="email" name="email" class="form-control"
-                 placeholder="you@example.com" required style="border-radius: var(--radius-sm);"/>
+                 placeholder="you@example.com" required autocomplete="email" list="email-suggestions" style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-1">
           <label class="form-label">Create Password</label>
