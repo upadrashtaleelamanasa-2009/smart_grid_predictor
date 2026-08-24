@@ -75,7 +75,7 @@
 </header>
 
 {% block body %}
-{% if not user %}
+{% if active_page == 'login' or not user %}
 
 <!-- LOGGED OUT / STANDALONE (LOGIN PAGE) -->
 {% block standalone_content %}{% endblock %}

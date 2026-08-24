@@ -175,16 +175,17 @@ def inject_user():
         "show_sidebar": True if role == "Operator" else False
     }
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def root():
+    session.pop("user", None)
+    return render_template("login.html", active_page="login", show_sidebar=False, user=None)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         return auth_email()
-    if request.path == "/login":
-        session.clear()
-    elif session.get("user"):
-        return redirect(url_for("home"))
-    return render_template("login.html", active_page="login", show_sidebar=False)
+    session.pop("user", None)
+    return render_template("login.html", active_page="login", show_sidebar=False, user=None)
 
 @app.route("/auth/signup", methods=["POST"])
 def auth_signup():
