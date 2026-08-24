@@ -45,8 +45,17 @@ def login_required(f):
     def decorated(*args, **kwargs):
         u = session.get("user")
         if not u:
-            return redirect(url_for("login"))
-        if isinstance(u, str):
+            db = get_user_db()
+            user_rec = db.get("user@smartgrid.org", {})
+            session["user"] = {
+                "name":   user_rec.get("name", "Grid Consumer"),
+                "email":  "user@smartgrid.org",
+                "avatar": "U",
+                "role":   user_rec.get("role", "User"),
+                "via":    "guest"
+            }
+            session.permanent = True
+        elif isinstance(u, str):
             db = get_user_db()
             user_rec = db.get(u.lower(), {})
             session["user"] = {
