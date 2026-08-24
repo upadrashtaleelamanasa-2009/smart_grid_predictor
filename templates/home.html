@@ -22,41 +22,43 @@
   </div>
 </div>
 
-<!-- GLOWINN FULL VIDEO HERO BANNER -->
-<section class="hero" id="top">
-  <div class="hero__media" aria-hidden="true">
-    <video id="hero-video" class="hero__video is-ready" src="{{ url_for('static', filename='hero.mp4') }}" autoPlay muted loop playsInline preload="auto"></video>
-    <div class="hero__scrim"></div>
+<!-- GLOWINN STYLE HERO BANNER -->
+<section class="card mb-2" id="top" style="padding: 2.5rem; background: linear-gradient(145deg, rgba(15, 23, 19, 0.85), rgba(7, 12, 10, 0.95)); border: 1px solid var(--hairline); border-radius: var(--radius-lg);">
+  <div class="page-tag mb-1" style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.65rem; color:var(--emerald-lt); background:rgba(16,185,129,0.1); padding:0.25rem 0.75rem; border-radius:999px; border:1px solid rgba(16,185,129,0.25);">
+    <span class="dot" style="width:6px; height:6px; border-radius:50%; background:var(--emerald);"></span> STEP 1 OF 3: Input Parameters
   </div>
 
-  <div class="hero__body shell">
-    <h1 class="hero__title">
-      <span class="hero__title-lead">Discover Energy Intelligence</span>
+  <div class="text-center my-3" style="margin-block: 1.5rem;">
+    <h1 class="hero__title" style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 500; line-height: 1.18;">
+      <span class="hero__title-lead" style="display:block; font-size:0.75em; font-weight:300; color:var(--ink-soft);">Discover Energy Intelligence</span>
       Made for Modern Power Grids.
     </h1>
+    <p style="max-width: 620px; margin: 0.8rem auto 1.5rem; font-size: 0.92rem; color: var(--ink-faint); font-weight: 300; line-height: 1.6;">
+      Enter date range, time window, weather factors, and previous hour consumption to generate ML electricity demand projections.
+    </p>
     <a class="btn btn--pearl hero__cta" href="#forecast-form">
       Configure Forecast Parameters ↓
     </a>
   </div>
 
-  <div class="hero__foot shell">
-    <article class="card card--note">
-      <h2>AI-Powered Grid Forecasting</h2>
-      <p>From real-time load analytics to XGBoost predictive modeling, explore grid performance metrics with precision.</p>
+  <div class="hero__foot" style="border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 1rem;">
+    <article class="card card--note" style="margin-bottom:0; background:rgba(22,32,26,0.4); border:1px solid var(--hairline);">
+      <h2 style="font-size:0.85rem; font-weight:500;">AI-Powered Grid Forecasting</h2>
+      <p style="font-size:0.72rem; color:var(--ink-faint);">From real-time load analytics to XGBoost predictive modeling, explore grid performance metrics with precision.</p>
     </article>
 
-    <p class="hero__caption">Smart Grid energy prediction with precision and accuracy.</p>
+    <p class="hero__caption" style="font-size:0.75rem;">Smart Grid energy prediction with precision and accuracy.</p>
 
     <div class="hero__stats">
-      <article class="card card--stat">
-        <strong>0.9754</strong>
-        <span class="card__label">R² Score</span>
-        <span class="card__foot">Gradient Boosting</span>
+      <article class="card card--stat" style="margin-bottom:0; background:rgba(22,32,26,0.4); border:1px solid var(--hairline); padding:0.6rem 1rem;">
+        <strong style="font-size:1.3rem;">0.9754</strong>
+        <span class="card__label" style="font-size:0.65rem;">R² Score</span>
+        <span class="card__foot" style="font-size:0.6rem; margin-top:0.4rem;">Gradient Boosting</span>
       </article>
-      <article class="card card--stat">
-        <strong>97.2%</strong>
-        <span class="card__label">Grid Health</span>
-        <span class="card__foot">Operational Stability</span>
+      <article class="card card--stat" style="margin-bottom:0; background:rgba(22,32,26,0.4); border:1px solid var(--hairline); padding:0.6rem 1rem;">
+        <strong style="font-size:1.3rem;">97.2%</strong>
+        <span class="card__label" style="font-size:0.65rem;">Grid Health</span>
+        <span class="card__foot" style="font-size:0.6rem; margin-top:0.4rem;">Operational Health</span>
       </article>
     </div>
   </div>
