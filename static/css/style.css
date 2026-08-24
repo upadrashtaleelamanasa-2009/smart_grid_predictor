@@ -21,12 +21,12 @@
   --hairline:     rgba(255, 255, 255, 0.13);
 
   --blush:        #f0b4c4;
-  --ground:       #16241b;
-  --ground-deep:  #050a07;
+  --ground:       #15092a;
+  --ground-deep:  #04020a;
 
-  --bg:           #050a07;
-  --surface:      rgba(15, 23, 19, 0.94);
-  --surface2:     rgba(22, 32, 26, 0.88);
+  --bg:           #04020a;
+  --surface:      rgba(15, 10, 30, 0.94);
+  --surface2:     rgba(22, 14, 42, 0.88);
   --border:       rgba(255, 255, 255, 0.13);
   --border-em:    rgba(16, 185, 129, 0.4);
   --emerald:      #10b981;
@@ -1019,7 +1019,7 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 18px rgba(16,1
   overflow: hidden;
   border-radius: var(--radius-lg);
   margin-bottom: 1.5rem;
-  background: radial-gradient(120% 90% at 50% 40%, var(--ground) 0%, var(--ground-deep) 100%);
+  background: radial-gradient(120% 90% at 50% 40%, #15092a 0%, #04020a 100%);
 }
 
 .hero__media {
