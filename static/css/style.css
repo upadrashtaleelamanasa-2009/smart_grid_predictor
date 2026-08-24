@@ -362,39 +362,47 @@ body::after {
 /* ══════════════════════════════════════════════════
    CARDS (SPACIOUS & ELEGANT)
 ══════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   CARDS (TRANSPARENT GLASSY CHASSIS)
+══════════════════════════════════════════════════ */
 .card {
-  background: linear-gradient(145deg, rgba(10, 14, 26, 0.92), rgba(6, 9, 18, 0.88));
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(145deg, rgba(10, 14, 26, 0.45), rgba(6, 9, 18, 0.4)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
   border-radius: var(--radius-lg);
   padding: 2.2rem 2.4rem;
   position: relative; overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 45px -15px rgba(0,0,0,0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 45px -15px rgba(0, 0, 0, 0.65) !important;
   margin-bottom: 1.8rem;
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(16px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
 }
 .card:hover {
   transform: translateY(-4px);
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 28px 60px -18px rgba(0,0,0,0.8), 0 0 35px -10px rgba(56, 189, 248, 0.2);
+  background: linear-gradient(145deg, rgba(14, 20, 36, 0.55), rgba(8, 12, 24, 0.5)) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 28px 60px -18px rgba(0,0,0,0.75), 0 0 35px -10px rgba(56, 189, 248, 0.25) !important;
 }
 .card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.5), rgba(37, 99, 235, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), rgba(37, 99, 235, 0.5), transparent);
 }
 .card-sm {
-  background: rgba(10, 14, 26, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 26, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
   border-radius: var(--radius-md);
   padding: 1.4rem 1.6rem;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  backdrop-filter: blur(14px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1) !important;
   transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
 .card-sm:hover {
-  border-color: rgba(56, 189, 248, 0.35);
+  border-color: rgba(56, 189, 248, 0.4) !important;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px -8px rgba(0,0,0,0.6);
+  background: rgba(14, 20, 36, 0.5) !important;
+  box-shadow: 0 12px 30px -8px rgba(0,0,0,0.6) !important;
 }
 
 /* Corner bracket decoration */
