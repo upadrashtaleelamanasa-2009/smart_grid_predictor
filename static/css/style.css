@@ -142,11 +142,15 @@ body::after {
   margin: 0 auto;
   padding-inline: clamp(1rem, 3vw, 2rem);
 }
-.layout-body {
+.layout-body, .layout-body-wrapper {
   display: flex;
   gap: 1.5rem;
   align-items: flex-start;
   width: 100%;
+}
+.user-content-full {
+  width: 100%;
+  flex: 1;
 }
 .sidebar {
   width: 250px;
