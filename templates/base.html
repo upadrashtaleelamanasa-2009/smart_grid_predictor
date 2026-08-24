@@ -70,11 +70,17 @@
     {% endif %}
   </div>
 </header>{% block body %}
-{% set is_operator = (show_sidebar and user is mapping and user.role == 'Operator') %}
+{% if not user %}
 
-<div class="{{ 'layout-sidebar' if is_operator else 'shell' }}" style="padding-top: calc(var(--nav-h) + 0.8rem); padding-bottom: 2.5rem;">
+<!-- LOGGED OUT / STANDALONE (LOGIN PAGE) -->
+{% block standalone_content %}{% endblock %}
 
-{% if is_operator %}
+{% else %}
+
+<!-- LOGGED IN USER OR OPERATOR -->
+<div class="{{ 'layout-sidebar' if (user is mapping and user.role == 'Operator') else 'shell' }}" style="padding-top: calc(var(--nav-h) + 0.8rem); padding-bottom: 2.5rem;">
+
+  {% if user is mapping and user.role == 'Operator' %}
   <div class="layout-body">
     <!-- SIDEBAR FOR OPERATORS -->
     <aside class="sidebar">
@@ -118,23 +124,28 @@
     </aside>
 
     <main class="main-content">
-{% endif %}
-
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% for cat, msg in messages %}
-      <div class="flash flash-{{ cat }}">{{ msg }}</div>
-    {% endfor %}
-  {% endwith %}
-
-  {% block content %}{% endblock %}
-  {% block standalone_content %}{% endblock %}
-
-{% if is_operator %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in messages %}
+          <div class="flash flash-{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endwith %}
+      {% block content_operator %}{% endblock %}
     </main>
   </div>
-{% endif %}
+  {% else %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash flash-{{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content_user %}{% endblock %}
+  {% endif %}
+
+  {% block content %}{% endblock %}
 
 </div>
+
+{% endif %}
 {% endblock %}
 </div><!-- /page-wrapper -->
 
