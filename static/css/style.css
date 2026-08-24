@@ -58,22 +58,23 @@
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
-  background: #05060d;
+  background: #020205;
   color: var(--text-1);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Purple - Blue - Black Gradient Ambient Background ── */
+/* ── Black + Navy Blue + Dark Blue + Purple Shade Ambient Background ── */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 900px 700px at 10% 0%,   rgba(147, 51, 234, 0.32), transparent 50%),
-    radial-gradient(ellipse 850px 650px at 90% 95%,  rgba(37, 99, 235, 0.3),  transparent 50%),
-    radial-gradient(circle  750px       at 50% 50%,  rgba(99, 102, 241, 0.16), transparent 55%),
-    linear-gradient(180deg, #090a16 0%, #030409 100%);
+    radial-gradient(ellipse 1100px 750px at 15% 10%, rgba(168, 85, 247, 0.35), transparent 55%),
+    radial-gradient(ellipse 950px 700px at 85% 35%, rgba(30, 58, 138, 0.45), transparent 60%),
+    radial-gradient(ellipse 1000px 800px at 20% 85%, rgba(15, 23, 42, 0.8), transparent 65%),
+    radial-gradient(ellipse 900px 650px at 75% 90%, rgba(126, 34, 206, 0.32), transparent 55%),
+    linear-gradient(160deg, #020205 0%, #060b1e 28%, #0a1336 52%, #1b0a33 80%, #020205 100%);
   pointer-events: none; z-index: 0;
   animation: floatBackground 22s ease-in-out infinite alternate;
 }
@@ -81,7 +82,7 @@ body::after {
   content: '';
   position: fixed; inset: 0;
   background-image: 
-    radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none; z-index: 0;
 }
