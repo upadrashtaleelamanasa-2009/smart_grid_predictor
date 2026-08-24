@@ -172,7 +172,10 @@ def inject_user():
     role = user.get("role", "User") if isinstance(user, dict) else "User"
     return {
         "user": user,
-        "show_sidebar": True if role == "Operator" else False
+        "show_sidebar": True if role == "Operator" else False,
+        "firebase_api_key": "AIzaSyAiey06HlOVGBUWfKqKWx-I7vNB3qMhbTo",
+        "firebase_auth_domain": "smartgridpredictor.firebaseapp.com",
+        "firebase_project_id": "smartgridpredictor"
     }
 
 @app.route("/")
