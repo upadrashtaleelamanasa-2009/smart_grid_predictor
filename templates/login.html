@@ -1,8 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Sign In – Project Expo{% endblock %}
+{% set show_sidebar = false %}
+{% set active_page = 'login' %}
+{% block title %}Sign In – Smart Grid Energy Predictor{% endblock %}
 
-{% block body %}
-<div class="login-page">
+{% block standalone_content %}
+<div class="login-page" style="padding-top: calc(var(--nav-h) + 2rem); position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+  
+  <!-- Video Background layer for Login Page -->
+  <div class="hero__media" aria-hidden="true" style="position: fixed; inset: 0; z-index: -1;">
+    <video class="hero__video is-ready" src="{{ url_for('static', filename='hero.mp4') }}" autoPlay muted loop playsInline></video>
+    <div class="hero__scrim"></div>
+  </div>
+
   <div class="login-box">
 
     <!-- Flash messages -->
@@ -12,26 +21,24 @@
       {% endfor %}
     {% endwith %}
 
-    <div class="card">
+    <div class="card" style="background: rgba(14, 20, 16, 0.72); border: 1px solid var(--hairline); backdrop-filter: blur(20px) saturate(120%); border-radius: 24px; padding: 2.2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.6);">
 
       <!-- Logo + Title -->
       <div class="text-center mb-2">
-        <div class="login-logo">⚡</div>
-        <h1 class="login-title">Smart Grid Access Portal</h1>
-        <p class="login-subtitle">Sign in to access the Energy Consumption Predictor</p>
+        <div class="login-logo" style="background: linear-gradient(135deg, var(--emerald), var(--cyan)); box-shadow: 0 0 25px rgba(16,185,129,0.4);">⚡</div>
+        <h1 class="login-title" style="font-family: var(--font-head); font-weight: 500;">Smart Grid Access Portal</h1>
+        <p class="login-subtitle" style="color: var(--ink-soft);">Sign in to access the Energy Consumption Predictor</p>
       </div>
 
-
-
       <!-- Tab Switcher -->
-      <div class="auth-tabs" style="display:flex; gap:0.5rem; background:rgba(10,14,28,0.7); padding:0.35rem; border-radius:12px; margin-bottom:1.2rem; border:1px solid rgba(255,255,255,0.08);">
-        <button id="tab-signin" type="button" class="btn btn-sm btn-primary" style="flex:1;" onclick="switchAuthTab('signin')">Sign In</button>
-        <button id="tab-signup" type="button" class="btn btn-sm btn-ghost" style="flex:1;" onclick="switchAuthTab('signup')">Create Account</button>
+      <div class="auth-tabs" style="display:flex; gap:0.5rem; background:rgba(10,14,28,0.7); padding:0.35rem; border-radius:999px; margin-bottom:1.2rem; border:1px solid rgba(255,255,255,0.08);">
+        <button id="tab-signin" type="button" class="btn btn-sm btn-primary" style="flex:1; border-radius:999px;" onclick="switchAuthTab('signin')">Sign In</button>
+        <button id="tab-signup" type="button" class="btn btn-sm btn-ghost" style="flex:1; border-radius:999px;" onclick="switchAuthTab('signup')">Create Account</button>
       </div>
 
       <!-- Google Sign In -->
       <div id="google-container">
-        <button class="btn-google mb-1" id="google-signin-btn" type="button">
+        <button class="btn-google mb-1" id="google-signin-btn" type="button" style="border-radius:999px; background: rgba(14,20,16,0.85); border: 1px solid var(--hairline);">
           <svg class="g-icon" viewBox="0 0 48 48">
             <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-21.5 0-1.4-.1-2.7-.5-4.5z"/>
             <path fill="#34A853" d="M6.3 14.7l7 5.1C15.2 16.2 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2c-7.6 0-14.2 4.6-17.7 12.7z"/>
@@ -48,14 +55,14 @@
         <div class="form-group mb-1">
           <label class="form-label">Email Address</label>
           <input type="email" name="email" id="signin-email" class="form-control"
-                 placeholder="you@example.com" required autocomplete="email"/>
+                 placeholder="you@example.com" required autocomplete="email" style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-2">
           <label class="form-label">Password</label>
           <input type="password" name="password" id="signin-pass" class="form-control"
-                 placeholder="Enter password" required autocomplete="current-password"/>
+                 placeholder="Enter password" required autocomplete="current-password" style="border-radius: var(--radius-sm);"/>
         </div>
-        <button type="submit" class="btn btn-primary btn-xl btn-block">
+        <button type="submit" class="btn btn--pearl btn-block" style="width: 100%; padding: 12px 26px; margin-top: 0.5rem;">
           Sign In &amp; Enter Dashboard →
         </button>
       </form>
@@ -65,39 +72,39 @@
         <div class="form-group mb-1">
           <label class="form-label">Full Name</label>
           <input type="text" name="name" class="form-control"
-                 placeholder="Enter your full name" required/>
+                 placeholder="Enter your full name" required style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-1">
           <label class="form-label">Email Address</label>
           <input type="email" name="email" class="form-control"
-                 placeholder="you@example.com" required/>
+                 placeholder="you@example.com" required style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-1">
           <label class="form-label">Create Password</label>
           <input type="password" name="password" class="form-control"
-                 placeholder="Minimum 4 characters" required minlength="4"/>
+                 placeholder="Minimum 4 characters" required minlength="4" style="border-radius: var(--radius-sm);"/>
         </div>
         <div class="form-group mb-2">
           <label class="form-label">Account Role</label>
-          <select name="role" class="form-control">
+          <select name="role" class="form-control" style="border-radius: var(--radius-sm);">
             <option value="User">👤 Grid User / Consumer</option>
             <option value="Operator">⚡ Grid Operator / Engineer</option>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary btn-xl btn-block">
+        <button type="submit" class="btn btn--pearl btn-block" style="width: 100%; padding: 12px 26px; margin-top: 0.5rem;">
           💾 Register &amp; Save Credentials →
         </button>
       </form>
 
       <div class="form-divider mt-1"><span>Fast Sign-In</span></div>
       <div class="quick-logins">
-        <button class="quick-btn" onclick="quickLogin('operator@smartgrid.org', 'demo123')">👤 Operator</button>
-        <button class="quick-btn" onclick="quickLogin('user@smartgrid.org', 'demo123')">👤 User</button>
+        <button class="quick-btn" style="border-radius:999px;" onclick="quickLogin('operator@smartgrid.org', 'demo123')">👤 Operator</button>
+        <button class="quick-btn" style="border-radius:999px;" onclick="quickLogin('user@smartgrid.org', 'demo123')">👤 User</button>
       </div>
 
     </div><!-- /card -->
 
-    <p class="text-center" style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-4);margin-top:0.8rem;">
+    <p class="text-center" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--ink-faint);margin-top:1rem;">
       🔒 Secured by Firebase Authentication · Smart Grid Energy v2.0
     </p>
   </div>
