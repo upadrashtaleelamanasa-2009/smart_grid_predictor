@@ -48,32 +48,38 @@
 <!-- ═══ KPI STATS ROW ═══ -->
 {% set st = analytics.get('stats', {}) %}
 <div class="dash-stats mb-2">
-  <div class="stat-box">
+  <div class="stat-box" style="--stat-accent: var(--emerald);">
+    <div class="icon-wrap" style="color: var(--emerald); background: rgba(16,185,129,0.12);">⚡</div>
     <div class="val" style="color:var(--emerald);">{{ st.get('avg_power_kw', 0)|round(2) }}</div>
     <span class="lbl">Avg Power (kW)</span>
     <span class="sub">Dataset baseline</span>
   </div>
-  <div class="stat-box">
+  <div class="stat-box" style="--stat-accent: var(--amber);">
+    <div class="icon-wrap" style="color: var(--amber); background: rgba(245,158,11,0.12);">🔥</div>
     <div class="val" style="color:var(--amber);">{{ st.get('max_power_kw', 0)|round(2) }}</div>
     <span class="lbl">Peak Power (kW)</span>
     <span class="sub">Maximum recorded</span>
   </div>
-  <div class="stat-box">
-    <div class="val">{{ st.get('min_power_kw', 0)|round(2) }}</div>
+  <div class="stat-box" style="--stat-accent: var(--cyan);">
+    <div class="icon-wrap" style="color: var(--cyan); background: rgba(6,182,212,0.12);">📉</div>
+    <div class="val" style="color: var(--cyan);">{{ st.get('min_power_kw', 0)|round(2) }}</div>
     <span class="lbl">Min Power (kW)</span>
     <span class="sub">Lowest baseload</span>
   </div>
-  <div class="stat-box">
+  <div class="stat-box" style="--stat-accent: var(--red);">
+    <div class="icon-wrap" style="color: var(--red); background: rgba(239,68,68,0.12);">⚠️</div>
     <div class="val" style="color:var(--red);">{{ st.get('overload_pct', 0) }}%</div>
     <span class="lbl">Overload Events</span>
     <span class="sub">Grid stress incidents</span>
   </div>
-  <div class="stat-box">
-    <div class="val" style="color:var(--cyan);">{{ st.get('avg_solar_kw', 0)|round(2) }}</div>
+  <div class="stat-box" style="--stat-accent: #f59e0b;">
+    <div class="icon-wrap" style="color: #f59e0b; background: rgba(245,158,11,0.12);">☀️</div>
+    <div class="val" style="color:#f59e0b;">{{ st.get('avg_solar_kw', 0)|round(2) }}</div>
     <span class="lbl">Avg Solar (kW)</span>
     <span class="sub">Renewable generation</span>
   </div>
-  <div class="stat-box">
+  <div class="stat-box" style="--stat-accent: var(--blue);">
+    <div class="icon-wrap" style="color: var(--blue); background: rgba(59,130,246,0.12);">💨</div>
     <div class="val" style="color:var(--blue);">{{ st.get('avg_wind_kw', 0)|round(2) }}</div>
     <span class="lbl">Avg Wind (kW)</span>
     <span class="sub">Renewable generation</span>
