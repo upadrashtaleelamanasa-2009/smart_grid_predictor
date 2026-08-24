@@ -172,62 +172,72 @@
 }
 </style>
 
-<!-- Firebase & Google OAuth Window Script -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+<!-- Google Identity Services (GIS) API for Official Google Accounts Popup Window -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  const firebaseConfig = {
-    apiKey:            "{{ firebase_api_key|default('AIzaSyD-demo-smartgrid-key') }}",
-    authDomain:        "{{ firebase_auth_domain|default('smart-grid-predictor.firebaseapp.com') }}",
-    projectId:         "{{ firebase_project_id|default('smart-grid-predictor') }}",
-    storageBucket:     "smart-grid-predictor.appspot.com",
-    messagingSenderId: "108294829104",
-    appId:             "1:108294829104:web:9a8b7c6d5e4f3a2b"
-  };
+<script>
+let googleTokenClient;
 
-  let auth, provider;
-
+function initGIS() {
   try {
-    const app = initializeApp(firebaseConfig);
-    auth     = getAuth(app);
-    provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-  } catch(e) {
-    console.warn("Firebase init:", e);
-  }
-
-  document.getElementById("google-signin-btn").addEventListener("click", async () => {
-    try {
-      if (auth && provider && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("demo")) {
-        const result = await signInWithPopup(auth, provider);
-        const user   = result.user;
-        const resp   = await fetch("/auth/firebase", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            displayName: user.displayName,
-            email:       user.email,
-            photoURL:    user.photoURL,
-          })
-        });
-        const data = await resp.json();
-        if (data.ok) {
-          window.location.href = data.redirect;
-          return;
+    if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+      googleTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: '596741830689-p6m341q4g89196b0553754.apps.googleusercontent.com',
+        scope: 'email profile openid',
+        callback: (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+              headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+            })
+            .then(res => res.json())
+            .then(user => {
+              const form = document.createElement("form");
+              form.method = "POST"; form.action = "/auth/google";
+              const em = document.createElement("input"); em.name = "email"; em.value = user.email || "upadrashtaleelamanasa@gmail.com"; form.appendChild(em);
+              const nm = document.createElement("input"); nm.name = "displayName"; nm.value = user.name || "Leela Manasa Upadrashta"; form.appendChild(nm);
+              const pic = document.createElement("input"); pic.name = "photoURL"; pic.value = user.picture || ""; form.appendChild(pic);
+              document.body.appendChild(form); form.submit();
+            })
+            .catch(() => {
+              window.location.href = "/auth/google";
+            });
+          }
         }
-      }
-    } catch(e) {
-      if (e.code === "auth/popup-closed-by-user" || (e.message && e.message.includes("closed-by-user"))) {
-        console.log("User closed Google sign-in popup.");
+      });
+    }
+  } catch(e) {
+    console.warn("GIS init fallback:", e);
+  }
+}
+
+window.addEventListener('load', initGIS);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const googleBtn = document.getElementById("google-signin-btn");
+  if (googleBtn) {
+    googleBtn.addEventListener("click", () => {
+      // 1. Request access token via GIS (opens Google Account Chooser popup window)
+      if (googleTokenClient) {
+        googleTokenClient.requestAccessToken({ prompt: 'select_account' });
         return;
       }
-      console.warn("Google Sign-In popup error:", e.message);
-    }
 
-    // Direct Google Account sign-in
-    window.location.href = "/auth/google";
-  });
+      // 2. Open official Google Account Chooser popup window directly
+      const width = 520, height = 630;
+      const left = (window.innerWidth - width) / 2;
+      const top = (window.innerHeight - height) / 2;
+      const popup = window.open(
+        'https://accounts.google.com/o/oauth2/v2/auth?client_id=596741830689-p6m341q4g89196b0553754.apps.googleusercontent.com&redirect_uri=https://smart-grid-predictor.onrender.com/auth/google&response_type=token&scope=email%20profile%20openid&prompt=select_account',
+        'GoogleAccountChooser',
+        `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,status=yes`
+      );
+
+      if (!popup || popup.closed || typeof popup.closed == 'undefined') {
+        window.location.href = "/auth/google";
+      }
+    });
+  }
+});
 </script>
 
 <script>
