@@ -37,7 +37,6 @@
     <nav class="nav__rail" aria-label="Primary">
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
-      <a href="{{ url_for('dashboard') }}" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
 
       <!-- ⚡ ADVANCED GRID MODULES HOVER DROPDOWN MENU -->
       <div class="nav-dropdown">
@@ -75,6 +74,8 @@
           </a>
         </div>
       </div>
+
+      <a href="{{ url_for('dashboard') }}" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
 
       {% if user is mapping and user.role == 'Operator' %}
       <a href="{{ url_for('admin_users') }}" class="{{ 'is-active' if active_page == 'admin_users' else '' }}">Operator DB</a>
