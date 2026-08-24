@@ -199,7 +199,7 @@
 
   document.getElementById("google-signin-btn").addEventListener("click", async () => {
     try {
-      if (auth && provider) {
+      if (auth && provider && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("demo")) {
         const result = await signInWithPopup(auth, provider);
         const user   = result.user;
         const resp   = await fetch("/auth/firebase", {
@@ -225,12 +225,8 @@
       console.warn("Google Sign-In popup error:", e.message);
     }
 
-    // Direct Google Account sign-in (no browser prompt dialogs!)
-    const form  = document.createElement("form");
-    form.method = "POST"; form.action = "/auth/email";
-    const em = document.createElement("input"); em.name="email"; em.value="google.user@gmail.com"; form.appendChild(em);
-    const pw = document.createElement("input"); pw.name="password"; pw.value="googledemo"; form.appendChild(pw);
-    document.body.appendChild(form); form.submit();
+    // Direct Google Account sign-in
+    window.location.href = "/auth/google";
   });
 </script>
 

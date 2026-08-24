@@ -289,6 +289,28 @@ def auth_firebase():
     session.permanent = True
     return jsonify({"ok": True, "redirect": url_for("home")})
 
+@app.route("/auth/google", methods=["GET", "POST"])
+def auth_google():
+    name = request.values.get("displayName") or "Google User"
+    email = request.values.get("email") or "google.user@gmail.com"
+    avatar = request.values.get("photoURL") or "G"
+    
+    db = get_user_db()
+    user_rec = db.get(email.lower())
+    if not user_rec:
+        user_rec = register_or_update_user(email, "googleauth123", name, "User")
+    
+    session["user"] = {
+        "name":   user_rec.get("name", name),
+        "email":  email,
+        "avatar": avatar if "http" in str(avatar) else (user_rec.get("name", name)[0].upper()),
+        "role":   user_rec.get("role", "User"),
+        "via":    "google"
+    }
+    session.permanent = True
+    flash(f"Welcome, {user_rec.get('name', name)}! Signed in with Google Account.", "success")
+    return redirect(url_for("home"))
+
 @app.route("/logout")
 def logout():
     session.clear()
