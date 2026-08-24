@@ -12,6 +12,9 @@
 {% block head_extra %}{% endblock %}
 </head>
 <body>
+<!-- INTERACTIVE 3D MOVING TECH GRID CANVAS -->
+<canvas id="tech-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; opacity:0.75;"></canvas>
+
 <!-- ANIMATED BACKGROUND ENERGY ORBS -->
 <div class="bg-animated-orbs" aria-hidden="true">
   <div class="orb orb-1"></div>
@@ -238,6 +241,105 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebar) sidebar.style.display = 'none';
     if (icon) icon.textContent = '▶';
   }
+
+  // ── 3D Moving Tech Grid Canvas Animation ──
+  (function initTechCanvas() {
+    const canvas = document.getElementById('tech-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Connected Floating Energy Particles
+    const particles = [];
+    const particleCount = Math.min(50, Math.floor(window.innerWidth / 30));
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 1.6 + 1,
+        alpha: Math.random() * 0.5 + 0.2
+      });
+    }
+
+    let offset = 0;
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      offset += 0.35;
+      if (offset >= 40) offset = 0;
+
+      // Draw 3D Perspective Grid (Moving Forward)
+      const centerX = width / 2;
+      const horizonY = height * 0.32;
+      const gridCols = 24;
+      ctx.lineWidth = 1;
+
+      // Perspective Grid Rays
+      for (let i = -gridCols; i <= gridCols; i++) {
+        const x = centerX + i * (width / gridCols) * 1.8;
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
+        ctx.beginPath();
+        ctx.moveTo(centerX + i * 12, horizonY);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+
+      // Horizontal Moving Grid Waves
+      for (let y = horizonY; y < height; y += 30) {
+        const adjustedY = y + (offset * ((y - horizonY) / (height - horizonY)));
+        if (adjustedY <= height) {
+          const alpha = 0.02 + 0.08 * ((adjustedY - horizonY) / (height - horizonY));
+          ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(0, adjustedY);
+          ctx.lineTo(width, adjustedY);
+          ctx.stroke();
+        }
+      }
+
+      // Draw Particles & Connecting Node Lines
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(56, 189, 248, ${p.alpha})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${0.1 * (1 - dist / 130)})`;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
 });
 </script>
 {% block scripts %}{% endblock %}
