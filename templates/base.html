@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (icon) icon.textContent = '▶';
   }
 
-  // ── 3D Moving Tech Grid Canvas Animation ──
+  // ── Ultra-Creative Interactive 3D Cyber Mesh & Data Pulse Canvas ──
   (function initTechCanvas() {
     const canvas = document.getElementById('tech-canvas');
     if (!canvas) return;
@@ -256,47 +256,85 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', resize);
     resize();
 
-    // Connected Floating Energy Particles
+    // Mouse Position & Interactive Attraction
+    const mouse = { x: -1000, y: -1000, active: false };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.active = false;
+    });
+
+    // Particle Constellation Nodes
+    const colorsList = ['rgba(56, 189, 248, ', 'rgba(129, 140, 248, ', 'rgba(192, 132, 252, '];
     const particles = [];
-    const particleCount = Math.min(50, Math.floor(window.innerWidth / 30));
+    const particleCount = Math.min(65, Math.floor(window.innerWidth / 22));
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 1.6 + 1,
-        alpha: Math.random() * 0.5 + 0.2
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        radius: Math.random() * 2 + 1,
+        colorPrefix: colorsList[Math.floor(Math.random() * colorsList.length)],
+        alpha: Math.random() * 0.6 + 0.2,
+        pulseSpeed: Math.random() * 0.03 + 0.01,
+        pulseAngle: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Shooting Grid Data Pulses
+    const gridPulses = [];
+    for (let i = 0; i < 8; i++) {
+      gridPulses.push({
+        colIndex: Math.floor((Math.random() - 0.5) * 24),
+        progress: Math.random(),
+        speed: Math.random() * 0.006 + 0.003,
+        color: Math.random() > 0.5 ? '#38bdf8' : '#c084fc'
       });
     }
 
     let offset = 0;
     function draw() {
       ctx.clearRect(0, 0, width, height);
-      offset += 0.35;
+      offset += 0.4;
       if (offset >= 40) offset = 0;
 
-      // Draw 3D Perspective Grid (Moving Forward)
       const centerX = width / 2;
       const horizonY = height * 0.32;
       const gridCols = 24;
-      ctx.lineWidth = 1;
 
-      // Perspective Grid Rays
+      // 1. Horizon Energy Glow Line
+      const horizonGrad = ctx.createLinearGradient(0, horizonY, width, horizonY);
+      horizonGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      horizonGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.25)');
+      horizonGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      ctx.strokeStyle = horizonGrad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, horizonY);
+      ctx.lineTo(width, horizonY);
+      ctx.stroke();
+
+      // 2. 3D Perspective Grid Rays
+      ctx.lineWidth = 1;
       for (let i = -gridCols; i <= gridCols; i++) {
-        const x = centerX + i * (width / gridCols) * 1.8;
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
+        const x = centerX + i * (width / gridCols) * 1.85;
+        const colAlpha = 0.04 + (1 - Math.abs(i) / gridCols) * 0.06;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${colAlpha})`;
         ctx.beginPath();
-        ctx.moveTo(centerX + i * 12, horizonY);
+        ctx.moveTo(centerX + i * 10, horizonY);
         ctx.lineTo(x, height);
         ctx.stroke();
       }
 
-      // Horizontal Moving Grid Waves
-      for (let y = horizonY; y < height; y += 30) {
+      // 3. Horizontal Moving Grid Waves (Depth Effect)
+      for (let y = horizonY; y < height; y += 28) {
         const adjustedY = y + (offset * ((y - horizonY) / (height - horizonY)));
         if (adjustedY <= height) {
-          const alpha = 0.02 + 0.08 * ((adjustedY - horizonY) / (height - horizonY));
+          const alpha = 0.02 + 0.09 * ((adjustedY - horizonY) / (height - horizonY));
           ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(0, adjustedY);
@@ -305,9 +343,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Draw Particles & Connecting Node Lines
+      // 4. Shooting Data Pulses along 3D Grid Rays
+      gridPulses.forEach(pulse => {
+        pulse.progress += pulse.speed;
+        if (pulse.progress > 1) {
+          pulse.progress = 0;
+          pulse.colIndex = Math.floor((Math.random() - 0.5) * 24);
+        }
+
+        const startX = centerX + pulse.colIndex * 10;
+        const endX = centerX + pulse.colIndex * (width / gridCols) * 1.85;
+
+        const currentX = startX + (endX - startX) * pulse.progress;
+        const currentY = horizonY + (height - horizonY) * pulse.progress;
+        const pRadius = 1.5 + pulse.progress * 3;
+
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, pRadius, 0, Math.PI * 2);
+        ctx.fillStyle = pulse.color;
+        ctx.shadowColor = pulse.color;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // 5. Interactive Particle Constellations & Mouse Attraction
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+        p.pulseAngle += p.pulseSpeed;
+        const currentAlpha = Math.max(0.1, p.alpha + Math.sin(p.pulseAngle) * 0.2);
+
+        // Mouse attraction physics
+        if (mouse.active) {
+          const mdx = mouse.x - p.x;
+          const mdy = mouse.y - p.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 180) {
+            p.x += (mdx / mdist) * 0.6;
+            p.y += (mdy / mdist) * 0.6;
+
+            // Connect mouse cursor to nearby nodes
+            ctx.beginPath();
+            ctx.moveTo(mouse.x, mouse.y);
+            ctx.lineTo(p.x, p.y);
+            ctx.strokeStyle = `rgba(56, 189, 248, ${0.25 * (1 - mdist / 180)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+
         p.x += p.vx;
         p.y += p.vy;
 
@@ -318,19 +402,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(56, 189, 248, ${p.alpha})`;
+        ctx.fillStyle = `${p.colorPrefix}${currentAlpha})`;
         ctx.fill();
 
+        // Node-to-node constellation lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130) {
+          if (dist < 135) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${0.1 * (1 - dist / 130)})`;
+            ctx.strokeStyle = `rgba(56, 189, 248, ${0.12 * (1 - dist / 135)})`;
             ctx.stroke();
           }
         }
