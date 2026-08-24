@@ -108,7 +108,7 @@
         <input type="date" name="to_date" id="to_date" class="form-control date-picker-input" value="{{ today }}" onclick="try{this.showPicker()}catch(e){}" required/>
       </div>
     </div>
-    <div style="font-family:var(--font-mono);font-size:0.62rem;color:var(--text-4);margin-top:0.4rem;" id="date-duration-label">
+    <div style="font-family:var(--font-mono);font-size:0.85rem;font-weight:600;color:var(--text-3);margin-top:0.4rem;" id="date-duration-label">
       📅 Selecting: today only (1 day)
     </div>
   </div>
@@ -206,7 +206,7 @@
         <div class="flex-center" style="gap:0.5rem;">
           <input type="number" name="prev_load" id="prev_load" class="form-control"
                  min="0.5" max="15" step="0.1" value="5.2" style="flex:1;"/>
-          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--emerald);">kW</span>
+          <span style="font-family:var(--font-mono);font-size:0.95rem;font-weight:700;color:var(--emerald);">kW</span>
         </div>
         <div class="label-sm mt-1">Last recorded grid load</div>
       </div>
@@ -219,11 +219,11 @@
     <div class="flex-between">
       <div>
         <div class="label-xs">Prediction Window Summary</div>
-        <div id="window-summary" style="font-family:var(--font-mono);font-size:0.78rem;color:var(--text-2);margin-top:0.3rem;">
+        <div id="window-summary" style="font-family:var(--font-mono);font-size:0.95rem;font-weight:600;color:var(--text-2);margin-top:0.3rem;">
           Today · 07:00 – 19:00 · 12 hours · ~48 intervals
         </div>
       </div>
-      <div id="model-status-home" class="model-status ready" style="font-size:0.62rem;">
+      <div id="model-status-home" class="model-status ready" style="font-size:0.82rem;font-weight:600;">
         <span class="live"></span> ML Model Ready
       </div>
     </div>
