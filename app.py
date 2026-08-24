@@ -378,11 +378,19 @@ def prediction():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    pred  = session.get("prediction", {})
+    pred = session.get("prediction")
+    if not pred and ml.models_exist():
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        try:
+            pred = ml.predict_range(today_str, today_str, 7, 19, 28.0, 60.0)
+            session["prediction"] = pred
+        except Exception:
+            pass
     if not pred:
-        return redirect(url_for("home"))
+        pred = {}
+
     return render_template("dashboard.html",
-        user=session["user"],
+        user=session.get("user"),
         pred=pred,
         metrics=get_metrics(),
         analytics=get_analytics(),
