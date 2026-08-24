@@ -446,19 +446,44 @@ body::after {
   border: none; transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
   position: relative; overflow: hidden;
 }
-.btn-primary {
-  background: linear-gradient(135deg, #047857 0%, #0369a1 100%);
-  color: #ecfdf5;
-  box-shadow: 0 6px 20px -6px rgba(4,120,87,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+.btn-primary, .btn--pearl, .hero__cta, #predict-btn {
+  background: linear-gradient(135deg, #1e1b4b 0%, #6b21a8 50%, #4c1d95 100%) !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(192, 132, 252, 0.45) !important;
+  box-shadow: 0 6px 20px -6px rgba(107, 33, 168, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
-.btn-primary:hover {
-  background: linear-gradient(135deg, var(--emerald) 0%, var(--cyan) 100%);
-  box-shadow: 0 10px 28px -6px rgba(16,185,129,0.55);
+.btn-primary:hover, .btn--pearl:hover, .hero__cta:hover, #predict-btn:hover {
+  background: linear-gradient(135deg, #2e1065 0%, #7e22ce 50%, #3b82f6 100%) !important;
+  border-color: rgba(192, 132, 252, 0.7) !important;
+  box-shadow: 0 10px 28px -6px rgba(126, 34, 206, 0.8), 0 0 25px rgba(168, 85, 247, 0.4) !important;
   transform: translateY(-2px);
-  color: #000;
+  color: #ffffff !important;
 }
-.btn-xl { font-size: 0.95rem; padding: 0.85rem 2.2rem; border-radius: var(--radius-md); width: auto; max-width: max-content; display: inline-flex; }
+.btn-xl { font-size: 0.95rem; padding: 0.85rem 2.2rem; border-radius: 999px; width: auto; max-width: max-content; display: inline-flex; }
 .btn-block { width: 100% !important; max-width: 100% !important; display: flex !important; }
+
+/* ── Custom Scrollbar (Pure Black Track & Deep Dark Blue/Purple Thumb) ── */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+  background: #020205;
+}
+::-webkit-scrollbar-track {
+  background: #020205 !important;
+}
+::-webkit-scrollbar-thumb {
+  background: #160a2c !important;
+  border-radius: 6px;
+  border: 1px solid rgba(168, 85, 247, 0.3) !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #28104e !important;
+}
+* {
+  scrollbar-color: #160a2c #020205 !important;
+  scrollbar-width: thin;
+}
 .btn-ghost {
   background: transparent; color: var(--text-2);
   border: 1px solid var(--border);
