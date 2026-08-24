@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}Grid Analytics & Substation Heatmap — SmartGrid AI{% endblock %}
+
+{% block content %}
+<div class="shell">
+
+  <!-- HERO SECTION -->
+  <section class="card mb-2" style="padding: 2rem 2.2rem;">
+    <div class="flex-between flex-wrap gap-1">
+      <div>
+        <div class="page-tag mb-1">
+          <span class="dot"></span> MODULE 1: Substation Analytics
+        </div>
+        <h1 class="h-display" style="font-size: 2.2rem; margin-bottom: 0.4rem;">
+          🗺️ Substation Load Heatmap &amp; Anomaly Radar
+        </h1>
+        <p class="text-lead" style="max-width: 720px; font-size: 0.95rem;">
+          Real-time telemetry monitoring across 6 key regional grid substations, ML anomaly risk radar, and carbon emission offset tracker.
+        </p>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span class="badge badge-low" style="font-size:0.85rem; padding:0.45rem 1rem;">🌱 CO₂ OFFSET: 1.48 TONS TODAY</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 REGIONAL SUBSTATIONS GRID HEATMAP -->
+  <div class="card mb-2">
+    <div class="flex-between mb-2">
+      <div>
+        <div class="h-section">⚡ Regional Substation Load Heatmap</div>
+        <div class="label-sm mt-1">Live active capacity utilization and transformer temperature telemetry</div>
+      </div>
+      <span class="label-xs" style="color:var(--cyan);">6 Active Grid Zones</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
+      {% for sub in substations %}
+      <div class="card-sm" style="position:relative; overflow:hidden;">
+        <div class="flex-between mb-1">
+          <span class="label-xs" style="color:var(--text-3);">ZONE #0{{ sub.id }}</span>
+          {% if sub.badge == 'critical' %}
+            <span class="badge badge-critical" style="font-size:0.7rem; padding:0.2rem 0.65rem;">{{ sub.status }}</span>
+          {% elif sub.badge == 'warning' %}
+            <span class="badge badge-high" style="font-size:0.7rem; padding:0.2rem 0.65rem;">{{ sub.status }}</span>
+          {% elif sub.badge == 'optimal' %}
+            <span class="badge badge-low" style="font-size:0.7rem; padding:0.2rem 0.65rem;">{{ sub.status }}</span>
+          {% else %}
+            <span class="badge badge-moderate" style="font-size:0.7rem; padding:0.2rem 0.65rem;">{{ sub.status }}</span>
+          {% endif %}
+        </div>
+
+        <h3 style="font-family:var(--font-head); font-weight:800; font-size:1.15rem; color:#fff; margin-bottom:0.2rem;">
+          {{ sub.name }}
+        </h3>
+        <div style="font-family:var(--font-mono); font-size:0.82rem; color:var(--text-3); margin-bottom:1rem;">
+          📍 {{ sub.zone }}
+        </div>
+
+        <!-- LOAD PERCENTAGE BAR -->
+        <div style="margin-bottom:0.8rem;">
+          <div class="flex-between mb-1" style="font-family:var(--font-mono); font-size:0.85rem;">
+            <span style="color:var(--text-3);">Capacity Load</span>
+            <span style="font-weight:800; color:{% if sub.load > 85 %}#f87171{% elif sub.load > 70 %}#fbbf24{% else %}#34d399{% endif %};">{{ sub.load }}%</span>
+          </div>
+          <div style="width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:999px; overflow:hidden;">
+            <div style="width:{{ sub.load }}%; height:100%; background:{% if sub.load > 85 %}linear-gradient(90deg, #f59e0b, #ef4444){% elif sub.load > 70 %}linear-gradient(90deg, #3b82f6, #f59e0b){% else %}linear-gradient(90deg, #10b981, #38bdf8){% endif %}; transition:width 1s;"></div>
+          </div>
+        </div>
+
+        <div class="flex-between" style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-3); border-top:1px solid rgba(255,255,255,0.08); padding-top:0.6rem;">
+          <span>Max: {{ sub.capacity }} MW</span>
+          <span>🌡️ {{ sub.temp }}°C</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ANOMALY RADAR & METRICS -->
+  <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+
+    <!-- RADAR CHART -->
+    <div class="card">
+      <div class="flex-between mb-2">
+        <div>
+          <div class="h-section">📡 ML Grid Anomaly Risk Radar</div>
+          <div class="label-sm mt-1">Multi-dimensional analysis of grid disturbance factors</div>
+        </div>
+        <span class="label-xs" style="color:var(--emerald);">Status: Stable</span>
+      </div>
+      <div style="height:320px; position:relative;">
+        <canvas id="anomalyRadarChart"></canvas>
+      </div>
+    </div>
+
+    <!-- CARBON & RELIABILITY CARDS -->
+    <div style="display:flex; flex-direction:column; gap:1.2rem;">
+      <div class="card-sm" style="background:linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,9,18,0.4)) !important; border-color:rgba(16,185,129,0.3) !important;">
+        <div class="label-xs" style="color:var(--emerald);">🌱 Carbon Offset Counter</div>
+        <div style="font-family:var(--font-head); font-size:2.4rem; font-weight:900; color:#fff; margin:0.4rem 0;">
+          1,480 <span style="font-size:1rem; color:var(--emerald-lt);">kg CO₂</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.82rem; color:var(--text-3);">
+          Prevented today via AI peak shaving &amp; solar ingestion optimization.
+        </div>
+      </div>
+
+      <div class="card-sm" style="background:linear-gradient(135deg, rgba(56,189,248,0.15), rgba(6,9,18,0.4)) !important; border-color:rgba(56,189,248,0.3) !important;">
+        <div class="label-xs" style="color:var(--cyan);">⚡ Grid Efficiency Ratio</div>
+        <div style="font-family:var(--font-head); font-size:2.4rem; font-weight:900; color:#fff; margin:0.4rem 0;">
+          98.4 %
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.82rem; color:var(--text-3);">
+          Transmission loss minimized by dynamic VAR voltage control.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('anomalyRadarChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Voltage Sag', 'Harmonic Noise', 'Frequency Shift', 'Overcurrent Peak', 'Thermal Stress', 'Phase Imbalance'],
+      datasets: [{
+        label: 'Current Anomaly Risk',
+        data: [25, 40, 15, 65, 30, 20],
+        backgroundColor: 'rgba(56, 189, 248, 0.25)',
+        borderColor: '#38bdf8',
+        pointBackgroundColor: '#38bdf8',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#38bdf8'
+      }, {
+        label: 'Safety Threshold Limit',
+        data: [80, 80, 80, 80, 80, 80],
+        backgroundColor: 'rgba(239, 68, 68, 0.08)',
+        borderColor: 'rgba(239, 68, 68, 0.5)',
+        borderDash: [5, 5],
+        pointRadius: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          pointLabels: { color: '#cbd5e1', font: { family: 'Jost', size: 12, weight: '600' } },
+          ticks: { backdropColor: 'transparent', color: 'rgba(255, 255, 255, 0.5)', stepSize: 20 }
+        }
+      },
+      plugins: {
+        legend: { labels: { color: '#ffffff', font: { family: 'Jost', size: 12 } } }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

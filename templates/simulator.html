@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block title %}Extreme Weather Stress Simulator — SmartGrid AI{% endblock %}
+
+{% block content %}
+<div class="shell">
+
+  <!-- HERO SECTION -->
+  <section class="card mb-2" style="padding: 2rem 2.2rem;">
+    <div class="flex-between flex-wrap gap-1">
+      <div>
+        <div class="page-tag mb-1">
+          <span class="dot"></span> MODULE 4: Weather &amp; Surge Stress Simulator
+        </div>
+        <h1 class="h-display" style="font-size: 2.2rem; margin-bottom: 0.4rem;">
+          ⚙️ Interactive Extreme Weather &amp; Load Stress Tester
+        </h1>
+        <p class="text-lead" style="max-width: 720px; font-size: 0.95rem;">
+          Simulate severe 45°C heatwaves, factory power surges, and solar cloud-cover blackouts to observe how the AI ML model dynamically balances grid risk.
+        </p>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span class="badge badge-low" id="risk-badge" style="font-size:0.85rem; padding:0.45rem 1rem;">🛡️ FAILURE RISK: 18% (SAFE)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRESS TEST SLIDERS & LIVE RISK GAUGE -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.8rem;">
+
+    <!-- INTERACTIVE SLIDER CONTROLS -->
+    <div class="card">
+      <div class="h-section mb-1">🎛️ Extreme Scenario Parameters</div>
+      <div class="label-sm mb-2">Adjust climate and demand stress parameters in real-time</div>
+
+      <!-- Temperature Slider -->
+      <div class="form-group mb-2">
+        <label class="form-label">🌡️ Ambient Heatwave Temperature &nbsp;
+          <span class="range-val" id="sim-temp-val">32.0 °C</span>
+        </label>
+        <div class="range-wrap">
+          <input type="range" id="sim-temp" min="-10" max="50" step="1" value="32" oninput="runGridSimulation()"/>
+        </div>
+        <div class="range-labels">
+          <span class="range-label-txt">-10°C (Deep Freeze)</span>
+          <span class="range-label-txt">25°C (Normal)</span>
+          <span class="range-label-txt">50°C (Extreme Heat)</span>
+        </div>
+      </div>
+
+      <!-- Industrial Surge Slider -->
+      <div class="form-group mb-2">
+        <label class="form-label">🏭 Factory Industrial Surge &nbsp;
+          <span class="range-val" id="sim-surge-val">+20 %</span>
+        </label>
+        <div class="range-wrap">
+          <input type="range" id="sim-surge" min="0" max="100" step="5" value="20" oninput="runGridSimulation()"/>
+        </div>
+        <div class="range-labels">
+          <span class="range-label-txt">0% (Normal)</span>
+          <span class="range-label-txt">+50% (High Surge)</span>
+          <span class="range-label-txt">+100% (Double Load)</span>
+        </div>
+      </div>
+
+      <!-- Cloud Cover Drop Slider -->
+      <div class="form-group">
+        <label class="form-label">☁️ Solar Cloud Cover Blackout &nbsp;
+          <span class="range-val" id="sim-cloud-val">15 %</span>
+        </label>
+        <div class="range-wrap">
+          <input type="range" id="sim-cloud" min="0" max="100" step="5" value="15" oninput="runGridSimulation()"/>
+        </div>
+        <div class="range-labels">
+          <span class="range-label-txt">0% (Clear Sun)</span>
+          <span class="range-label-txt">50% (Partial Overcast)</span>
+          <span class="range-label-txt">100% (Full Storm)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DYNAMIC RISK INDEX & ACTION REASONING -->
+    <div class="card">
+      <div class="h-section mb-1">📊 Dynamic Grid Failure Risk Index</div>
+      <div class="label-sm mb-2">Real-time risk meter calculated dynamically based on stress inputs</div>
+
+      <div style="text-align:center; padding:1rem 0;">
+        <div style="font-family:var(--font-head); font-size:4.5rem; font-weight:900; line-height:1; transition:color 0.3s;" id="risk-score">
+          18 <span style="font-size:2rem;">%</span>
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.9rem; margin-top:0.4rem; color:var(--emerald-lt);" id="risk-status">
+          LOW FAILURE RISK — GRID CAPACITY SUFFICIENT
+        </div>
+      </div>
+
+      <div style="background:rgba(18,22,48,0.6); padding:1.2rem; border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.1); margin-top:1rem;">
+        <div style="font-family:var(--font-mono); font-size:0.85rem; font-weight:700; color:var(--cyan); margin-bottom:0.4rem;">
+          🤖 ML Automated Protection Directives:
+        </div>
+        <div style="font-family:var(--font-mono); font-size:0.82rem; color:var(--text-3); line-height:1.5;" id="sim-directives">
+          • Grid operating within normal thermal and capacity safety limits.<br/>
+          • BESS reserves standing by at 84.5% capacity.<br/>
+          • Recommended Action: Continue normal automated load scheduling.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STRESS PROJECTION COMPARISON CHART -->
+  <div class="card">
+    <div class="flex-between mb-2">
+      <div>
+        <div class="h-section">📈 Baseline vs Stressed Load Curve</div>
+        <div class="label-sm mt-1">Real-time simulated 24-hour load curve under stress conditions</div>
+      </div>
+      <span class="label-xs" style="color:var(--cyan);">Simulated Dynamic Telemetry</span>
+    </div>
+    <div style="height:320px; position:relative;">
+      <canvas id="simChart"></canvas>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let simChart;
+
+function runGridSimulation() {
+  const temp = parseFloat(document.getElementById('sim-temp').value);
+  const surge = parseFloat(document.getElementById('sim-surge').value);
+  const cloud = parseFloat(document.getElementById('sim-cloud').value);
+
+  document.getElementById('sim-temp-val').textContent = temp.toFixed(1) + ' °C';
+  document.getElementById('sim-surge-val').textContent = '+' + surge + ' %';
+  document.getElementById('sim-cloud-val').textContent = cloud + ' %';
+
+  // Calculate Risk Index
+  let tempFactor = Math.max(0, temp - 25) * 1.8;
+  let risk = Math.min(100, Math.round(tempFactor + (surge * 0.5) + (cloud * 0.25)));
+
+  const scoreEl = document.getElementById('risk-score');
+  const statusEl = document.getElementById('risk-status');
+  const badgeEl = document.getElementById('risk-badge');
+  const directivesEl = document.getElementById('sim-directives');
+
+  scoreEl.innerHTML = risk + ' <span style="font-size:2rem;">%</span>';
+
+  if (risk > 75) {
+    scoreEl.style.color = '#f87171';
+    statusEl.textContent = '🚨 CRITICAL FAILURE RISK — GRID OVERLOAD IMMINENT';
+    statusEl.style.color = '#f87171';
+    badgeEl.className = 'badge badge-critical';
+    badgeEl.textContent = '🚨 FAILURE RISK: ' + risk + '% (CRITICAL)';
+    directivesEl.innerHTML = '• ⚠️ <strong>CRITICAL OVERLOAD:</strong> Ambient temp &amp; surge exceeding transformer thermal limits.<br/>• Action: Discharging 100% BESS reserves (1200 kW).<br/>• Action: Initiating 15% rolling industrial load-shedding.';
+  } else if (risk > 45) {
+    scoreEl.style.color = '#fbbf24';
+    statusEl.textContent = '⚠️ MODERATE RISK — HIGH THERMAL & DEMAND STRESS';
+    statusEl.style.color = '#fbbf24';
+    badgeEl.className = 'badge badge-high';
+    badgeEl.textContent = '⚠️ FAILURE RISK: ' + risk + '% (MODERATE)';
+    directivesEl.innerHTML = '• ⚠️ High load stress detected.<br/>• Action: Dispatching 600 kW from BESS storage.<br/>• Action: Engaging step-up VAR voltage regulators.';
+  } else {
+    scoreEl.style.color = '#34d399';
+    statusEl.textContent = '🛡️ LOW FAILURE RISK — GRID CAPACITY SUFFICIENT';
+    statusEl.style.color = '#34d399';
+    badgeEl.className = 'badge badge-low';
+    badgeEl.textContent = '🛡️ FAILURE RISK: ' + risk + '% (SAFE)';
+    directivesEl.innerHTML = '• Grid operating within normal thermal and capacity safety limits.<br/>• BESS reserves standing by at 84.5% capacity.<br/>• Recommended Action: Continue normal automated load scheduling.';
+  }
+
+  // Update Chart Data
+  if (simChart) {
+    const multiplier = 1 + (surge / 100) + (temp > 25 ? (temp - 25) * 0.015 : 0);
+    const baseline = [2800, 2400, 2200, 2100, 2300, 3100, 4200, 4800, 5200, 5500, 5800, 6100, 6000, 5700, 5400, 5200, 5600, 6400, 6800, 6500, 5800, 4900, 4100, 3400];
+    const stressed = baseline.map(v => Math.round(v * multiplier));
+
+    simChart.data.datasets[1].data = stressed;
+    simChart.update();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const ctx = document.getElementById('simChart').getContext('2d');
+  const hours = Array.from({length: 24}, (_, i) => `${String(i).padStart(2, '0')}:00`);
+  const baseline = [2800, 2400, 2200, 2100, 2300, 3100, 4200, 4800, 5200, 5500, 5800, 6100, 6000, 5700, 5400, 5200, 5600, 6400, 6800, 6500, 5800, 4900, 4100, 3400];
+  const stressed = baseline.map(v => Math.round(v * 1.2));
+
+  simChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: hours,
+      datasets: [
+        {
+          label: 'Baseline Grid Capacity (kW)',
+          data: baseline,
+          borderColor: '#38bdf8',
+          borderWidth: 2,
+          borderDash: [5, 5],
+          fill: false
+        },
+        {
+          label: 'Stressed Load Profile (kW)',
+          data: stressed,
+          borderColor: '#f87171',
+          backgroundColor: 'rgba(248, 113, 113, 0.15)',
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.35
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { grid: { color: 'rgba(255, 255, 255, 0.06)' }, ticks: { color: '#cbd5e1', font: { family: 'Jost' } } },
+        y: { grid: { color: 'rgba(255, 255, 255, 0.06)' }, ticks: { color: '#cbd5e1', font: { family: 'Jost' } } }
+      },
+      plugins: {
+        legend: { labels: { color: '#ffffff', font: { family: 'Jost', size: 12 } } }
+      }
+    }
+  });
+
+  runGridSimulation();
+});
+</script>
+{% endblock %}

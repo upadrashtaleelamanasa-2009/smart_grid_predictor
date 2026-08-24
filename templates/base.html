@@ -38,6 +38,44 @@
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
       <a href="{{ url_for('dashboard') }}" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
+
+      <!-- ⚡ ADVANCED GRID MODULES HOVER DROPDOWN MENU -->
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-btn {{ 'is-active' if active_page in ['analytics', 'bess', 'anomalies', 'simulator'] else '' }}" type="button">
+          ⚡ Advanced Modules <span style="font-size:0.6rem; margin-left:2px;">▼</span>
+        </button>
+        <div class="nav-dropdown-content">
+          <a href="{{ url_for('analytics') }}" class="dropdown-item {{ 'is-active' if active_page == 'analytics' else '' }}">
+            <span class="item-icon">🗺️</span>
+            <div>
+              <div class="item-title">Substation Analytics</div>
+              <div class="item-sub">6-Zone Heatmap &amp; Anomaly Radar</div>
+            </div>
+          </a>
+          <a href="{{ url_for('bess') }}" class="dropdown-item {{ 'is-active' if active_page == 'bess' else '' }}">
+            <span class="item-icon">🔋</span>
+            <div>
+              <div class="item-title">BESS &amp; Solar Storage</div>
+              <div class="item-sub">Peak Shaving &amp; SOC Simulator</div>
+            </div>
+          </a>
+          <a href="{{ url_for('anomalies') }}" class="dropdown-item {{ 'is-active' if active_page == 'anomalies' else '' }}">
+            <span class="item-icon">🚨</span>
+            <div>
+              <div class="item-title">Fault &amp; Outage Center</div>
+              <div class="item-sub">SAIDI / SAIFI &amp; Diagnostic Alerts</div>
+            </div>
+          </a>
+          <a href="{{ url_for('simulator') }}" class="dropdown-item {{ 'is-active' if active_page == 'simulator' else '' }}">
+            <span class="item-icon">⚙️</span>
+            <div>
+              <div class="item-title">Weather Stress Simulator</div>
+              <div class="item-sub">Heatwave &amp; Surge Failure Tester</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
       {% if user is mapping and user.role == 'Operator' %}
       <a href="{{ url_for('admin_users') }}" class="{{ 'is-active' if active_page == 'admin_users' else '' }}">Operator DB</a>
       {% endif %}
@@ -152,6 +190,22 @@
         </a></li>
         <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if active_page == 'dashboard' else '' }}">
           <span class="icon">📊</span> Full Dashboard
+        </a></li>
+      </ul>
+      <hr class="sidebar-divider"/>
+      <div class="sidebar-section-label">Advanced Modules</div>
+      <ul class="sidebar-nav">
+        <li><a href="{{ url_for('analytics') }}" class="{{ 'active' if active_page == 'analytics' else '' }}">
+          <span class="icon">🗺️</span> Substation Analytics
+        </a></li>
+        <li><a href="{{ url_for('bess') }}" class="{{ 'active' if active_page == 'bess' else '' }}">
+          <span class="icon">🔋</span> BESS &amp; Solar Storage
+        </a></li>
+        <li><a href="{{ url_for('anomalies') }}" class="{{ 'active' if active_page == 'anomalies' else '' }}">
+          <span class="icon">🚨</span> Fault &amp; Outage Center
+        </a></li>
+        <li><a href="{{ url_for('simulator') }}" class="{{ 'active' if active_page == 'simulator' else '' }}">
+          <span class="icon">⚙️</span> Stress Simulator
         </a></li>
       </ul>
       <hr class="sidebar-divider"/>

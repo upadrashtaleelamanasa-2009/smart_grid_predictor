@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Grid Fault & Outage Prevention — SmartGrid AI{% endblock %}
+
+{% block content %}
+<div class="shell">
+
+  <!-- HERO SECTION -->
+  <section class="card mb-2" style="padding: 2rem 2.2rem;">
+    <div class="flex-between flex-wrap gap-1">
+      <div>
+        <div class="page-tag mb-1">
+          <span class="dot"></span> MODULE 3: Grid Fault &amp; Outage Center
+        </div>
+        <h1 class="h-display" style="font-size: 2.2rem; margin-bottom: 0.4rem;">
+          🚨 Live Fault Diagnostics &amp; Reliability Indices
+        </h1>
+        <p class="text-lead" style="max-width: 720px; font-size: 0.95rem;">
+          Automated IEEE reliability metrics (SAIDI, SAIFI, CAIDI), live diagnostic event feeds, and automated operator emergency directives.
+        </p>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span class="badge badge-low" style="font-size:0.85rem; padding:0.45rem 1rem;">🛡️ ASAI AVAILABILITY: {{ reliability.asai }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- IEEE RELIABILITY INDICES STAT CARDS -->
+  <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; margin-bottom: 1.8rem;">
+    <div class="card-sm">
+      <div class="label-xs" style="color:var(--cyan);">⏱️ SAIDI Index</div>
+      <div style="font-family:var(--font-head); font-size:2rem; font-weight:900; color:#fff; margin:0.3rem 0;">
+        {{ reliability.saidi }}
+      </div>
+      <div class="label-sm">System Avg Interruption Duration</div>
+    </div>
+
+    <div class="card-sm">
+      <div class="label-xs" style="color:var(--emerald);">⚡ SAIFI Index</div>
+      <div style="font-family:var(--font-head); font-size:2rem; font-weight:900; color:#fff; margin:0.3rem 0;">
+        {{ reliability.saifi }}
+      </div>
+      <div class="label-sm">System Avg Interruption Frequency</div>
+    </div>
+
+    <div class="card-sm">
+      <div class="label-xs" style="color:var(--amber);">⌛ CAIDI Index</div>
+      <div style="font-family:var(--font-head); font-size:2rem; font-weight:900; color:#fff; margin:0.3rem 0;">
+        {{ reliability.caidi }}
+      </div>
+      <div class="label-sm">Customer Avg Interruption Duration</div>
+    </div>
+
+    <div class="card-sm">
+      <div class="label-xs" style="color:var(--purple-bright);">🛡️ ASAI Grid Availability</div>
+      <div style="font-family:var(--font-head); font-size:2rem; font-weight:900; color:#fff; margin:0.3rem 0;">
+        {{ reliability.asai }}
+      </div>
+      <div class="label-sm">Average System Availability</div>
+    </div>
+  </div>
+
+  <!-- LIVE FAULT LOG TABLE & EMERGENCY DIRECTIVES -->
+  <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+
+    <!-- LIVE FAULT LOG TABLE -->
+    <div class="card">
+      <div class="flex-between mb-2">
+        <div>
+          <div class="h-section">📋 Live Diagnostic Event Feed</div>
+          <div class="label-sm mt-1">Real-time telemetry disturbance logs and automated mitigation actions</div>
+        </div>
+        <span class="label-xs" style="color:var(--emerald);">4 Events Logged</span>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="hourly-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Ref Code</th>
+              <th>Grid Zone</th>
+              <th>Disturbance Type</th>
+              <th>Severity</th>
+              <th>Automated Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ev in events %}
+            <tr>
+              <td style="font-family:var(--font-mono); color:var(--text-3);">{{ ev.time }}</td>
+              <td style="font-family:var(--font-mono); font-weight:700; color:var(--cyan);">{{ ev.code }}</td>
+              <td style="font-family:var(--font-mono); font-weight:600;">{{ ev.zone }}</td>
+              <td style="color:#fff; font-weight:600;">{{ ev.type }}</td>
+              <td>
+                {% if ev.severity == 'CRITICAL' %}
+                  <span class="badge badge-critical" style="font-size:0.65rem; padding:0.15rem 0.5rem;">CRITICAL</span>
+                {% elif ev.severity == 'HIGH' %}
+                  <span class="badge badge-high" style="font-size:0.65rem; padding:0.15rem 0.5rem;">HIGH</span>
+                {% elif ev.severity == 'MODERATE' %}
+                  <span class="badge badge-moderate" style="font-size:0.65rem; padding:0.15rem 0.5rem;">MODERATE</span>
+                {% else %}
+                  <span class="badge badge-low" style="font-size:0.65rem; padding:0.15rem 0.5rem;">LOW</span>
+                {% endif %}
+              </td>
+              <td style="font-family:var(--font-mono); font-size:0.8rem; color:var(--emerald-lt);">{{ ev.action }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- AUTOMATED DIRECTIVE CONTROL CARD -->
+    <div class="card">
+      <div class="h-section mb-1">🎮 Operator Directives</div>
+      <div class="label-sm mb-2">Execute immediate automated emergency grid protection commands</div>
+
+      <div style="display:flex; flex-direction:column; gap:0.9rem; margin-top:1.2rem;">
+        <button class="btn btn-sm" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); color:#f87171; width:100%; justify-content:flex-start;" onclick="alert('⚡ Executed Industrial Peak Load-Shedding Directive (Zone 1 & 5 throttled by 15%)')">
+          🚨 Execute Industrial Load Shedding
+        </button>
+
+        <button class="btn btn-sm" style="background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; width:100%; justify-content:flex-start;" onclick="alert('🔋 Discharged Full BESS Reserve Backup (2.5 MWh Online)')">
+          🔋 Force Emergency BESS Discharge
+        </button>
+
+        <button class="btn btn-sm" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; width:100%; justify-content:flex-start;" onclick="alert('🔄 Engaged Automated VAR Voltage Regulator Support')">
+          🔄 Tap Step-Up VAR Voltage Stabilizer
+        </button>
+
+        <button class="btn btn-sm" style="background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); color:#c084fc; width:100%; justify-content:flex-start;" onclick="alert('📋 Diagnostics Log Exported to PDF / Syslog')">
+          📄 Download Reliability Audit Report
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

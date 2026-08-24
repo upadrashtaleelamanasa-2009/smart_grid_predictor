@@ -435,6 +435,63 @@ def dashboard():
     )
 
 # ══════════════════════════════════════════════════════════════════════
+# ADVANCED ECOSYSTEM MODULE ROUTES
+# ══════════════════════════════════════════════════════════════════════
+@app.route("/analytics")
+@login_required
+def analytics():
+    """Grid Analytics & Regional Substation Heatmap"""
+    substations = [
+        {"id": 1, "name": "North Substation", "zone": "Industrial Hub", "load": 88, "capacity": 12.5, "status": "High Load", "badge": "warning", "temp": 32.4},
+        {"id": 2, "name": "Tech Park Complex", "zone": "Commercial District", "load": 62, "capacity": 8.0, "status": "Optimal", "badge": "normal", "temp": 24.1},
+        {"id": 3, "name": "Solar Farm Alpha", "zone": "Renewable Ingestion", "load": 94, "capacity": 15.0, "status": "Peak Solar Gen", "badge": "optimal", "temp": 38.0},
+        {"id": 4, "name": "Residential Zone 4", "zone": "Suburban Baseload", "load": 45, "capacity": 6.5, "status": "Normal", "badge": "normal", "temp": 22.8},
+        {"id": 5, "name": "EV Supercharger Grid", "zone": "Highway Corridor", "load": 91, "capacity": 9.2, "status": "Critical Peak", "badge": "critical", "temp": 36.5},
+        {"id": 6, "name": "Central Gateway Node", "zone": "Main Distribution", "load": 74, "capacity": 20.0, "status": "Moderate", "badge": "warning", "temp": 28.2},
+    ]
+    return render_template("analytics.html", user=session.get("user"), substations=substations, active_page="analytics")
+
+@app.route("/bess")
+@login_required
+def bess():
+    """BESS (Battery Energy Storage) & Solar Optimizer"""
+    bess_info = {
+        "soc": 84.5,
+        "capacity_kwh": 2500,
+        "current_charge_kw": 420.0,
+        "solar_gen_kw": 860.5,
+        "wind_gen_kw": 340.2,
+        "peak_shaved_today_kwh": 1840.0,
+        "cost_saved_usd": 386.40,
+        "co2_saved_tons": 1.48
+    }
+    return render_template("bess.html", user=session.get("user"), bess=bess_info, active_page="bess")
+
+@app.route("/anomalies")
+@login_required
+def anomalies():
+    """Grid Fault & Outage Prevention Center"""
+    fault_events = [
+        {"time": "22:42:15", "code": "FLT-9041", "zone": "EV Supercharger Grid", "type": "Thermal Overheat Alert", "severity": "CRITICAL", "action": "Auto-throttled charging slots by 25%"},
+        {"time": "21:15:08", "code": "FLT-8820", "zone": "North Substation", "type": "Harmonic Distortion Spike", "severity": "HIGH", "action": "Engaged active harmonic filters"},
+        {"time": "19:04:30", "code": "FLT-7612", "zone": "Residential Zone 4", "type": "Voltage Sag (208V → 194V)", "severity": "MODERATE", "action": "Tapped step-up transformer boost"},
+        {"time": "16:20:11", "code": "FLT-6105", "zone": "Solar Farm Alpha", "type": "Cloud Ingress Generation Drop", "severity": "LOW", "action": "Discharged BESS reserve by 300 kW"},
+    ]
+    reliability = {
+        "saidi": "1.42 hrs/yr",
+        "saifi": "0.38 interruptions/yr",
+        "caidi": "3.73 hrs/event",
+        "asai": "99.9837%"
+    }
+    return render_template("anomalies.html", user=session.get("user"), events=fault_events, reliability=reliability, active_page="anomalies")
+
+@app.route("/simulator")
+@login_required
+def simulator():
+    """Interactive Extreme Weather & Stress Tester"""
+    return render_template("simulator.html", user=session.get("user"), active_page="simulator")
+
+# ══════════════════════════════════════════════════════════════════════
 # API ENDPOINTS (called by dashboard JS)
 # ══════════════════════════════════════════════════════════════════════
 @app.route("/api/dataset-sample")
