@@ -596,6 +596,55 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 18px rgba(16,1
 .weather-humidity { font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan); }
 
 /* ══════════════════════════════════════════════════
+   DASHBOARD ANIMATIONS & GAUGE CARDS
+══════════════════════════════════════════════════ */
+@keyframes cardFadeUp {
+  0% { opacity: 0; transform: translateY(18px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(16,185,129,0.3); }
+  50% { box-shadow: 0 0 35px rgba(16,185,129,0.7); }
+}
+@keyframes pulseRadar {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.chart-card {
+  animation: cardFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.dash-stats .stat-box {
+  animation: cardFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.dash-stats .stat-box:nth-child(1) { animation-delay: 0.05s; }
+.dash-stats .stat-box:nth-child(2) { animation-delay: 0.1s; }
+.dash-stats .stat-box:nth-child(3) { animation-delay: 0.15s; }
+.dash-stats .stat-box:nth-child(4) { animation-delay: 0.2s; }
+.dash-stats .stat-box:nth-child(5) { animation-delay: 0.25s; }
+.dash-stats .stat-box:nth-child(6) { animation-delay: 0.3s; }
+
+/* Gauge Center Text overlay */
+.gauge-center-text {
+  position: absolute;
+  top: 58%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.gauge-val {
+  font-family: var(--font-head);
+  font-size: 1.6rem; font-weight: 800;
+  color: var(--emerald-lt);
+  text-shadow: 0 0 20px rgba(16,185,129,0.6);
+}
+.gauge-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.65rem; color: var(--text-4);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* ══════════════════════════════════════════════════
    PREDICTION PAGE
 ══════════════════════════════════════════════════ */
 .prediction-hero {

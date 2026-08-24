@@ -150,59 +150,63 @@
     </div>
   </div>
 
-  <!-- CHART 4: Hourly Load Profile -->
+  <!-- CHART 4: 24-Hour Radial Polar Radar Load Clock -->
   <div id="chart-peaks" class="chart-card">
     <div class="chart-header">
       <div>
-        <div class="chart-title">🔥 Hourly Load Distribution</div>
-        <div class="chart-subtitle">Average power consumption by hour of day across full dataset</div>
+        <div class="chart-title">🌀 24-Hour Radial Load Clock</div>
+        <div class="chart-subtitle">Polar load distribution mapped by hour of day (00:00 - 23:00)</div>
       </div>
     </div>
-    <div class="chart-canvas-wrap" style="height:220px;">
+    <div class="chart-canvas-wrap" style="height:230px; display:flex; align-items:center; justify-content:center;">
       <canvas id="chart-hourly-canvas"></canvas>
     </div>
     <div class="chart-legend mt-1">
       <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div><span class="legend-txt">Evening Peak (18-22h)</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Afternoon Ramp</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Night Baseload</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Daytime Ramp</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Baseload (00-06h)</span></div>
     </div>
   </div>
 
 </div><!-- /charts-row-2 -->
 
-<!-- ═══ ROW: Voltage+Overload  +  Price+PowerFactor ═══ -->
+<!-- ═══ ROW: Speedometer Gauge  +  Pricing Combo ═══ -->
 <div class="charts-row charts-row-2 mb-2">
 
-  <!-- CHART 5: Grid Health & Overload Gauge (Doughnut Chart) -->
+  <!-- CHART 5: Speedometer Gauge -->
   <div class="chart-card">
     <div class="chart-header">
       <div>
-        <div class="chart-title">⚠️ Grid Health &amp; Overload Distribution</div>
-        <div class="chart-subtitle">Dataset grid stability — Normal operations vs Overload incidents</div>
+        <div class="chart-title">⚡ Smart Grid Stability Speedometer</div>
+        <div class="chart-subtitle">Real-time health status gauge — Normal grid load vs Overload incidents</div>
       </div>
     </div>
-    <div class="chart-canvas-wrap" style="height:200px; display:flex; align-items:center; justify-content:center;">
+    <div class="chart-canvas-wrap" style="height:220px; position:relative; display:flex; align-items:center; justify-content:center;">
       <canvas id="chart-overload-canvas"></canvas>
+      <div class="gauge-center-text">
+        <div class="gauge-val" id="gauge-stability-val">97.2%</div>
+        <div class="gauge-lbl">Grid Health</div>
+      </div>
     </div>
-    <div class="chart-legend mt-1">
-      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Normal Operations</span></div>
-      <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div><span class="legend-txt">Grid Overload Incidents</span></div>
+    <div class="chart-legend mt-1" style="justify-content:center; gap:1.5rem;">
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span class="legend-txt">Normal Operations (97.2%)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444;"></div><span class="legend-txt">Grid Stress (2.8%)</span></div>
     </div>
   </div>
 
-  <!-- CHART 6: Electricity Price -->
+  <!-- CHART 6: Horizontal Combo Bar/Line Chart -->
   <div class="chart-card">
     <div class="chart-header">
       <div>
-        <div class="chart-title">💰 Electricity Price &amp; Power Factor</div>
-        <div class="chart-subtitle">Real-time pricing (USD/kWh) vs Power Factor efficiency</div>
+        <div class="chart-title">💎 Pricing Tiers &amp; Power Efficiency</div>
+        <div class="chart-subtitle">Horizontal rate breakdown (USD/kWh) vs Power Factor stability</div>
       </div>
     </div>
     <div class="chart-canvas-wrap" style="height:220px;">
       <canvas id="chart-price-canvas"></canvas>
     </div>
     <div class="chart-legend mt-1">
-      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Price (USD/kWh)</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div><span class="legend-txt">Price Tier ($/kWh)</span></div>
       <div class="legend-item"><div class="legend-dot" style="background:#818cf8;"></div><span class="legend-txt">Power Factor</span></div>
     </div>
   </div>
@@ -424,10 +428,15 @@ function loadHistory(period, btn) {
         }
       });
 
-      // Overload Doughnut Gauge Chart
+      // ── CHART 5: Speedometer Gauge ──────────────────────────
       if (overloadChart) overloadChart.destroy();
       const overloadEvents = d.overload.filter(v => v === 1).length;
       const normalOps = d.overload.length - overloadEvents;
+      const healthPct = ((normalOps / d.overload.length) * 100).toFixed(1);
+
+      const stabilityEl = document.getElementById('gauge-stability-val');
+      if (stabilityEl) stabilityEl.innerText = healthPct + '%';
+
       overloadChart = new Chart(document.getElementById('chart-overload-canvas'), {
         type: 'doughnut',
         data: {
@@ -435,7 +444,7 @@ function loadHistory(period, btn) {
           datasets: [{
             data: [normalOps, overloadEvents],
             backgroundColor: ['#10b981', '#ef4444'],
-            borderColor: 'rgba(10,14,28,0.9)',
+            borderColor: 'rgba(10,14,28,0.95)',
             borderWidth: 4,
             hoverOffset: 8
           }]
@@ -443,7 +452,9 @@ function loadHistory(period, btn) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutout: '72%',
+          circumference: 180,
+          rotation: -90,
+          cutout: '78%',
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -456,48 +467,39 @@ function loadHistory(period, btn) {
               }
             }
           },
-          animation: { duration: 500 }
+          animation: { duration: 1400, easing: 'easeOutQuart' }
         }
       });
 
-      // Price chart
+      // ── CHART 6: Horizontal Combo Bar Chart ───────────────
       if (priceChart) priceChart.destroy();
       priceChart = new Chart(document.getElementById('chart-price-canvas'), {
-        type:'line',
-        data:{
-          labels: d.timestamps,
-          datasets:[
+        type: 'bar',
+        data: {
+          labels: d.timestamps.slice(0, 10),
+          datasets: [
             {
-              label:'Price (USD/kWh)',
-              data: d.price,
-              borderColor:'#f59e0b', borderWidth:1.5, pointRadius:0, tension:0.3,
-              fill:true,
-              backgroundColor: ctx => {
-                const g = ctx.chart.ctx.createLinearGradient(0,0,0,180);
-                g.addColorStop(0,'rgba(245,158,11,0.2)');
-                g.addColorStop(1,'rgba(245,158,11,0.0)');
-                return g;
-              },
-              yAxisID:'y'
+              label: 'Price Tier ($/kWh)',
+              data: d.price.slice(0, 10),
+              backgroundColor: 'rgba(245, 158, 11, 0.85)',
+              borderRadius: 6,
+              barThickness: 9
             },
             {
-              label:'Power Factor',
-              data: d.power_factor,
-              borderColor:'#818cf8', borderWidth:1.5, pointRadius:0, tension:0.3,
-              fill:false,
-              yAxisID:'y1'
+              label: 'Power Factor',
+              data: d.power_factor.slice(0, 10),
+              backgroundColor: 'rgba(129, 140, 248, 0.85)',
+              borderRadius: 6,
+              barThickness: 9
             }
           ]
         },
-        options:{
-          responsive:true, maintainAspectRatio:false,
-          scales:{
-            x: COMMON_SCALES.x,
-            y:  { ...COMMON_SCALES.y, position:'left',  title:{display:true,text:'Price (USD/kWh)',color:'#f59e0b',font:{size:10}} },
-            y1: { ...COMMON_SCALES.y, position:'right', grid:{drawOnChartArea:false}, title:{display:true,text:'Power Factor',color:'#818cf8',font:{size:10}} }
-          },
-          plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false} },
-          animation:{ duration:400 }
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          scales: COMMON_SCALES,
+          plugins: { legend: { display: false } },
+          animation: { duration: 1000, easing: 'easeOutCubic' }
         }
       });
     });
@@ -508,8 +510,7 @@ function loadActPred() {
   const avp = {{ analytics.get('actual_vs_pred', {}) | tojson }};
   if (!avp || !avp.timestamps) return;
 
-  // Sample 60 evenly spaced points for a crisp vertical bar display matching screenshot
-  const step = Math.max(1, Math.floor(avp.timestamps.length / 60));
+  const step = Math.max(1, Math.floor(avp.timestamps.length / 50));
   const sampledLabels = avp.timestamps.filter((_, i) => i % step === 0);
   const sampledActual = avp.actual.filter((_, i) => i % step === 0);
   const sampledPred   = avp.predicted.filter((_, i) => i % step === 0);
@@ -526,7 +527,7 @@ function loadActPred() {
           backgroundColor: 'rgba(16, 185, 129, 0.85)',
           borderColor: '#34d399',
           borderWidth: 1.5,
-          borderRadius: 2,
+          borderRadius: 4,
           barPercentage: 0.7,
           categoryPercentage: 0.8
         },
@@ -536,7 +537,7 @@ function loadActPred() {
           backgroundColor: 'rgba(6, 182, 212, 0.85)',
           borderColor: '#38bdf8',
           borderWidth: 1.5,
-          borderRadius: 2,
+          borderRadius: 4,
           barPercentage: 0.7,
           categoryPercentage: 0.8
         }
@@ -546,46 +547,47 @@ function loadActPred() {
       responsive: true, maintainAspectRatio: false,
       scales: COMMON_SCALES,
       plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
-      animation: { duration: 500 }
+      animation: { duration: 1000, easing: 'easeOutQuart' }
     }
   });
 }
 
-// ─── CHART 4: Hourly Load ────────────────────────────────────
+// ─── CHART 4: 24-Hour Polar Radar Clock ─────────────────────
 function loadHourly() {
   const hourly = {{ analytics.get('hourly_avg', []) | tojson }};
   if (!hourly.length) return;
 
   const labels = hourly.map(h => String(h.Hour).padStart(2,'0')+':00');
   const means  = hourly.map(h => parseFloat(h.mean.toFixed(3)));
-  const colors = hourly.map(h => {
-    if (h.Hour >= 18 && h.Hour <= 21) return 'rgba(239,68,68,0.8)';
-    if (h.Hour >= 11 && h.Hour <= 17) return 'rgba(245,158,11,0.75)';
-    if (h.Hour <= 5)                  return 'rgba(16,185,129,0.75)';
-    return 'rgba(6,182,212,0.65)';
-  });
 
   if (hourlyChart) hourlyChart.destroy();
   hourlyChart = new Chart(document.getElementById('chart-hourly-canvas'), {
-    type:'bar',
-    data:{
-      labels,
-      datasets:[{
-        label:'Avg kW',
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Avg Load (kW)',
         data: means,
-        backgroundColor: colors,
-        borderRadius: 4,
-        borderSkipped: false,
+        backgroundColor: 'rgba(16, 185, 129, 0.25)',
+        borderColor: '#10b981',
+        borderWidth: 2,
+        pointBackgroundColor: '#34d399',
+        pointBorderColor: '#fff',
+        pointHoverRadius: 6
       }]
     },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      scales:{
-        x:{ ...COMMON_SCALES.x, ticks:{...COMMON_SCALES.x.ticks,maxRotation:45} },
-        y:{ ...COMMON_SCALES.y, title:{display:true,text:'Avg kW',color:'#475569',font:{size:10}} }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: { color: 'rgba(255,255,255,0.08)' },
+          grid: { color: 'rgba(255,255,255,0.08)' },
+          pointLabels: { color: '#94a3b8', font: { size: 9, family: "'JetBrains Mono', monospace" } },
+          ticks: { display: false }
+        }
       },
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label(c){return c.parsed.y + ' kW avg';}}} },
-      animation:{ duration:600 }
+      plugins: { legend: { display: false } },
+      animation: { duration: 1200, easing: 'easeOutBack' }
     }
   });
 }
