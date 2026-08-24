@@ -70,24 +70,24 @@
       {% endfor %}
     {% endwith %}
 
-    <div class="card" style="background: rgba(16, 24, 19, 0.92); border: 1px solid var(--hairline); backdrop-filter: blur(24px); border-radius: 24px; padding: 2.2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.7);">
+    <div class="card" style="background: linear-gradient(135deg, rgba(30, 16, 52, 0.94), rgba(18, 10, 36, 0.97)); border: 1px solid rgba(168, 85, 247, 0.35); backdrop-filter: blur(28px) saturate(140%); border-radius: 24px; padding: 2.2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 50px rgba(168, 85, 247, 0.2);">
 
       <!-- Logo + Title -->
       <div class="text-center mb-2">
-        <div class="login-logo" style="width:54px; height:54px; border-radius:16px; margin:0 auto 0.8rem; background: linear-gradient(135deg, var(--emerald), var(--cyan)); display:flex; align-items:center; justify-content:center; font-size:1.6rem; box-shadow: 0 0 25px rgba(16,185,129,0.4);">⚡</div>
+        <div class="login-logo" style="width:54px; height:54px; border-radius:16px; margin:0 auto 0.8rem; background: linear-gradient(135deg, var(--purple), var(--cyan)); display:flex; align-items:center; justify-content:center; font-size:1.6rem; box-shadow: 0 0 25px rgba(168,85,247,0.4);">⚡</div>
         <h1 class="login-title" style="font-family: var(--font-body); font-weight: 500; font-size: 1.45rem; color: var(--ink);">Smart Grid Access Portal</h1>
         <p class="login-subtitle" style="font-size: 0.82rem; color: var(--ink-soft); margin-top: 2px;">Sign in to access the Energy Consumption Predictor</p>
       </div>
 
       <!-- Tab Switcher -->
-      <div class="auth-tabs" style="display:flex; gap:0.5rem; background:rgba(10,14,12,0.8); padding:0.35rem; border-radius:999px; margin-bottom:1.2rem; border:1px solid var(--hairline);">
+      <div class="auth-tabs" style="display:flex; gap:0.5rem; background:rgba(12,8,24,0.8); padding:0.35rem; border-radius:999px; margin-bottom:1.2rem; border:1px solid rgba(168,85,247,0.25);">
         <button id="tab-signin" type="button" class="btn btn-sm btn-primary" style="flex:1; border-radius:999px; font-size:0.8rem;" onclick="switchAuthTab('signin')">Sign In</button>
         <button id="tab-signup" type="button" class="btn btn-sm btn-ghost" style="flex:1; border-radius:999px; font-size:0.8rem;" onclick="switchAuthTab('signup')">Create Account</button>
       </div>
 
       <!-- Google Sign In -->
       <div id="google-container">
-        <button class="btn-google mb-1" id="google-signin-btn" type="button" style="border-radius:999px; background: rgba(14,20,16,0.85); border: 1px solid var(--hairline); width:100%;">
+        <button class="btn-google mb-1" id="google-signin-btn" type="button" style="border-radius:999px; background: rgba(24,14,42,0.88); border: 1px solid rgba(168,85,247,0.3); width:100%;">
           <svg class="g-icon" viewBox="0 0 48 48">
             <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-21.5 0-1.4-.1-2.7-.5-4.5z"/>
             <path fill="#34A853" d="M6.3 14.7l7 5.1C15.2 16.2 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2c-7.6 0-14.2 4.6-17.7 12.7z"/>
@@ -99,25 +99,17 @@
         <div class="form-divider" style="margin:0.8rem 0;"><span>or sign in with email</span></div>
       </div>
 
-      <!-- Email Suggestions Datalist -->
-      <datalist id="email-suggestions">
-        <option value="operator@smartgrid.org">⚡ operator@smartgrid.org (Operator Admin)</option>
-        <option value="user@smartgrid.org">👤 user@smartgrid.org (Grid Consumer)</option>
-        <option value="admin@smartgrid.org"></option>
-        <option value="demo.user@gmail.com"></option>
-      </datalist>
-
       <!-- Email / Password Sign In Form -->
       <form id="signin-form" method="POST" action="{{ url_for('auth_email') }}">
         <div class="form-group mb-1">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Email Address</label>
           <input type="email" name="email" id="signin-email" class="form-control"
-                 placeholder="you@example.com" required autocomplete="email" list="email-suggestions" style="border-radius: var(--radius-sm); background:rgba(10,14,12,0.8); border:1px solid var(--hairline); color:var(--ink);"/>
+                 placeholder="you@example.com" required autocomplete="email" style="border-radius: var(--radius-sm); background:rgba(12,8,24,0.85); border:1px solid rgba(168,85,247,0.25); color:var(--ink);"/>
         </div>
         <div class="form-group mb-2">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Password</label>
           <input type="password" name="password" id="signin-pass" class="form-control"
-                 placeholder="Enter password" required autocomplete="current-password" style="border-radius: var(--radius-sm); background:rgba(10,14,12,0.8); border:1px solid var(--hairline); color:var(--ink);"/>
+                 placeholder="Enter password" required autocomplete="current-password" style="border-radius: var(--radius-sm); background:rgba(12,8,24,0.85); border:1px solid rgba(168,85,247,0.25); color:var(--ink);"/>
         </div>
         <button type="submit" class="btn btn--pearl btn-block" style="width: 100%; padding: 12px 26px; margin-top: 0.5rem;">
           Sign In &amp; Enter Dashboard →
@@ -129,17 +121,17 @@
         <div class="form-group mb-1">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Full Name</label>
           <input type="text" name="name" class="form-control"
-                 placeholder="Enter your full name" required style="border-radius: var(--radius-sm); background:rgba(10,14,12,0.8); border:1px solid var(--hairline); color:var(--ink);"/>
+                 placeholder="Enter your full name" required style="border-radius: var(--radius-sm); background:rgba(12,8,24,0.85); border:1px solid rgba(168,85,247,0.25); color:var(--ink);"/>
         </div>
         <div class="form-group mb-1">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Email Address</label>
           <input type="email" name="email" class="form-control"
-                 placeholder="you@example.com" required autocomplete="email" list="email-suggestions" style="border-radius: var(--radius-sm); background:rgba(10,14,12,0.8); border:1px solid var(--hairline); color:var(--ink);"/>
+                 placeholder="you@example.com" required autocomplete="email" style="border-radius: var(--radius-sm); background:rgba(12,8,24,0.85); border:1px solid rgba(168,85,247,0.25); color:var(--ink);"/>
         </div>
         <div class="form-group mb-1">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Create Password</label>
           <input type="password" name="password" class="form-control"
-                 placeholder="Minimum 4 characters" required minlength="4" style="border-radius: var(--radius-sm); background:rgba(10,14,12,0.8); border:1px solid var(--hairline); color:var(--ink);"/>
+                 placeholder="Minimum 4 characters" required minlength="4" style="border-radius: var(--radius-sm); background:rgba(12,8,24,0.85); border:1px solid rgba(168,85,247,0.25); color:var(--ink);"/>
         </div>
         <div class="form-group mb-2">
           <label class="form-label" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);">Account Role</label>
@@ -200,8 +192,12 @@
   }
 
   document.getElementById("google-signin-btn").addEventListener("click", async () => {
+    if (provider) {
+      provider.setCustomParameters({ prompt: 'select_account' });
+    }
     if (!firebaseReady || firebaseConfig.apiKey.includes("DEMO")) {
-      const email = "demo.user@gmail.com";
+      const email = prompt("Google Sign-In: Choose or enter your Google Account email:", "user@gmail.com");
+      if (!email) return;
       const form  = document.createElement("form");
       form.method = "POST"; form.action = "/auth/email";
       const em = document.createElement("input"); em.name="email"; em.value=email; form.appendChild(em);
