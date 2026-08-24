@@ -132,6 +132,14 @@ def register_or_update_user(email, password, name=None, role="User"):
 # ══════════════════════════════════════════════════════════════════════
 # PAGE 1 – LOGIN & REGISTRATION
 # ══════════════════════════════════════════════════════════════════════
+@app.context_processor
+def inject_user():
+    user = session.get("user")
+    return {
+        "user": user,
+        "show_sidebar": True if (user and user.get("role") == "Operator") else False
+    }
+
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -141,7 +149,7 @@ def login():
         session.clear()
     elif session.get("user"):
         return redirect(url_for("home"))
-    return render_template("login.html")
+    return render_template("login.html", active_page="login", show_sidebar=False)
 
 @app.route("/auth/signup", methods=["POST"])
 def auth_signup():

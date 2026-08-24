@@ -28,7 +28,7 @@
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
       <a href="{{ url_for('dashboard') }}" class="{{ 'is-active' if active_page == 'dashboard' else '' }}">Dashboard</a>
-      {% if user and user.role == 'Operator' %}
+      {% if user and user.get('role') == 'Operator' %}
       <a href="{{ url_for('admin_users') }}" class="{{ 'is-active' if active_page == 'admin_users' else '' }}">Operator DB</a>
       {% endif %}
     </nav>
@@ -60,7 +60,7 @@
     <a href="{{ url_for('home') }}">Home</a>
     <a href="#" onclick="navPrediction(event)">Predictor</a>
     <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    {% if user and user.role == 'Operator' %}
+    {% if user and user.get('role') == 'Operator' %}
     <a href="{{ url_for('admin_users') }}">Operator DB</a>
     {% endif %}
     {% if user %}
@@ -72,7 +72,7 @@
 </header>
 
 {% block body %}
-{% if show_sidebar and user and user.role == 'Operator' %}
+{% if show_sidebar and user and user.get('role') == 'Operator' %}
 <div class="layout-sidebar" style="padding-top: calc(var(--nav-h) + 0.5rem);">
 
   <!-- LAYOUT BODY -->
