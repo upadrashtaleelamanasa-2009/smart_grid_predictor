@@ -22,12 +22,45 @@
   </div>
 </div>
 
-<!-- Hero Banner -->
-<div class="card mb-2">
-  <div class="page-tag"><span class="dot"></span> STEP 1 OF 3: Input Parameters</div>
-  <h1 class="h-display grad">Configure Forecast Conditions</h1>
-  <p class="text-lead mt-1">Enter date range, time window, weather factors, and previous hour consumption to generate ML electricity demand projections.</p>
-</div>
+<!-- GLOWINN FULL VIDEO HERO BANNER -->
+<section class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <video id="hero-video" class="hero__video is-ready" src="{{ url_for('static', filename='hero.mp4') }}" autoPlay muted loop playsInline preload="auto"></video>
+    <div class="hero__scrim"></div>
+  </div>
+
+  <div class="hero__body shell">
+    <h1 class="hero__title">
+      <span class="hero__title-lead">Discover Energy Intelligence</span>
+      Made for Modern Power Grids.
+    </h1>
+    <a class="btn btn--pearl hero__cta" href="#forecast-form">
+      Configure Forecast Parameters ↓
+    </a>
+  </div>
+
+  <div class="hero__foot shell">
+    <article class="card card--note">
+      <h2>AI-Powered Grid Forecasting</h2>
+      <p>From real-time load analytics to XGBoost predictive modeling, explore grid performance metrics with precision.</p>
+    </article>
+
+    <p class="hero__caption">Smart Grid energy prediction with precision and accuracy.</p>
+
+    <div class="hero__stats">
+      <article class="card card--stat">
+        <strong>0.9754</strong>
+        <span class="card__label">R² Score</span>
+        <span class="card__foot">Gradient Boosting</span>
+      </article>
+      <article class="card card--stat">
+        <strong>97.2%</strong>
+        <span class="card__label">Grid Health</span>
+        <span class="card__foot">Operational Stability</span>
+      </article>
+    </div>
+  </div>
+</section>
 
 <!-- Scenario Presets -->
 <div class="card mb-2">
