@@ -163,9 +163,7 @@ function toggleMobileNav() {
   }
 }
 function navPrediction(e) {
-  e.preventDefault();
-  const hasPred = {{ 'true' if session.get('prediction') else 'false' }};
-  if (!hasPred) { alert('Please generate a prediction first from the Input Details page.'); return; }
+  if (e) e.preventDefault();
   window.location.href = '{{ url_for("prediction") }}';
 }
 function toggleProfileModal(e) {

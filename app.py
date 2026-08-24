@@ -274,6 +274,18 @@ def home():
 def prediction():
     if request.method == "GET":
         result = session.get("prediction")
+        if not result and ml.models_exist():
+            today_str = datetime.now().strftime("%Y-%m-%d")
+            try:
+                result = ml.predict_range(today_str, today_str, 7, 19, 28.0, 60.0)
+                session["prediction"] = result
+                session["prediction_params"] = {
+                    "from_date": today_str, "to_date": today_str,
+                    "from_hour": 7, "to_hour": 19,
+                    "temperature": 28.0, "humidity": 60.0
+                }
+            except Exception as e:
+                pass
         if not result:
             flash("Please generate a prediction first from the Input Details page.", "warning")
             return redirect(url_for("home"))
