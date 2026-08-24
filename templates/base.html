@@ -36,10 +36,10 @@
     <div class="nav__actions">
       {% if user %}
       <div class="user-avatar" style="cursor:pointer;" title="Click to view account details" onclick="toggleProfileModal(event)">
-        {% if user.via == 'google' and user.avatar and user.avatar.startswith('http') %}
-          <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+        {% if user and user.get('via') == 'google' and user.get('avatar') and 'http' in user.get('avatar') %}
+          <img src="{{ user.get('avatar') }}" alt="{{ user.get('name') }}"/>
         {% else %}
-          {{ user.avatar or user.name[0] }}
+          {{ user.get('avatar') or (user.get('name') and user.get('name')[0]) or 'U' }}
         {% endif %}
       </div>
       <a class="btn btn--ink" href="{{ url_for('logout') }}">Sign Out</a>
@@ -104,15 +104,15 @@
       <div class="sidebar-bottom">
         <div class="sidebar-user">
           <div class="user-avatar" style="width:30px;height:30px;font-size:0.75rem;">
-            {% if user.via == 'google' and user.avatar and user.avatar.startswith('http') %}
-              <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+            {% if user and user.get('via') == 'google' and user.get('avatar') and 'http' in user.get('avatar') %}
+              <img src="{{ user.get('avatar') }}" alt="{{ user.get('name') }}"/>
             {% else %}
-              {{ user.avatar or user.name[0] }}
+              {{ user.get('avatar') or (user.get('name') and user.get('name')[0]) or 'U' }}
             {% endif %}
           </div>
           <div>
-            <div class="sidebar-user-name">{{ user.name }}</div>
-            <div class="sidebar-user-email">{{ user.email }}</div>
+            <div class="sidebar-user-name">{{ user.get('name') }}</div>
+            <div class="sidebar-user-email">{{ user.get('email') }}</div>
           </div>
         </div>
         <a href="{{ url_for('logout') }}" class="btn-logout"><span>⬅</span> Sign Out</a>
