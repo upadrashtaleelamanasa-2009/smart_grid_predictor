@@ -31,7 +31,7 @@
       {% if user is mapping and user.role == 'Operator' %}
       <a href="{{ url_for('admin_users') }}" class="{{ 'is-active' if active_page == 'admin_users' else '' }}">Operator DB</a>
       {% endif %}
-    </nav>    <div class="nav__actions">
+    </nav>    <div class="nav__actions" style="position:relative;">
       {% if user is mapping and user.role == 'Operator' %}
       <button type="button" class="btn btn--ink btn-sm" id="sidebar-toggle-btn" onclick="toggleOperatorSidebar()" style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; padding:0.3rem 0.8rem; border-radius:999px; margin-right:0.4rem;">
         <span id="sidebar-toggle-icon">◀</span> Sidebar
@@ -46,6 +46,35 @@
         {% endif %}
       </div>
       <a class="btn btn--ink" href="{{ url_for('logout') }}">Sign Out</a>
+
+      <!-- USER PROFILE ACCOUNT POPUP MODAL -->
+      <div id="user-profile-modal" style="display:none; position:absolute; top:calc(100% + 12px); right:0; width:280px; background:rgba(10, 14, 26, 0.96); border:1px solid rgba(255,255,255,0.18); border-radius:20px; padding:1.4rem; box-shadow:0 20px 50px rgba(0,0,0,0.85); backdrop-filter:blur(24px); z-index:9999;">
+        <div style="text-align:center; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div class="user-avatar" style="width:54px; height:54px; font-size:1.4rem; margin:0 auto 0.6rem;">
+            {% if user.via == 'google' and user.avatar and 'http' in user.avatar %}
+              <img src="{{ user.avatar }}" alt="{{ user.name }}"/>
+            {% else %}
+              {{ user.avatar or (user.name and user.name[0]) or 'U' }}
+            {% endif %}
+          </div>
+          <div style="font-weight:600; font-size:0.98rem; color:#ffffff;">{{ user.name or 'User' }}</div>
+          <div style="font-size:0.78rem; color:var(--ink-soft); word-break:break-all;">{{ user.email or '' }}</div>
+        </div>
+        <div style="padding:0.8rem 0; font-size:0.78rem; color:var(--ink-faint); display:flex; flex-direction:column; gap:0.4rem;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>Role:</span>
+            <strong style="color:var(--cyan);">{{ user.role or 'Consumer' }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>Signed in via:</span>
+            <strong style="color:#ffffff;">{{ 'Google' if user.via == 'google' else 'Email' }}</strong>
+          </div>
+        </div>
+        <a class="btn btn--pearl btn-block" href="{{ url_for('logout') }}" style="width:100%; padding:0.6rem 1rem; margin-top:0.4rem; font-size:0.82rem;">
+          Sign Out
+        </a>
+      </div>
+
       {% else %}
       <a class="btn btn--pearl" href="{{ url_for('login') }}" onclick="if(window.openLoginModal){ openLoginModal(); return false; }">Sign In</a>
       {% endif %}
