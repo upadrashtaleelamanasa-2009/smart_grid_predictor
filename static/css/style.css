@@ -65,18 +65,21 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Faint Large Tech Grid & Dark Obsidian Navy Ambient Background ── */
+/* ── Faint Large Tech Grid & Animated Dark Obsidian Navy Ambient Background ── */
 body::before {
   content: '';
-  position: fixed; inset: 0;
+  position: fixed; inset: -10%;
+  width: 120%; height: 120%;
   background:
-    radial-gradient(ellipse 1200px 800px at 15% 10%, rgba(15, 23, 42, 0.65), transparent 60%),
-    radial-gradient(ellipse 1000px 750px at 85% 35%, rgba(10, 15, 30, 0.7), transparent 65%),
-    radial-gradient(ellipse 1100px 850px at 50% 90%, rgba(6, 10, 22, 0.9), transparent 70%),
+    radial-gradient(ellipse 900px 600px at 20% 20%, rgba(30, 58, 138, 0.4), transparent 60%),
+    radial-gradient(ellipse 800px 550px at 80% 40%, rgba(14, 165, 233, 0.25), transparent 65%),
+    radial-gradient(ellipse 1000px 700px at 50% 85%, rgba(67, 56, 202, 0.28), transparent 70%),
     linear-gradient(160deg, #020307 0%, #050816 35%, #070d22 65%, #020307 100%);
   pointer-events: none; z-index: 0;
-  animation: floatBackground 25s ease-in-out infinite alternate;
+  animation: cosmicAtmosphere 24s ease-in-out infinite alternate;
+  will-change: transform;
 }
+
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -85,12 +88,49 @@ body::after {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 72px 72px; /* Large Tech Grid! */
   pointer-events: none; z-index: 0;
+  animation: gridScan 45s linear infinite;
+  will-change: background-position;
 }
 
-@keyframes floatBackground {
-  0% { transform: scale(1) translateY(0); }
-  50% { transform: scale(1.05) translateY(-8px); }
-  100% { transform: scale(1) translateY(0); }
+@keyframes cosmicAtmosphere {
+  0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+  50% { transform: scale(1.08) translate(-15px, 12px) rotate(1.5deg); }
+  100% { transform: scale(1.02) translate(12px, -15px) rotate(-1.5deg); }
+}
+
+@keyframes gridScan {
+  0% { background-position: 0 0; }
+  100% { background-position: 72px 72px; }
+}
+
+/* Floating Ambient Energy Orbs */
+.bg-animated-orbs {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+.bg-animated-orbs .orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+.bg-animated-orbs .orb-1 {
+  top: 15%; left: 10%; width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 70%);
+  animation-duration: 22s;
+}
+.bg-animated-orbs .orb-2 {
+  top: 60%; right: 15%; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.22), transparent 70%);
+  animation-duration: 28s; animation-delay: -5s;
+}
+.bg-animated-orbs .orb-3 {
+  bottom: 10%; left: 30%; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(30, 58, 138, 0.3), transparent 70%);
+  animation-duration: 25s; animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-40px) scale(1.12); opacity: 0.75; }
+  100% { transform: translateY(20px) scale(0.95); opacity: 0.5; }
 }
 
 /* ── Keyframe Animations ── */
