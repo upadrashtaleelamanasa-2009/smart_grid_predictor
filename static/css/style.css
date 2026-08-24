@@ -242,14 +242,21 @@ body::after {
 /* ── Navbar Hover Dropdown Menu ── */
 .nav-dropdown { position: relative; display: inline-flex; align-items: center; }
 .nav-dropdown-btn {
-  background: transparent; border: none; color: inherit; font: inherit; cursor: pointer;
-  padding: 0.35rem 0.85rem; border-radius: 999px;
+  background: transparent; border: none; cursor: pointer;
+  padding: 8px 17px !important; border-radius: 999px !important;
+  font-family: var(--font-body) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--ink-soft) !important;
   display: inline-flex; align-items: center; gap: 4px;
-  transition: all 0.2s ease;
+  transition: background-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
 }
-.nav-dropdown-btn:hover, .nav-dropdown-btn.is-active {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+.nav-dropdown-btn:hover {
+  color: var(--ink) !important;
+}
+.nav-dropdown-btn.is-active, .nav-dropdown:hover .nav-dropdown-btn {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: var(--ink) !important;
 }
 .nav-dropdown-content {
   display: none;
