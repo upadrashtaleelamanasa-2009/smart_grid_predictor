@@ -34,6 +34,7 @@
       <span>SmartGrid AI</span>
     </a>
 
+    {% if user is mapping and active_page != 'login' %}
     <nav class="nav__rail" aria-label="Primary">
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
@@ -80,7 +81,8 @@
       {% if user is mapping and user.role == 'Operator' %}
       <a href="{{ url_for('admin_users') }}" class="{{ 'is-active' if active_page == 'admin_users' else '' }}">Operator DB</a>
       {% endif %}
-    </nav>    <div class="nav__actions" style="position:relative;">
+    </nav>
+    {% endif %}    <div class="nav__actions" style="position:relative;">
       {% if user is mapping and user.role == 'Operator' %}
       <button type="button" class="btn btn--ink btn-sm" id="sidebar-toggle-btn" onclick="toggleOperatorSidebar()" style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; padding:0.3rem 0.8rem; border-radius:999px; margin-right:0.4rem;">
         <span id="sidebar-toggle-icon">◀</span> Sidebar
