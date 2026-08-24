@@ -65,25 +65,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Faint Tech Grid & Dark Obsidian Navy Ambient Background ── */
+/* ── Faint Large Tech Grid & Dark Obsidian Navy Ambient Background ── */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 1100px 750px at 15% 10%, rgba(30, 58, 138, 0.4), transparent 55%),
-    radial-gradient(ellipse 950px 700px at 85% 35%, rgba(14, 165, 233, 0.25), transparent 60%),
-    radial-gradient(ellipse 1000px 800px at 20% 85%, rgba(15, 23, 42, 0.85), transparent 65%),
-    linear-gradient(160deg, #04050a 0%, #080c1e 35%, #0a1128 65%, #04050a 100%);
+    radial-gradient(ellipse 1200px 800px at 15% 10%, rgba(15, 23, 42, 0.65), transparent 60%),
+    radial-gradient(ellipse 1000px 750px at 85% 35%, rgba(10, 15, 30, 0.7), transparent 65%),
+    radial-gradient(ellipse 1100px 850px at 50% 90%, rgba(6, 10, 22, 0.9), transparent 70%),
+    linear-gradient(160deg, #020307 0%, #050816 35%, #070d22 65%, #020307 100%);
   pointer-events: none; z-index: 0;
-  animation: floatBackground 22s ease-in-out infinite alternate;
+  animation: floatBackground 25s ease-in-out infinite alternate;
 }
 body::after {
   content: '';
   position: fixed; inset: 0;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 32px 32px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 72px 72px; /* Large Tech Grid! */
   pointer-events: none; z-index: 0;
 }
 
@@ -320,39 +320,39 @@ body::after {
 .step-sep { color: var(--text-4); font-size: 0.85rem; margin: 0 0.1rem; }
 
 /* ══════════════════════════════════════════════════
-   CARDS
+   CARDS (SPACIOUS & ELEGANT)
 ══════════════════════════════════════════════════ */
 .card {
-  background: linear-gradient(145deg, rgba(22, 10, 44, 0.92), rgba(14, 6, 28, 0.88));
-  border: 1px solid rgba(192, 132, 252, 0.22);
+  background: linear-gradient(145deg, rgba(10, 14, 26, 0.92), rgba(6, 9, 18, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-lg);
-  padding: 1.8rem;
+  padding: 2.2rem 2.4rem;
   position: relative; overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 20px 45px -15px rgba(0,0,0,0.65);
-  margin-bottom: 1.4rem;
-  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 45px -15px rgba(0,0,0,0.7);
+  margin-bottom: 1.8rem;
+  backdrop-filter: blur(18px);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
 }
 .card:hover {
   transform: translateY(-4px);
-  border-color: rgba(168, 85, 247, 0.45);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 28px 60px -18px rgba(0,0,0,0.8), 0 0 35px -10px rgba(168, 85, 247, 0.25);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 28px 60px -18px rgba(0,0,0,0.8), 0 0 35px -10px rgba(56, 189, 248, 0.2);
 }
 .card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), rgba(56, 189, 248, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.5), rgba(37, 99, 235, 0.4), transparent);
 }
 .card-sm {
-  background: rgba(22, 10, 44, 0.85);
-  border: 1px solid rgba(192, 132, 252, 0.2);
+  background: rgba(10, 14, 26, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
-  padding: 1.2rem;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: 1.4rem 1.6rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
   transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
 .card-sm:hover {
-  border-color: rgba(168, 85, 247, 0.4);
+  border-color: rgba(56, 189, 248, 0.35);
   transform: translateY(-2px);
   box-shadow: 0 12px 30px -8px rgba(0,0,0,0.6);
 }
