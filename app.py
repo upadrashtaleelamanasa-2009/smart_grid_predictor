@@ -39,13 +39,24 @@ def _boot_train():
 threading.Thread(target=_boot_train, daemon=True).start()
 
 # ── Helpers ────────────────────────────────────────────────────────────
+from functools import wraps
 def login_required(f):
-    from functools import wraps
     @wraps(f)
-    def decorated(*a, **kw):
-        if not session.get("user"):
+    def decorated(*args, **kwargs):
+        u = session.get("user")
+        if not u:
             return redirect(url_for("login"))
-        return f(*a, **kw)
+        if isinstance(u, str):
+            db = get_user_db()
+            user_rec = db.get(u.lower(), {})
+            session["user"] = {
+                "name":   user_rec.get("name") or u.split("@")[0].title(),
+                "email":  u,
+                "avatar": (user_rec.get("name") or u)[0].upper(),
+                "role":   user_rec.get("role", "User"),
+                "via":    "email"
+            }
+        return f(*args, **kwargs)
     return decorated
 
 def get_analytics():
@@ -135,9 +146,24 @@ def register_or_update_user(email, password, name=None, role="User"):
 @app.context_processor
 def inject_user():
     user = session.get("user")
+    if isinstance(user, str):
+        db = get_user_db()
+        user_rec = db.get(user.lower(), {})
+        user = {
+            "name":   user_rec.get("name") or user.split("@")[0].title(),
+            "email":  user,
+            "avatar": (user_rec.get("name") or user)[0].upper(),
+            "role":   user_rec.get("role", "User"),
+            "via":    "email"
+        }
+        session["user"] = user
+    elif not isinstance(user, dict):
+        user = None
+
+    role = user.get("role", "User") if isinstance(user, dict) else "User"
     return {
         "user": user,
-        "show_sidebar": True if (user and user.get("role") == "Operator") else False
+        "show_sidebar": True if role == "Operator" else False
     }
 
 @app.route("/", methods=["GET", "POST"])
