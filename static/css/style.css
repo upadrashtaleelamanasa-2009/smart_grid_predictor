@@ -1110,6 +1110,7 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .nav__inner {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20px;
   min-height: var(--nav-h);
 }
@@ -1161,6 +1162,7 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
   display: flex;
   align-items: center;
   gap: 18px;
+  margin-left: auto;
 }
 
 .nav__actions .btn {
