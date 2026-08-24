@@ -16,19 +16,19 @@
   --ink-soft:     rgba(255, 255, 255, 0.76);
   --ink-faint:    rgba(255, 255, 255, 0.56);
 
-  --glass:        rgba(22, 32, 26, 0.55);
-  --glass-lift:   rgba(32, 44, 36, 0.68);
-  --hairline:     rgba(255, 255, 255, 0.13);
+  --glass:        rgba(28, 12, 54, 0.65);
+  --glass-lift:   rgba(42, 18, 78, 0.78);
+  --hairline:     rgba(192, 132, 252, 0.2);
 
   --blush:        #f0b4c4;
-  --ground:       #15092a;
-  --ground-deep:  #04020a;
+  --ground:       #16082e;
+  --ground-deep:  #06030e;
 
-  --bg:           #04020a;
-  --surface:      rgba(15, 10, 30, 0.94);
-  --surface2:     rgba(22, 14, 42, 0.88);
-  --border:       rgba(255, 255, 255, 0.13);
-  --border-em:    rgba(16, 185, 129, 0.4);
+  --bg:           #06030e;
+  --surface:      rgba(22, 10, 44, 0.92);
+  --surface2:     rgba(32, 14, 60, 0.85);
+  --border:       rgba(192, 132, 252, 0.25);
+  --border-em:    rgba(168, 85, 247, 0.4);
   --emerald:      #10b981;
   --emerald-lt:   #34d399;
   --cyan:         #38bdf8;
