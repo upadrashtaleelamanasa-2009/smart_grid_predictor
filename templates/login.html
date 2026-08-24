@@ -166,7 +166,11 @@
       if (data.ok) window.location.href = data.redirect;
       else alert("Sign-in error: " + data.error);
     } catch(e) {
-      alert("Google sign-in failed: " + e.message);
+      if (e.code === "auth/popup-closed-by-user" || (e.message && e.message.includes("closed-by-user"))) {
+        console.log("User closed Google sign-in popup.");
+        return;
+      }
+      console.warn("Google sign-in error:", e.message);
     }
   });
 </script>
