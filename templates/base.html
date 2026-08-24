@@ -47,7 +47,7 @@
       </div>
       <a class="btn btn--ink" href="{{ url_for('logout') }}">Sign Out</a>
       {% else %}
-      <a class="btn btn--pearl" href="{{ url_for('login') }}?login=1" onclick="if(window.openLoginModal){ openLoginModal(); return false; }">Sign In</a>
+      <a class="btn btn--pearl" href="{{ url_for('login') }}" onclick="if(window.openLoginModal){ openLoginModal(); return false; }">Sign In</a>
       {% endif %}
     </div>
 

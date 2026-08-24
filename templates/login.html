@@ -271,11 +271,10 @@ function quickFill(email, pass) {
   document.getElementById('signin-pass').value = pass;
 }
 
-// Open modal if URL has ?login=1 or if flashed error
+// Keep modal closed on initial load so user sees hero landing first
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const hasFlashedMessage = document.querySelector('#login-modal .flash');
-  if (urlParams.get('login') === '1' || hasFlashedMessage) {
+  if (urlParams.get('open_modal') === '1') {
     openLoginModal();
   }
 });
