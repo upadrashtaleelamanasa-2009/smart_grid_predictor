@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2"/>
 {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -40,8 +40,8 @@
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
 
       <!-- ⚡ ADVANCED GRID MODULES HOVER DROPDOWN MENU -->
-      <div class="nav-dropdown">
-        <button class="nav-dropdown-btn {{ 'is-active' if active_page in ['analytics', 'bess', 'anomalies', 'simulator'] else '' }}" type="button">
+      <div class="nav-dropdown" id="adv-modules-dropdown">
+        <button class="nav-dropdown-btn {{ 'is-active' if active_page in ['analytics', 'bess', 'anomalies', 'simulator'] else '' }}" type="button" onclick="toggleAdvModules(event)">
           ⚡ Advanced Modules <span style="font-size:0.6rem; margin-left:2px;">▼</span>
         </button>
         <div class="nav-dropdown-content">
@@ -275,10 +275,22 @@ function toggleProfileModal(e) {
     modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
   }
 }
+function toggleAdvModules(e) {
+  if (e) e.stopPropagation();
+  const dropdown = document.getElementById('adv-modules-dropdown');
+  if (dropdown) {
+    dropdown.classList.toggle('is-open');
+  }
+}
 document.addEventListener('click', function(e) {
   const modal = document.getElementById('user-profile-modal');
   if (modal && modal.style.display !== 'none' && !modal.contains(e.target)) {
     modal.style.display = 'none';
+  }
+  
+  const advDropdown = document.getElementById('adv-modules-dropdown');
+  if (advDropdown && advDropdown.classList.contains('is-open') && !advDropdown.contains(e.target)) {
+    advDropdown.classList.remove('is-open');
   }
 });
 

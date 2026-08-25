@@ -34,7 +34,7 @@
       <span class="label-xs" style="color:var(--cyan);">6 Active Grid Zones</span>
     </div>
 
-    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;">
+    <div class="zone-grid">
       {% for sub in substations %}
       <div class="card-sm" style="position:relative; overflow:hidden;">
         <div class="flex-between mb-1">
@@ -78,7 +78,7 @@
   </div>
 
   <!-- ANOMALY RADAR & METRICS -->
-  <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+  <div class="charts-row-2">
 
     <!-- RADAR CHART -->
     <div class="card">
