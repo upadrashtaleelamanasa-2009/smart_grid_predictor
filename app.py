@@ -5,7 +5,7 @@ app.py – Smart Grid Energy Dashboard (Flask)
 import os, json, threading
 from datetime import datetime, timedelta
 from flask import (Flask, render_template, redirect, url_for,
-                   session, request, jsonify, flash)
+                   session, request, jsonify, flash, Response)
 from flask_session import Session
 
 import ml_pipeline as ml
