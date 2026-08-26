@@ -1,1 +1,391 @@
-﻿C:\Users\LENOVO
+{% extends "base.html" %}
+{% set show_sidebar = true %}
+{% set active_page = 'home' %}
+{% set step = 1 %}
+{% block title %}Input Details – Project Expo{% endblock %}
+
+{% block content %}
+
+<!-- Live weather fetch -->
+<div id="weather-bar" class="weather-live-box" style="display:none;">
+  <div class="weather-icon" id="w-icon">⛅</div>
+  <div>
+    <div class="flex-center gap-sm">
+      <span class="weather-temp" id="w-temp">--°C</span>
+      <span class="weather-cond" id="w-cond">Fetching weather…</span>
+    </div>
+    <div class="weather-loc" id="w-loc">📍 Locating…</div>
+  </div>
+  <div style="margin-left:auto;text-align:right;">
+    <div class="weather-humidity" id="w-hum">💧 --%</div>
+    <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-4);margin-top:2px;" id="w-updated">--</div>
+  </div>
+</div>
+
+<!-- GLOWINN STYLE HERO BANNER -->
+<!-- GLOWINN STYLE HERO BANNER -->
+<section class="card mb-2" id="top" style="padding: 2.5rem; background: linear-gradient(145deg, rgba(5, 7, 15, 0.85), rgba(2, 4, 8, 0.9)); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: var(--radius-lg); backdrop-filter: blur(18px) saturate(140%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 20px 50px rgba(0,0,0,0.6);">
+  <div class="page-tag mb-1" style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.65rem; color:var(--cyan); background:rgba(56,189,248,0.12); padding:0.25rem 0.75rem; border-radius:999px; border:1px solid rgba(56,189,248,0.25);">
+    <span class="dot" style="width:6px; height:6px; border-radius:50%; background:var(--cyan);"></span> STEP 1 OF 3: Input Parameters
+  </div>
+
+  <div class="text-center my-3" style="margin-block: 1.5rem;">
+    <h1 class="hero__title" style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 500; line-height: 1.18;">
+      <span class="hero__title-lead" style="display:block; font-size:0.75em; font-weight:300; color:var(--ink-soft);">Discover Energy Intelligence</span>
+      Made for Modern Power Grids.
+    </h1>
+    <p style="max-width: 620px; margin: 0.8rem auto 1.5rem; font-size: 0.92rem; color: var(--ink-faint); font-weight: 300; line-height: 1.6;">
+      Enter date range, time window, weather factors, and previous hour consumption to generate ML electricity demand projections.
+    </p>
+    <a class="btn btn--pearl hero__cta" href="#forecast-form">
+      Configure Forecast Parameters ↓
+    </a>
+  </div>
+
+  <div class="hero__foot" style="border-top: 1px solid var(--hairline); padding-top: 1.2rem; margin-top: 1rem;">
+    <article class="card card--note" style="margin-bottom:0; background:rgba(4, 6, 12, 0.85); border:1px solid rgba(255, 255, 255, 0.14); backdrop-filter:blur(14px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <h2 style="font-size:0.85rem; font-weight:500;">AI-Powered Grid Forecasting</h2>
+      <p style="font-size:0.72rem; color:var(--ink-faint);">From real-time load analytics to XGBoost predictive modeling, explore grid performance metrics with precision.</p>
+    </article>
+
+    <p class="hero__caption" style="font-size:0.75rem;">Smart Grid energy prediction with precision and accuracy.</p>
+
+    <div class="hero__stats">
+      <article class="card card--stat" style="margin-bottom:0; background:rgba(4, 6, 12, 0.85); border:1px solid rgba(255, 255, 255, 0.14); backdrop-filter:blur(14px); padding:0.6rem 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <strong style="font-size:1.3rem;">0.9754</strong>
+        <span class="card__label" style="font-size:0.65rem;">R² Score</span>
+        <span class="card__foot" style="font-size:0.6rem; margin-top:0.4rem;">Gradient Boosting</span>
+      </article>
+      <article class="card card--stat" style="margin-bottom:0; background:rgba(4, 6, 12, 0.85); border:1px solid rgba(255, 255, 255, 0.14); backdrop-filter:blur(14px); padding:0.6rem 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <strong style="font-size:1.3rem;">97.2%</strong>
+        <span class="card__label" style="font-size:0.65rem;">Grid Health</span>
+        <span class="card__foot" style="font-size:0.6rem; margin-top:0.4rem;">Operational Health</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Scenario Presets -->
+<div class="card mb-2">
+  <div class="flex-between mb-1">
+    <div class="h-section">⚡ Quick Scenario Presets</div>
+    <span class="label-xs">1-click fill</span>
+  </div>
+  <div class="preset-grid">
+    <button class="preset-btn" onclick="applyPreset('summer_peak')" type="button">
+      <div class="preset-name">🔥 Summer Peak</div>
+      <div class="preset-meta">19-Aug &nbsp;·&nbsp; 07:00 PM</div>
+    </button>
+    <button class="preset-btn" onclick="applyPreset('winter_load')" type="button">
+      <div class="preset-name">❄️ Winter Load</div>
+      <div class="preset-meta">15-Jan &nbsp;·&nbsp; 08:00 AM</div>
+    </button>
+    <button class="preset-btn" onclick="applyPreset('spring_mild')" type="button">
+      <div class="preset-name">🌱 Spring Mild</div>
+      <div class="preset-meta">22-Apr &nbsp;·&nbsp; 02:00 PM</div>
+    </button>
+    <button class="preset-btn" onclick="applyPreset('night_base')" type="button">
+      <div class="preset-name">🌙 Night Baseload</div>
+      <div class="preset-meta">10-Oct &nbsp;·&nbsp; 03:00 AM</div>
+    </button>
+  </div>
+</div>
+
+<!-- Input Form -->
+<form method="POST" action="{{ url_for('prediction') }}" id="forecast-form">
+
+  <!-- DATE RANGE -->
+  <div class="card mb-2">
+    <div class="h-section mb-2">📅 Forecast Date Range</div>
+    <div class="date-range-row">
+      <div class="form-group">
+        <label class="form-label">From Date</label>
+        <input type="date" name="from_date" id="from_date" class="form-control date-picker-input" value="{{ today }}" onclick="try{this.showPicker()}catch(e){}" required/>
+      </div>
+      <div class="date-range-sep" style="margin-top:1.4rem;">→</div>
+      <div class="form-group">
+        <label class="form-label">To Date</label>
+        <input type="date" name="to_date" id="to_date" class="form-control date-picker-input" value="{{ today }}" onclick="try{this.showPicker()}catch(e){}" required/>
+      </div>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:0.85rem;font-weight:600;color:var(--text-3);margin-top:0.4rem;" id="date-duration-label">
+      📅 Selecting: today only (1 day)
+    </div>
+  </div>
+
+  <!-- TIME RANGE & WEATHER -->
+  <div class="card mb-2">
+    <div class="input-grid">
+
+      <!-- Time From -->
+      <div class="form-group">
+        <label class="form-label">🕐 Time — From</label>
+        <select name="from_hour" id="from_hour" class="form-control">
+          {% for h in range(24) %}
+          <option value="{{ h }}" {{ 'selected' if h == 7 else '' }}>
+            {{ '%02d:00' % h }} ({{ h }}:00 {{ 'AM' if h < 12 else 'PM' }})
+          </option>
+          {% endfor %}
+        </select>
+        <div class="label-sm mt-1">Prediction start hour</div>
+      </div>
+
+      <!-- Time To -->
+      <div class="form-group">
+        <label class="form-label">🕐 Time — To</label>
+        <select name="to_hour" id="to_hour" class="form-control">
+          {% for h in range(24) %}
+          <option value="{{ h }}" {{ 'selected' if h == 19 else '' }}>
+            {{ '%02d:00' % h }} ({{ h }}:00 {{ 'AM' if h < 12 else 'PM' }})
+          </option>
+          {% endfor %}
+        </select>
+        <div class="label-sm mt-1">Prediction end hour</div>
+      </div>
+
+      <!-- Weather Condition -->
+      <div class="form-group">
+        <label class="form-label">⛅ Weather Condition</label>
+        <select name="weather_cond" id="weather_cond" class="form-control">
+          <option value="clear">☀️ Clear / Sunny</option>
+          <option value="humid" selected>🌫️ Hot &amp; Humid (High AC Demand)</option>
+          <option value="cloudy">☁️ Cloudy / Overcast</option>
+          <option value="rainy">🌧️ Rainy / Wet</option>
+          <option value="cold">❄️ Cold / Dry</option>
+          <option value="windy">💨 Windy</option>
+        </select>
+        <div class="label-sm mt-1" id="weather-auto-label">Auto-detected from location</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDERS: TEMP + HUMIDITY + PREV LOAD -->
+  <div class="card mb-2">
+    <div class="input-grid">
+
+      <!-- Temperature -->
+      <div class="form-group">
+        <label class="form-label">🌡️ Ambient Temperature &nbsp;
+          <span class="range-val" id="temp-val">28.0 °C</span>
+        </label>
+        <div class="range-wrap">
+          <input type="range" name="temperature" id="temperature"
+                 min="-5" max="45" step="0.5" value="28"
+                 oninput="document.getElementById('temp-val').textContent = this.value + ' °C'"/>
+          <div class="range-labels">
+            <span class="range-label-txt">-5°C (Heating)</span>
+            <span class="range-label-txt">24°C (Baseline)</span>
+            <span class="range-label-txt">45°C (Cooling Peak)</span>
+          </div>
+        </div>
+        <input type="hidden" name="temperature" id="temperature-hidden" value="28"/>
+      </div>
+
+      <!-- Humidity -->
+      <div class="form-group">
+        <label class="form-label">💧 Relative Humidity &nbsp;
+          <span class="range-val" id="hum-val">60 %</span>
+        </label>
+        <div class="range-wrap">
+          <input type="range" name="humidity" id="humidity"
+                 min="15" max="100" step="1" value="60"
+                 oninput="document.getElementById('hum-val').textContent = this.value + ' %'"/>
+          <div class="range-labels">
+            <span class="range-label-txt">15% (Dry)</span>
+            <span class="range-label-txt">60% (Comfort)</span>
+            <span class="range-label-txt">100% (Saturated)</span>
+          </div>
+        </div>
+        <input type="hidden" name="humidity" id="humidity-hidden" value="60"/>
+      </div>
+
+      <!-- Previous Load -->
+      <div class="form-group">
+        <label class="form-label">⚡ Previous Load (t−1)</label>
+        <div class="flex-center" style="gap:0.5rem;">
+          <input type="number" name="prev_load" id="prev_load" class="form-control"
+                 min="0.5" max="15" step="0.1" value="5.2" style="flex:1;"/>
+          <span style="font-family:var(--font-mono);font-size:0.95rem;font-weight:700;color:var(--emerald);">kW</span>
+        </div>
+        <div class="label-sm mt-1">Last recorded grid load</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Time window summary -->
+  <div class="card-sm mb-2" style="padding:0.9rem 1.1rem;">
+    <div class="flex-between">
+      <div>
+        <div class="label-xs">Prediction Window Summary</div>
+        <div id="window-summary" style="font-family:var(--font-mono);font-size:0.95rem;font-weight:600;color:var(--text-2);margin-top:0.3rem;">
+          Today · 07:00 – 19:00 · 12 hours · ~48 intervals
+        </div>
+      </div>
+      <div id="model-status-home" class="model-status ready" style="font-size:0.82rem;font-weight:600;">
+        <span class="live"></span> ML Model Ready
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Container -->
+  <div style="display:flex; justify-content:center; margin-top:1.5rem;">
+    <button type="submit" class="btn btn-primary btn-xl" id="predict-btn">
+      ⚡ GENERATE PREDICTION →
+    </button>
+  </div>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('forecast-form').addEventListener('submit', function() {
+  const btn = document.getElementById('predict-btn');
+  if (btn) {
+    btn.classList.add('btn-loading');
+    btn.innerHTML = '<span class="spin-icon">⚡</span> GENERATING PREDICTION &amp; CALCULATING SLOTS...';
+  }
+});
+const OWM_KEY = ""; // Leave empty — real key entered by user for real weather
+
+// ── Live weather fetch from user's geolocation ──
+function fetchWeather(lat, lon) {
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relative_humidity_2m`)
+    .then(r => r.json())
+    .then(d => {
+      const cw = d.current_weather;
+      const temp = Math.round(cw.temperature * 10) / 10;
+      const wcode = cw.weathercode;
+      const hum = (d.hourly && d.hourly.relative_humidity_2m) ? d.hourly.relative_humidity_2m[0] : 65;
+      
+      let cond = 'Clear / Sunny', ico = '☀️', condVal = 'clear';
+      if (wcode >= 1 && wcode <= 3) { cond = 'Cloudy / Overcast'; ico = '☁️'; condVal = 'cloudy'; }
+      else if (wcode >= 51 && wcode <= 67) { cond = 'Rainy / Wet'; ico = '🌧️'; condVal = 'rainy'; }
+      else if (wcode >= 71 && wcode <= 77) { cond = 'Cold / Dry'; ico = '❄️'; condVal = 'cold'; }
+      else if (wcode >= 80 && wcode <= 99) { cond = 'Rainy / Wet'; ico = '⛈️'; condVal = 'rainy'; }
+
+      document.getElementById('w-icon').textContent = ico;
+      document.getElementById('w-temp').textContent = temp + '°C';
+      document.getElementById('w-cond').textContent = cond;
+      document.getElementById('w-loc').textContent  = '📍 Live Local Weather';
+      document.getElementById('w-hum').textContent  = '💧 ' + hum + '%';
+      document.getElementById('w-updated').textContent = 'Live · ' + new Date().toLocaleTimeString();
+      document.getElementById('weather-bar').style.display = 'flex';
+      document.getElementById('weather-auto-label').textContent = '✅ Auto-detected from location';
+
+      // Pre-fill sliders
+      document.getElementById('temperature').value = temp;
+      document.getElementById('temp-val').textContent = temp + ' °C';
+      document.getElementById('temperature-hidden').value = temp;
+      document.getElementById('humidity').value = hum;
+      document.getElementById('hum-val').textContent = hum + ' %';
+      document.getElementById('humidity-hidden').value = hum;
+
+      const sel  = document.getElementById('weather_cond');
+      for(let o of sel.options) { if(o.value===condVal) o.selected=true; }
+    })
+    .catch(() => autoEstimateWeather());
+}
+
+function autoEstimateWeather() {
+  const now = new Date();
+  const h   = now.getHours();
+  const m   = now.getMonth() + 1;
+  let temp = 28, hum = 65, cond = 'Clear / Normal', icon = '☀️';
+  if (m >= 3 && m <= 6)  { temp = 32; hum = 65; cond='Hot & Humid (High AC Demand)'; icon='🌫️'; }
+  else if (m >= 7 && m <= 9) { temp = 28; hum = 80; cond='Rainy / Wet'; icon='🌧️'; }
+  else if (m >= 11 || m <= 2) { temp = 18; hum = 55; cond='Cold / Dry'; icon='❄️'; }
+  if (h < 6 || h > 21) temp -= 3;
+
+  document.getElementById('w-icon').textContent = icon;
+  document.getElementById('w-temp').textContent = temp + '°C';
+  document.getElementById('w-cond').textContent = cond;
+  document.getElementById('w-loc').textContent  = '📍 Live Local Weather';
+  document.getElementById('w-hum').textContent  = '💧 ' + hum + '%';
+  document.getElementById('w-updated').textContent = 'Live · ' + new Date().toLocaleTimeString();
+  document.getElementById('weather-bar').style.display = 'flex';
+
+  document.getElementById('temperature').value = temp;
+  document.getElementById('temp-val').textContent = temp + ' °C';
+  document.getElementById('temperature-hidden').value = temp;
+  document.getElementById('humidity').value = hum;
+  document.getElementById('hum-val').textContent = hum + ' %';
+  document.getElementById('humidity-hidden').value = hum;
+}
+
+// Geolocation
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    pos => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+    ()  => autoEstimateWeather(),
+    { timeout: 5000 }
+  );
+} else { autoEstimateWeather(); }
+
+// Keep hidden inputs in sync with sliders
+document.getElementById('temperature').addEventListener('input', function() {
+  document.getElementById('temperature-hidden').value = this.value;
+});
+document.getElementById('humidity').addEventListener('input', function() {
+  document.getElementById('humidity-hidden').value = this.value;
+});
+
+// ── Date / Time summary ──
+function updateSummary() {
+  const fd  = document.getElementById('from_date').value;
+  const td  = document.getElementById('to_date').value;
+  const fh  = parseInt(document.getElementById('from_hour').value);
+  const th  = parseInt(document.getElementById('to_hour').value);
+  const ms  = new Date(td) - new Date(fd);
+  const days = Math.max(0, Math.round(ms / 86400000)) + 1;
+  const hrs = th >= fh ? (th - fh) * days : (24 - fh + th) * days;
+  const slots = hrs * 4;
+  const label = `${fd === td ? 'Single day' : days + ' days'} · ${String(fh).padStart(2,'0')}:00 – ${String(th).padStart(2,'0')}:00 · ${hrs} hours · ~${slots} intervals`;
+  document.getElementById('window-summary').textContent = label;
+  document.getElementById('date-duration-label').textContent = '📅 Selecting: ' + (fd === td ? 'today only (1 day)' : days + ' days from ' + fd + ' to ' + td);
+}
+['from_date','to_date','from_hour','to_hour'].forEach(id => {
+  document.getElementById(id).addEventListener('change', updateSummary);
+});
+updateSummary();
+
+// ── Scenario Presets ──
+const PRESETS = {
+  summer_peak: { fd:'2024-08-19', td:'2024-08-19', fh:15, th:22, temp:35.0, hum:72, prev:8.5, cond:'humid' },
+  winter_load: { fd:'2024-01-15', td:'2024-01-15', fh:6,  th:10, temp:7.0,  hum:68, prev:6.2, cond:'cold'  },
+  spring_mild: { fd:'2024-04-22', td:'2024-04-22', fh:10, th:18, temp:24.0, hum:52, prev:5.0, cond:'clear' },
+  night_base:  { fd:'2024-10-10', td:'2024-10-10', fh:0,  th:5,  temp:18.0, hum:78, prev:2.8, cond:'cloudy'},
+};
+
+function applyPreset(key) {
+  const p = PRESETS[key];
+  document.getElementById('from_date').value = p.fd;
+  document.getElementById('to_date').value   = p.td;
+  document.getElementById('from_hour').value  = p.fh;
+  document.getElementById('to_hour').value    = p.th;
+  document.getElementById('temperature').value = p.temp;
+  document.getElementById('temperature-hidden').value = p.temp;
+  document.getElementById('temp-val').textContent = p.temp + ' °C';
+  document.getElementById('humidity').value   = p.hum;
+  document.getElementById('humidity-hidden').value = p.hum;
+  document.getElementById('hum-val').textContent = p.hum + ' %';
+  document.getElementById('prev_load').value  = p.prev;
+  document.getElementById('weather_cond').value = p.cond;
+  updateSummary();
+}
+
+// ── Model status check ──
+fetch("/api/model-status").then(r=>r.json()).then(d=>{
+  const pill = document.getElementById("model-status-home");
+  if (!d.ready) {
+    pill.className = "model-status training";
+    pill.innerHTML = '<span class="live"></span> Training… please wait';
+    document.getElementById("predict-btn").disabled = true;
+    document.getElementById("predict-btn").textContent = '⏳ Model Training…';
+  }
+});
+</script>
+{% endblock %}
