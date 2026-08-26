@@ -331,15 +331,15 @@ function toggleFeaturesDropdown(e) {
     if (e) e.stopPropagation();
     const dropdown = document.getElementById('features-dropdown');
     if (dropdown) {
-      dropdown.classList.toggle('active');
+      dropdown.classList.toggle('is-open');
     }
     const adv = document.getElementById('adv-modules-dropdown');
-    if (adv) adv.classList.remove('active');
+    if (adv) adv.classList.remove('is-open');
 }
 
 function toggleAdvModules(e) {
     const fdrop = document.getElementById('features-dropdown');
-    if (fdrop) fdrop.classList.remove('active');
+    if (fdrop) fdrop.classList.remove('is-open');
 
   if (e) e.stopPropagation();
   const dropdown = document.getElementById('adv-modules-dropdown');
@@ -356,6 +356,11 @@ document.addEventListener('click', function(e) {
   const advDropdown = document.getElementById('adv-modules-dropdown');
   if (advDropdown && advDropdown.classList.contains('is-open') && !advDropdown.contains(e.target)) {
     advDropdown.classList.remove('is-open');
+  }
+
+  const featuresDropdown = document.getElementById('features-dropdown');
+  if (featuresDropdown && featuresDropdown.classList.contains('is-open') && !featuresDropdown.contains(e.target)) {
+    featuresDropdown.classList.remove('is-open');
   }
 });
 
