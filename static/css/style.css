@@ -1,12 +1,12 @@
-/* ═══════════════════════════════════════════════════════════════
-   Smart Grid Energy Dashboard – Premium CSS Theme
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   Smart Grid Energy Dashboard â€“ Premium CSS Theme
    Dark Navy + Emerald Green + Cyan Accents
-   Fonts: Outfit (headings) · Plus Jakarta Sans (body) · Fira Code (mono)
-═══════════════════════════════════════════════════════════════ */
+   Fonts: Outfit (headings) Â· Plus Jakarta Sans (body) Â· Fira Code (mono)
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* ── Root Tokens (Glowinn Forest & Dark Theme) ── */
+/* â”€â”€ Root Tokens (Glowinn Forest & Dark Theme) â”€â”€ */
 :root {
   --font-body:    'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-head:    'Jost', 'Space Grotesk', sans-serif;
@@ -46,14 +46,14 @@
   --radius-sm:    12px;
   --radius:       12px;
   --gutter:       clamp(16px, 3.4vw, 40px);
-  --shell:        1240px;
+  --shell: 96%; max-width: 1800px;
   --nav-h:        72px;
   --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
   --shadow-glow:  0 0 50px -15px rgba(16, 185, 129, 0.4);
   color-scheme:   dark;
 }
 
-/* ── Base ── */
+/* â”€â”€ Base â”€â”€ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
@@ -65,7 +65,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── Faint Large Tech Grid & Animated Dark Obsidian Navy Ambient Background ── */
+/* â”€â”€ Faint Large Tech Grid & Animated Dark Obsidian Navy Ambient Background â”€â”€ */
 body::before {
   content: '';
   position: fixed; inset: -10%;
@@ -133,7 +133,7 @@ body::after {
   100% { transform: translateY(20px) scale(0.95); opacity: 0.5; }
 }
 
-/* ── Keyframe Animations ── */
+/* â”€â”€ Keyframe Animations â”€â”€ */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -166,17 +166,17 @@ body::after {
   animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ── Scrollbar ── */
+/* â”€â”€ Scrollbar â”€â”€ */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: #040810; }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--emerald), var(--cyan)); border-radius: 999px; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    LAYOUT WRAPPER
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .page-wrapper { position: relative; z-index: 1; min-height: 100vh; }
 
-/* ── Layout Flex System ── */
+/* â”€â”€ Layout Flex System â”€â”€ */
 .layout-sidebar {
   width: 100%;
   max-width: 1400px;
@@ -239,7 +239,7 @@ body::after {
 .layout-sidebar .sidebar    { grid-row: 2; }
 .layout-sidebar .main-content { grid-row: 2; padding: 1.5rem 2rem; overflow-x: hidden; }
 
-/* ── Navbar Hover Dropdown Menu ── */
+/* â”€â”€ Navbar Hover Dropdown Menu â”€â”€ */
 .nav-dropdown { position: relative; display: inline-flex; align-items: center; }
 .nav-dropdown-btn {
   background: transparent; border: none; cursor: pointer;
@@ -297,9 +297,9 @@ body::after {
 .dropdown-item .item-title { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: #ffffff; }
 .dropdown-item .item-sub { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-3); margin-top: 1px; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TOP NAVIGATION BAR
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .topbar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 1.8rem;
@@ -340,9 +340,9 @@ body::after {
 }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SIDEBAR NAVIGATION ITEMS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .sidebar-section-label {
   font-family: var(--font-mono); font-size: 0.58rem;
   text-transform: uppercase; letter-spacing: 0.14em;
@@ -391,9 +391,9 @@ body::after {
 }
 .btn-logout:hover { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.5); }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    STEP PROGRESS BAR
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .step-bar {
   display: flex; align-items: center; gap: 0.3rem;
   padding: 0.55rem 1.2rem;
@@ -417,12 +417,12 @@ body::after {
 .step-label.pending { color: var(--text-4); }
 .step-sep { color: var(--text-4); font-size: 0.85rem; margin: 0 0.1rem; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CARDS (SPACIOUS & ELEGANT)
-══════════════════════════════════════════════════ */
-/* ══════════════════════════════════════════════════
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CONTAINER & CARD ANIMATIONS (ENTRANCE, NEON BORDER, LIGHT SHEEN, HOVER FLOAT)
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .card, .card-sm, .stat-card, .info-box, .preset-card, .layout-body-wrapper {
   animation: cardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -526,9 +526,9 @@ body::after {
 .corner-tl::before { top:0; left:0; border-top:2px solid var(--emerald); border-left:2px solid var(--emerald); border-radius:3px 0 0 0; }
 .corner-tr::before { top:0; right:0; border-top:2px solid var(--emerald); border-right:2px solid var(--emerald); border-radius:0 3px 0 0; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TYPOGRAPHY (ENHANCED LEGIBILITY & SCALED SIZES)
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .page-tag {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600;
@@ -552,9 +552,9 @@ body::after {
 .text-am    { color: var(--amber); }
 .text-rd    { color: var(--red); }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    METRICS / HERO NUMBERS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .metric-hero {
   font-family: var(--font-head); font-weight: 900;
   font-size: 4.5rem; line-height: 1;
@@ -582,9 +582,9 @@ body::after {
 .stat-box .lbl { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-top: 0.4rem; display: block; }
 .stat-box .sub { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-4); margin-top: 0.25rem; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BADGES
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .badge {
   display: inline-block;
   padding: 0.35rem 1.1rem;
@@ -598,9 +598,9 @@ body::after {
 .badge-high     { background: rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); color: #fbbf24; }
 .badge-critical { background: rgba(239,68,68,0.15);  border:1px solid rgba(239,68,68,0.4);  color: #f87171; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BUTTONS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   padding: 0.7rem 1.5rem; border-radius: var(--radius-sm);
@@ -609,7 +609,7 @@ body::after {
   border: none; transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
   position: relative; overflow: hidden;
 }
-/* ── Clean Solid Pearl White CTA Buttons (No Outer Shining Glow!) ── */
+/* â”€â”€ Clean Solid Pearl White CTA Buttons (No Outer Shining Glow!) â”€â”€ */
 .btn--pearl, .hero__cta, .nav__cta {
   background: #ffffff !important;
   color: #0f172a !important;
@@ -627,7 +627,7 @@ body::after {
   transform: translateY(-1px) !important;
 }
 
-/* ── Primary Action Buttons (Generate Prediction - Black & Deep Blue Gradient - No Outer Shining Glow!) ── */
+/* â”€â”€ Primary Action Buttons (Generate Prediction - Black & Deep Blue Gradient - No Outer Shining Glow!) â”€â”€ */
 .btn-primary, #predict-btn {
   background: linear-gradient(135deg, #090d16 0%, #1e3a8a 50%, #0284c7 100%) !important;
   color: #ffffff !important;
@@ -645,7 +645,7 @@ body::after {
 .btn-xl { font-size: 0.95rem; padding: 0.85rem 2.2rem; border-radius: 999px; width: auto; max-width: max-content; display: inline-flex; }
 .btn-block { width: 100% !important; max-width: 100% !important; display: flex !important; }
 
-/* ── Custom Scrollbar (Pure Black Track & Deep Dark Blue/Purple Thumb) ── */
+/* â”€â”€ Custom Scrollbar (Pure Black Track & Deep Dark Blue/Purple Thumb) â”€â”€ */
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
@@ -675,9 +675,9 @@ body::after {
 .btn-danger:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.5); }
 .btn-sm { padding: 0.42rem 0.9rem; font-size: 0.78rem; border-radius: var(--radius-sm); }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FORM INPUTS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .form-group { margin-bottom: 0; }
 .form-label { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-2); margin-bottom: 0.55rem; display: block; }
 .form-control {
@@ -706,7 +706,7 @@ body::after {
 select.form-control { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2338bdf8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.2rem; }
 select.form-control option { background: #121630; color: var(--text-1); font-size: 1rem; }
 
-/* ── Range Slider ── */
+/* â”€â”€ Range Slider â”€â”€ */
 .range-wrap { position: relative; padding-top: 0.1rem; }
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
@@ -731,18 +731,18 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
   font-weight: 800; color: var(--amber); float: right;
 }
 
-/* ── Form Divider ── */
+/* â”€â”€ Form Divider â”€â”€ */
 .form-divider { display: flex; align-items: center; gap: 0.75rem; margin: 0.8rem 0; }
 .form-divider span { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; color: var(--text-3); white-space: nowrap; }
 .form-divider::before, .form-divider::after { content:''; flex:1; height:1px; background: var(--border); }
 
-/* ── Date Range ── */
+/* â”€â”€ Date Range â”€â”€ */
 .date-range-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.65rem; }
 .date-range-sep { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; color: var(--text-2); text-align: center; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    LOGIN PAGE
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
 .login-box { width: 100%; max-width: 450px; }
 .login-logo {
@@ -784,9 +784,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .flash-error   { background: rgba(239,68,68,0.12);  border: 1px solid rgba(239,68,68,0.3);  color: #fca5a5; }
 .flash-warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #fde68a; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    HOME / INPUT PAGE
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
 .input-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
@@ -820,9 +820,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .weather-loc  { font-family: var(--font-mono); font-size: 0.75rem; color: var(--emerald); margin-top: 2px; }
 .weather-humidity { font-family: var(--font-mono); font-size: 0.85rem; color: var(--cyan); }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DASHBOARD ANIMATIONS & GAUGE CARDS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @keyframes cardFadeUp {
   0% { opacity: 0; transform: translateY(18px) scale(0.98); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -869,9 +869,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
   text-transform: uppercase; letter-spacing: 0.1em;
 }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PREDICTION PAGE
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .prediction-hero {
   text-align: center;
   padding: 2rem 1.5rem 1.5rem;
@@ -896,9 +896,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .hourly-table tr:hover td { background: rgba(16,185,129,0.04); }
 .hourly-table .level-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 0.4rem; }
 
-/* ══════════════════════════════════════════════════
-   DASHBOARD PAGE – CHART SECTIONS
-══════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DASHBOARD PAGE â€“ CHART SECTIONS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .dashboard-header { margin-bottom: 1.6rem; }
 .charts-row { display: grid; gap: 1.4rem; margin-bottom: 1.4rem; }
 .charts-row-1 { grid-template-columns: 1fr; }
@@ -935,14 +935,14 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .chart-canvas-wrap { height: 300px; position: relative; }
 .chart-canvas-wrap canvas { width: 100% !important; }
 
-/* ── Chart Legend ── */
+/* â”€â”€ Chart Legend â”€â”€ */
 .chart-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.8rem; }
 .legend-item { display: flex; align-items: center; gap: 0.35rem; }
 .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
 .legend-line { width: 16px; height: 2px; border-radius: 999px; }
 .legend-txt { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-3); }
 
-/* ── Dashboard stats row ── */
+/* â”€â”€ Dashboard stats row â”€â”€ */
 .dash-stats {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -1005,9 +1005,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
   display: block;
 }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MODEL BENCHMARK TABLE
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .bench-table { width: 100%; }
 .bench-row {
   display: flex; align-items: center; justify-content: space-between;
@@ -1024,9 +1024,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .bench-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-3); display: flex; gap: 0.8rem; margin-top: 0.2rem; }
 .bench-crown { color: var(--amber); margin-right: 0.3rem; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PEAK WINDOW CARDS
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .peak-windows { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 0.8rem; }
 .peak-win {
   border-radius: var(--radius-md);
@@ -1036,9 +1036,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .peak-win-time { font-family: var(--font-head); font-weight: 900; font-size: 1.15rem; color: var(--text-1); margin: 0.3rem 0 0.15rem; letter-spacing: -0.02em; }
 .peak-win-desc { font-size: 0.73rem; font-family: var(--font-body); line-height: 1.45; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FEATURE IMPORTANCE
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .feat-bar-row { margin-bottom: 0.85rem; }
 .feat-bar-head { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
 .feat-bar-name { font-family: var(--font-body); font-size: 0.78rem; color: var(--text-2); font-weight: 500; }
@@ -1046,9 +1046,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .feat-bar-bg   { background: rgba(30,41,59,0.6); border-radius: 999px; height: 6px; overflow: hidden; }
 .feat-bar-fill { height: 6px; border-radius: 999px; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    UTILITIES
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 1rem 0; }
 .text-center { text-align: center; }
 .mb-0  { margin-bottom: 0; }
@@ -1074,9 +1074,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
 .model-status.ready { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:var(--emerald-lt); }
 .model-status.training { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:#fbbf24; animation: pulse-live 1.5s infinite; }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GLOWINN FLOATING PILL NAVBAR & HERO COMPONENT STYLES
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .shell { width:100%; max-width:var(--shell); margin-inline:auto; padding-inline:var(--gutter); }
 
 .btn {
@@ -1391,9 +1391,9 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 20px rgba(16,1
   }
 }
 
-/* ══════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    COMPREHENSIVE RESPONSIVE MEDIA QUERIES (LAPTOP / TABLET / MOBILE)
-══════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 1200px) {
   .dash-stats { grid-template-columns: repeat(3, 1fr) !important; }
 }

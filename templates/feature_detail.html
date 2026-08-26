@@ -84,6 +84,17 @@
   </div>
 </div>
 
+<div style="background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.1); padding:8px 15px; border-radius:6px; font-family:var(--font-mono); font-size:0.75rem; color:#10b981; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+  <span style="display:flex; align-items:center; gap:8px;">
+    <span class="pulse-indicator" style="width:6px;height:6px;background:#10b981;border-radius:50%;box-shadow:0 0 8px #10b981;"></span>
+    <strong style="color:#fff;">SCADA FEED:</strong>
+  </span>
+  <span style="overflow:hidden; white-space:nowrap; width:65%; text-overflow:ellipsis; opacity:0.85; color:#38bdf8;">
+    > [SYS_OK] GRID_FREQ: 50.02Hz | V_BUS: 401kV | ACTIVE_PWR: 12,450 MW | PREDICTED_PEAK: 15,200 MW @ 18:00 | BESS_SOC: 84% | SECURITY_NET: SECURE 
+  </span>
+  <span style="color:#a855f7; font-weight:bold;">UPTIME: 99.99%</span>
+</div>
+
 {% if feature_id == 'predictor' %}
 <!-- PREDICTOR ENGINE DASHBOARD -->
 <div class="grid-3">
@@ -411,5 +422,27 @@
   </div>
 </div>
 {% endif %}
+
+<div class="grid-4" style="margin-top:2rem; border-top:1px solid rgba(255,255,255,0.1); padding-top:2rem;">
+  <div class="scada-panel" style="padding:1.2rem; background:rgba(0,0,0,0.4);">
+    <div class="scada-title" style="margin-bottom:0.5rem;">SYS_CPU_CORE</div>
+    <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;"><div style="width:34%; height:100%; background:#10b981; border-radius:3px; box-shadow:0 0 5px #10b981;"></div></div>
+    <div style="text-align:right; font-size:0.75rem; margin-top:6px; color:var(--ink-soft); font-family:var(--font-mono);">34% (THREAD_4)</div>
+  </div>
+  <div class="scada-panel" style="padding:1.2rem; background:rgba(0,0,0,0.4);">
+    <div class="scada-title" style="margin-bottom:0.5rem;">MEM_ALLOCATION</div>
+    <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;"><div style="width:78%; height:100%; background:#f59e0b; border-radius:3px; box-shadow:0 0 5px #f59e0b;"></div></div>
+    <div style="text-align:right; font-size:0.75rem; margin-top:6px; color:var(--ink-soft); font-family:var(--font-mono);">78% (12.4 GB)</div>
+  </div>
+  <div class="scada-panel" style="padding:1.2rem; background:rgba(0,0,0,0.4);">
+    <div class="scada-title" style="margin-bottom:0.5rem;">NETWORK_IO_TXL</div>
+    <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;"><div style="width:65%; height:100%; background:#38bdf8; border-radius:3px; box-shadow:0 0 5px #38bdf8;"></div></div>
+    <div style="text-align:right; font-size:0.75rem; margin-top:6px; color:var(--ink-soft); font-family:var(--font-mono);">450 Mbps / 1G</div>
+  </div>
+  <div class="scada-panel" style="padding:1.2rem; background:rgba(0,0,0,0.4); text-align:center; display:flex; flex-direction:column; justify-content:center;">
+    <div class="scada-title" style="justify-content:center; margin-bottom:0.3rem;">AI AGENT STATE</div>
+    <div style="font-weight:bold; color:#a855f7; font-size:1.1rem; letter-spacing:2px; font-family:var(--font-mono); text-shadow:0 0 8px rgba(168,85,247,0.5);">AUTONOMOUS</div>
+  </div>
+</div>
 
 {% endblock %}
