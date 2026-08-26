@@ -1,49 +1,205 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% set show_sidebar = true %}
 {% block title %}{{ feature.title }} - Smart Grid AI{% endblock %}
 
 {% block content %}
-<section class="feature-detail-header" style="padding: 3rem 2rem; background: linear-gradient(145deg, rgba(10, 14, 26, 0.45), rgba(6, 9, 18, 0.4)); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: var(--radius-lg); backdrop-filter: blur(18px) saturate(140%); margin-bottom: 2rem;">
-  <div style="display:flex; align-items:center; gap: 1.5rem; margin-bottom: 1.5rem;">
-    <div style="width: 72px; height: 72px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-family: var(--font-mono);">
-      {{ feature.icon }}
-    </div>
+<style>
+  .scada-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .scada-panel {
+    background: rgba(10, 14, 26, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+  }
+  .scada-title {
+    font-family: var(--font-mono);
+    color: var(--cyan);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .scada-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .scada-stat {
+    font-size: 2.5rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.2rem;
+  }
+  .scada-substat {
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+  }
+  .terminal-box {
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #0f0;
+    height: 200px;
+    overflow-y: auto;
+  }
+  .pulse-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
+  .mock-graph {
+    height: 150px;
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
+    border-bottom: 2px solid var(--cyan);
+    position: relative;
+    overflow: hidden;
+  }
+  .mock-graph::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; top: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(255,255,255,0.05) 50px);
+  }
+  .feature-hero {
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
+    border-left: 4px solid var(--cyan);
+    padding: 2rem;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .bg-grid {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
+
+<div class="feature-hero">
+  <div class="bg-grid"></div>
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
     <div>
-      <h1 style="font-size: 2.2rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--ink);">{{ feature.title }}</h1>
-      <div style="font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em;">SMART GRID AI FEATURE</div>
+      <div style="display:flex; align-items:center; gap: 1rem; margin-bottom: 0.5rem;">
+        <span style="font-size:2.5rem; background:rgba(255,255,255,0.1); padding:10px; border-radius:12px;">{{ feature.icon }}</span>
+        <div>
+          <div style="color:var(--cyan); font-family:var(--font-mono); font-size:0.9rem; letter-spacing:2px;">MODULE: {{ feature_id | upper }}</div>
+          <h1 style="font-size:2.4rem; margin:0; color:#fff; font-weight:700;">{{ feature.title }}</h1>
+        </div>
+      </div>
+      <p style="color:var(--ink-soft); font-size:1.1rem; max-width:700px; margin-top:1rem; line-height:1.6;">
+        {{ feature.desc }}
+      </p>
+    </div>
+    <div style="text-align:right; font-family:var(--font-mono);">
+      <div style="color:var(--ink-faint); font-size:0.8rem;">SYSTEM STATUS</div>
+      <div style="color:#10b981; font-weight:bold; font-size:1.2rem; display:flex; align-items:center; gap:8px; justify-content:flex-end;">
+        <span class="pulse-indicator"></span> ONLINE &amp; SECURE
+      </div>
+      <div style="margin-top:10px; color:var(--ink-faint); font-size:0.8rem;">LATENCY: <span style="color:#38bdf8;">14ms</span></div>
     </div>
   </div>
-  <p style="font-size: 1.1rem; color: var(--ink-soft); line-height: 1.6; max-width: 800px;">
-    {{ feature.desc }}
-  </p>
-</section>
+</div>
 
-<section class="feature-content card" style="padding: 2.5rem; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: var(--radius-md);">
-  <h2 style="font-size: 1.4rem; font-weight: 500; margin-bottom: 1.2rem; color: var(--ink);">Purpose &amp; Capabilities</h2>
-  <div style="color: var(--ink-faint); line-height: 1.7; font-size: 0.95rem;">
+<div class="scada-grid">
+  <!-- Dynamic Stats Panels based on feature -->
+  <div class="scada-panel">
+    <div class="scada-title">Operations Core</div>
     {% if feature_id == 'predictor' %}
-      <p style="margin-bottom: 1rem;">The <strong>Predictor Engine</strong> is the core machine learning module of the Smart Grid AI platform. It utilizes advanced ensemble methods, specifically XGBoost and Random Forest, to analyze historical telemetry and forecast future electricity demand with high precision.</p>
-      <p>By predicting peak loads before they happen, grid operators can proactively spin up auxiliary generators, manage battery storage, and prevent unexpected blackouts.</p>
+    <div class="scada-stat">98.4%</div>
+    <div class="scada-substat">Current Model Accuracy (R²)</div>
     {% elif feature_id == 'analytics' %}
-      <p style="margin-bottom: 1rem;">The <strong>Load Analytics</strong> module provides deep, exploratory data analysis of substation performance. It visualizes 24-hour demand curves and peak load heatmaps across multiple city zones.</p>
-      <p>This allows grid engineers to easily identify which zones (such as industrial sectors or residential areas) are drawing the most power at any given hour, ensuring infrastructure is adequately maintained.</p>
-    {% elif feature_id == 'weather' %}
-      <p style="margin-bottom: 1rem;">The <strong>Weather Correlation</strong> module performs multi-factor impact analysis by integrating real-time and forecasted weather data—including temperature, humidity, and wind speed—directly into the demand models.</p>
-      <p>Since extreme weather events heavily influence human behavior (e.g., cranking up air conditioning during a heatwave), this module ensures predictions remain accurate even during volatile climate conditions.</p>
-    {% elif feature_id == 'leaderboard' %}
-      <p style="margin-bottom: 1rem;">The <strong>Model Leaderboard</strong> is an evaluation dashboard that benchmarks the performance of various machine learning algorithms against live grid data.</p>
-      <p>It displays a comprehensive comparison table tracking Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), Mean Squared Error (MSE), and R² accuracy, ensuring operators always know which model is performing best.</p>
-    {% elif feature_id == 'api' %}
-      <p style="margin-bottom: 1rem;">The <strong>REST API Docs</strong> provide developers with comprehensive endpoints to interact with the Smart Grid AI programmatically.</p>
-      <p>Powered by FastAPI, it includes auto-generated Swagger UI schemas, cURL examples, and robust documentation for integrating our demand forecasting into third-party enterprise systems.</p>
+    <div class="scada-stat">12,450 <span style="font-size:1rem;">MW</span></div>
+    <div class="scada-substat">Active Substation Load</div>
     {% elif feature_id == 'security' %}
-      <p style="margin-bottom: 1rem;">The <strong>Smart Grid Security</strong> module is built to protect the integrity of the grid's operational data. It performs enterprise dataset integrity checking and telemetry validation.</p>
-      <p>By sanitizing incoming sensor data and detecting anomalous data injections, it ensures that the AI predictor engine is never fed compromised data that could lead to dangerous load shedding decisions.</p>
+    <div class="scada-stat">0</div>
+    <div class="scada-substat">Detected Intrusions (24h)</div>
+    {% else %}
+    <div class="scada-stat">ACTIVE</div>
+    <div class="scada-substat">Module Status Node</div>
     {% endif %}
   </div>
-  
-  <div style="margin-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
-    <a href="{{ url_for('home') }}" class="btn btn--pearl">Back to Home</a>
+
+  <div class="scada-panel">
+    <div class="scada-title">Resource Allocation</div>
+    <div class="scada-stat" style="color:var(--cyan);">42.8%</div>
+    <div class="scada-substat">GPU Compute Utilization</div>
+    <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); margin-top:10px; border-radius:2px;">
+      <div style="width:42.8%; height:100%; background:var(--cyan); border-radius:2px;"></div>
+    </div>
   </div>
-</section>
-{% endblock %}
+
+  <div class="scada-panel">
+    <div class="scada-title">Live Telemetry Data</div>
+    <div class="mock-graph">
+      <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <polyline points="0,80 20,60 40,70 60,30 80,45 100,20" fill="none" stroke="#38bdf8" stroke-width="2" />
+        <polyline points="0,90 20,80 40,85 60,50 80,65 100,40" fill="none" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="4" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="scada-grid" style="grid-template-columns: 2fr 1fr; margin-bottom:3rem;">
+  <div class="scada-panel">
+    <div class="scada-title">Module Capabilities &amp; Overview</div>
+    <div style="color:var(--ink-soft); line-height:1.7; font-size:0.95rem;">
+      <p style="margin-bottom:1rem;">The <strong>{{ feature.title }}</strong> subsystem provides enterprise-grade infrastructure management, securely integrated with our Smart Grid AI ecosystem.</p>
+      <ul style="padding-left:1.5rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:0.8rem;">
+        <li><strong>Continuous Execution:</strong> Deployed in highly-available redundant clusters ensuring uninterrupted service.</li>
+        <li><strong>Deep Integration:</strong> Seamlessly hooks into existing SCADA metrics, providing real-time data overlays.</li>
+        <li><strong>AI-Driven Insights:</strong> Utilizes advanced machine learning algorithms to optimize power routing and predictive maintenance.</li>
+      </ul>
+    </div>
+    <div style="margin-top:2rem;">
+      <a href="{{ url_for('dashboard') }}" class="btn btn--pearl">Return to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="scada-panel">
+    <div class="scada-title">System Terminal</div>
+    <div class="terminal-box">
+      <div>> INITIALIZING MODULE...</div>
+      <div style="color:#888;">[14:02:01] Loading dependencies... OK</div>
+      <div style="color:#888;">[14:02:02] Establishing secure handshake... OK</div>
+      <div>> CONNECTING TO GRID DB...</div>
+      <div style="color:#888;">[14:02:04] Authentication valid.</div>
+      <div style="color:#38bdf8;">> {{ feature_id | upper }} SUBSYSTEM ONLINE.</div>
+      <div style="color:#888; margin-top:10px;">Awaiting telemetry...</div>
+      <div class="pulse-indicator" style="width:6px; height:6px; background:#0f0; box-shadow:none; margin-top:5px;"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
