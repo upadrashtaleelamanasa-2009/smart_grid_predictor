@@ -109,22 +109,22 @@ body::after {
 }
 .bg-animated-orbs .orb {
   position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6;
-  animation: floatOrb 18s ease-in-out infinite alternate;
+  animation: floatOrb 45s ease-in-out infinite alternate;
 }
 .bg-animated-orbs .orb-1 {
   top: 15%; left: 10%; width: 450px; height: 450px;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 70%);
-  animation-duration: 22s;
+  animation-duration: 55s;
 }
 .bg-animated-orbs .orb-2 {
   top: 60%; right: 15%; width: 500px; height: 500px;
   background: radial-gradient(circle, rgba(99, 102, 241, 0.22), transparent 70%);
-  animation-duration: 28s; animation-delay: -5s;
+  animation-duration: 70s; animation-delay: -5s;
 }
 .bg-animated-orbs .orb-3 {
   bottom: 10%; left: 30%; width: 400px; height: 400px;
   background: radial-gradient(circle, rgba(30, 58, 138, 0.3), transparent 70%);
-  animation-duration: 25s; animation-delay: -10s;
+  animation-duration: 62s; animation-delay: -10s;
 }
 
 @keyframes floatOrb {
