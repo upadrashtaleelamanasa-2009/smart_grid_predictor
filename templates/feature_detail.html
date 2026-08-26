@@ -4,89 +4,6 @@
 
 {% block content %}
 <style>
-  .scada-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-  .scada-panel {
-    background: rgba(10, 14, 26, 0.7);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px);
-  }
-  .scada-title {
-    font-family: var(--font-mono);
-    color: var(--cyan);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .scada-title::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var(--cyan);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--cyan);
-  }
-  .scada-stat {
-    font-size: 2.5rem;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 0.2rem;
-  }
-  .scada-substat {
-    font-size: 0.85rem;
-    color: var(--ink-faint);
-  }
-  .terminal-box {
-    background: #000;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: #0f0;
-    height: 200px;
-    overflow-y: auto;
-  }
-  .pulse-indicator {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background: #10b981;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #10b981;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-  }
-  .mock-graph {
-    height: 150px;
-    background: linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, transparent 100%);
-    border-bottom: 2px solid var(--cyan);
-    position: relative;
-    overflow: hidden;
-  }
-  .mock-graph::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0; top: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(255,255,255,0.05) 50px);
-  }
   .feature-hero {
     background: linear-gradient(90deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
     border-left: 4px solid var(--cyan);
@@ -94,17 +11,56 @@
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
     margin-bottom: 2rem;
     position: relative;
+    overflow: hidden;
   }
   .bg-grid {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    z-index: -1;
-    pointer-events: none;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 20px 20px; z-index: -1; pointer-events: none;
   }
+  .scada-panel {
+    background: rgba(10, 14, 26, 0.8);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .scada-title {
+    font-family: var(--font-mono); color: var(--cyan); font-size: 0.85rem;
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .scada-title::before {
+    content: ''; display: inline-block; width: 8px; height: 8px; background: var(--cyan);
+    border-radius: 50%; box-shadow: 0 0 8px var(--cyan);
+  }
+  
+  /* Feature Specific Grids */
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  
+  /* Leaderboard Table */
+  .leaderboard-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .leaderboard-table th { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.8rem; }
+  .leaderboard-table td { padding: 1.2rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; }
+  .badge-active { background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid #10b981; }
+  .badge-standby { background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; border: 1px solid #f59e0b; }
+  
+  /* Heatmap */
+  .heatmap-grid { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; }
+  .heatmap-cell { height: 16px; border-radius: 2px; background: rgba(56, 189, 248, 0.1); }
+  .hm-low { background: #0284c7; }
+  .hm-med { background: #10b981; }
+  .hm-high { background: #f59e0b; }
+  .hm-crit { background: #ef4444; }
+  
+  /* API Terminal */
+  .api-code { font-family: monospace; background: #000; padding: 1rem; border-radius: 6px; color: #a5b4fc; margin-bottom: 1rem; white-space: pre-wrap; }
+  
+  /* Terminal / Logs */
+  .terminal { background: #000; border: 1px solid #333; padding: 1rem; font-family: monospace; font-size: 0.85rem; color: #10b981; height: 250px; overflow-y: auto; }
 </style>
 
 <div class="feature-hero">
@@ -118,88 +74,303 @@
           <h1 style="font-size:2.4rem; margin:0; color:#fff; font-weight:700;">{{ feature.title }}</h1>
         </div>
       </div>
-      <p style="color:var(--ink-soft); font-size:1.1rem; max-width:700px; margin-top:1rem; line-height:1.6;">
-        {{ feature.desc }}
-      </p>
+      <p style="color:var(--ink-soft); font-size:1.1rem; max-width:700px; margin-top:1rem; line-height:1.6;">{{ feature.desc }}</p>
     </div>
     <div style="text-align:right; font-family:var(--font-mono);">
-      <div style="color:var(--ink-faint); font-size:0.8rem;">SYSTEM STATUS</div>
       <div style="color:#10b981; font-weight:bold; font-size:1.2rem; display:flex; align-items:center; gap:8px; justify-content:flex-end;">
-        <span class="pulse-indicator"></span> ONLINE &amp; SECURE
+        <span style="display:inline-block; width:10px; height:10px; background:#10b981; border-radius:50%; box-shadow:0 0 10px #10b981;"></span> SYSTEM ONLINE
       </div>
-      <div style="margin-top:10px; color:var(--ink-faint); font-size:0.8rem;">LATENCY: <span style="color:#38bdf8;">14ms</span></div>
     </div>
   </div>
 </div>
 
-<div class="scada-grid">
-  <!-- Dynamic Stats Panels based on feature -->
+{% if feature_id == 'predictor' %}
+<!-- PREDICTOR ENGINE DASHBOARD -->
+<div class="grid-3">
   <div class="scada-panel">
-    <div class="scada-title">Operations Core</div>
-    {% if feature_id == 'predictor' %}
-    <div class="scada-stat">98.4%</div>
-    <div class="scada-substat">Current Model Accuracy (R²)</div>
-    {% elif feature_id == 'analytics' %}
-    <div class="scada-stat">12,450 <span style="font-size:1rem;">MW</span></div>
-    <div class="scada-substat">Active Substation Load</div>
-    {% elif feature_id == 'security' %}
-    <div class="scada-stat">0</div>
-    <div class="scada-substat">Detected Intrusions (24h)</div>
-    {% else %}
-    <div class="scada-stat">ACTIVE</div>
-    <div class="scada-substat">Module Status Node</div>
-    {% endif %}
+    <div class="scada-title">Primary Model</div>
+    <div style="font-size:1.5rem; font-weight:bold; color:#fff;">XGBoost Ensemble</div>
+    <div style="margin-top:1rem; display:flex; justify-content:space-between; color:var(--ink-faint); font-size:0.85rem;">
+      <span>Live MAE</span> <span style="color:#f59e0b; font-weight:bold;">10.5 MW</span>
+    </div>
+    <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); margin-top:5px; border-radius:2px;"><div style="width:90%; height:100%; background:#f59e0b; border-radius:2px;"></div></div>
   </div>
-
   <div class="scada-panel">
-    <div class="scada-title">Resource Allocation</div>
-    <div class="scada-stat" style="color:var(--cyan);">42.8%</div>
-    <div class="scada-substat">GPU Compute Utilization</div>
-    <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); margin-top:10px; border-radius:2px;">
-      <div style="width:42.8%; height:100%; background:var(--cyan); border-radius:2px;"></div>
+    <div class="scada-title">Secondary Model</div>
+    <div style="font-size:1.5rem; font-weight:bold; color:#fff;">Random Forest</div>
+    <div style="margin-top:1rem; display:flex; justify-content:space-between; color:var(--ink-faint); font-size:0.85rem;">
+      <span>Live MAE</span> <span style="color:#a855f7; font-weight:bold;">15.8 MW</span>
+    </div>
+    <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); margin-top:5px; border-radius:2px;"><div style="width:75%; height:100%; background:#a855f7; border-radius:2px;"></div></div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Compute Node</div>
+    <div style="font-size:1.5rem; font-weight:bold; color:#fff;">GPU Cluster A</div>
+    <div style="margin-top:1rem; display:flex; justify-content:space-between; color:var(--ink-faint); font-size:0.85rem;">
+      <span>VRAM Allocation</span> <span style="color:#ef4444; font-weight:bold;">49.3%</span>
+    </div>
+    <div style="width:100%; height:4px; background:rgba(255,255,255,0.1); margin-top:5px; border-radius:2px;"><div style="width:49%; height:100%; background:#ef4444; border-radius:2px;"></div></div>
+  </div>
+</div>
+<div class="scada-panel" style="margin-bottom:1.5rem;">
+  <div class="scada-title">Continuous Inference Subsystem</div>
+  <div style="height:250px; background:linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, transparent 100%); border-bottom:2px solid #333; position:relative; overflow:hidden; display:flex; align-items:flex-end;">
+    <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
+      <!-- Actual -->
+      <polyline points="0,70 10,40 20,20 30,30 40,60 50,80 60,85 70,70 80,40 90,30 100,50" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4" />
+      <!-- Predicted -->
+      <polyline points="0,68 10,42 20,22 30,33 40,58 50,78 60,83 70,72 80,42 90,31 100,48" fill="none" stroke="#38bdf8" stroke-width="2" />
+    </svg>
+  </div>
+  <div style="display:flex; gap:2rem; margin-top:1rem; font-size:0.85rem; color:var(--ink-faint); justify-content:center;">
+    <div style="display:flex; align-items:center; gap:0.5rem;"><div style="width:15px; height:2px; background:#38bdf8;"></div> AI Forecast</div>
+    <div style="display:flex; align-items:center; gap:0.5rem;"><div style="width:15px; height:2px; border-top:2px dashed #818cf8;"></div> Actual Ground Truth</div>
+  </div>
+</div>
+
+{% elif feature_id == 'analytics' %}
+<!-- LOAD ANALYTICS DASHBOARD -->
+<div class="grid-4">
+  <div class="scada-panel">
+    <div class="scada-title">Current Demand</div>
+    <div style="font-size:2rem; font-weight:bold; color:#fff;">11,667 <span style="font-size:1rem; color:var(--cyan);">MW</span></div>
+    <div style="margin-top:0.5rem; color:var(--ink-faint); font-size:0.8rem;">60% Grid Capacity</div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Peak 24h Load</div>
+    <div style="font-size:2rem; font-weight:bold; color:#fff;">15,434 <span style="font-size:1rem; color:#a855f7;">MW</span></div>
+    <div style="margin-top:0.5rem; color:var(--ink-faint); font-size:0.8rem;">Cap Limit: 19,500 MW</div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Reserve Margin</div>
+    <div style="font-size:2rem; font-weight:bold; color:#10b981;">40.2%</div>
+    <div style="margin-top:0.5rem; color:var(--ink-faint); font-size:0.8rem;">Status: NOMINAL</div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Grid Frequency</div>
+    <div style="font-size:2rem; font-weight:bold; color:#fff;">50.02 <span style="font-size:1rem; color:var(--ink-soft);">Hz</span></div>
+    <div style="margin-top:0.5rem; color:var(--ink-faint); font-size:0.8rem;">±0.02 Hz Deviation</div>
+  </div>
+</div>
+<div class="scada-panel" style="margin-bottom:1.5rem;">
+  <div class="scada-title" style="display:flex; justify-content:space-between;">
+    <span>Peak Load Heatmap Matrix (7-Day)</span>
+    <div style="display:flex; gap:1rem; font-size:0.75rem; color:var(--ink-faint);">
+      <span style="display:flex; align-items:center; gap:4px;"><span class="heatmap-cell hm-low" style="width:12px;height:12px;"></span> LOW</span>
+      <span style="display:flex; align-items:center; gap:4px;"><span class="heatmap-cell hm-med" style="width:12px;height:12px;"></span> OPTIMAL</span>
+      <span style="display:flex; align-items:center; gap:4px;"><span class="heatmap-cell hm-high" style="width:12px;height:12px;"></span> HIGH</span>
+      <span style="display:flex; align-items:center; gap:4px;"><span class="heatmap-cell hm-crit" style="width:12px;height:12px;"></span> CRITICAL</span>
     </div>
   </div>
+  <div style="display:flex; flex-direction:column; gap:6px; margin-top:1.5rem;">
+    <!-- 7 rows of 24 cells -->
+    {% for day in ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; font-size:0.75rem; color:var(--ink-faint); font-family:var(--font-mono);">{{ day }}</div>
+      <div class="heatmap-grid" style="flex:1;">
+        {% for hour in range(24) %}
+          {% set load = [1,1,1,2,2,3,4,4,3,2,2,1,1,1,2,3,4,4,3,2,1,1,1,1] | random %}
+          {% set css_class = 'hm-low' %}
+          {% if hour > 7 and hour < 20 %}
+            {% set css_class = ['hm-med', 'hm-high'] | random %}
+          {% endif %}
+          {% if hour > 16 and hour < 21 and day in ['Tue','Wed','Thu'] %}
+            {% set css_class = ['hm-high', 'hm-crit'] | random %}
+          {% endif %}
+          <div class="heatmap-cell {{ css_class }}" title="Hour {{ hour }}:00"></div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div style="display:flex; justify-content:space-between; margin-top:10px; margin-left:40px; color:var(--ink-faint); font-size:0.75rem; font-family:var(--font-mono);">
+    <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:00</span>
+  </div>
+</div>
 
+{% elif feature_id == 'weather' %}
+<!-- WEATHER CORRELATION DASHBOARD -->
+<div class="grid-4">
+  <div class="scada-panel" style="text-align:center;">
+    <div style="font-size:2rem; margin-bottom:10px;">🌡️</div>
+    <div class="scada-title" style="justify-content:center;">Mean Temp</div>
+    <div style="font-size:1.8rem; font-weight:bold; color:#fff;">28.4°C</div>
+    <div style="color:#f59e0b; font-size:0.8rem; margin-top:5px;">High Correlation (0.84)</div>
+  </div>
+  <div class="scada-panel" style="text-align:center;">
+    <div style="font-size:2rem; margin-bottom:10px;">💧</div>
+    <div class="scada-title" style="justify-content:center;">Humidity</div>
+    <div style="font-size:1.8rem; font-weight:bold; color:#fff;">64%</div>
+    <div style="color:#10b981; font-size:0.8rem; margin-top:5px;">Med Correlation (0.45)</div>
+  </div>
+  <div class="scada-panel" style="text-align:center;">
+    <div style="font-size:2rem; margin-bottom:10px;">☀️</div>
+    <div class="scada-title" style="justify-content:center;">Solar Irradiance</div>
+    <div style="font-size:1.8rem; font-weight:bold; color:#fff;">850 W/m²</div>
+    <div style="color:#ef4444; font-size:0.8rem; margin-top:5px;">Negative Corr (-0.72)</div>
+  </div>
+  <div class="scada-panel" style="text-align:center;">
+    <div style="font-size:2rem; margin-bottom:10px;">💨</div>
+    <div class="scada-title" style="justify-content:center;">Wind Speed</div>
+    <div style="font-size:1.8rem; font-weight:bold; color:#fff;">12 km/h</div>
+    <div style="color:var(--ink-soft); font-size:0.8rem; margin-top:5px;">Low Correlation (0.12)</div>
+  </div>
+</div>
+<div class="grid-2">
   <div class="scada-panel">
-    <div class="scada-title">Live Telemetry Data</div>
-    <div class="mock-graph">
-      <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
-        <polyline points="0,80 20,60 40,70 60,30 80,45 100,20" fill="none" stroke="#38bdf8" stroke-width="2" />
-        <polyline points="0,90 20,80 40,85 60,50 80,65 100,40" fill="none" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="4" />
-      </svg>
+    <div class="scada-title">Temperature vs. Load Curve</div>
+    <div style="height:200px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(255,255,255,0.1); border-radius:8px;">
+      <div style="color:var(--ink-faint); font-family:var(--font-mono);">[ Interactive Scatter Plot Loading... ]</div>
+    </div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Weather Event Triggers</div>
+    <ul style="color:var(--ink-soft); line-height:2; font-size:0.9rem; margin-left:1.5rem;">
+      <li><span style="color:#ef4444; font-weight:bold;">Heatwave Detected:</span> Expected peak load +15% at 14:00</li>
+      <li><span style="color:#10b981;">Cloud Cover Normal:</span> Solar generation within baseline</li>
+      <li><span style="color:#f59e0b;">Storm Warning (Sector 4):</span> Grid vulnerability elevated</li>
+    </ul>
+  </div>
+</div>
+
+{% elif feature_id == 'leaderboard' %}
+<!-- MODEL LEADERBOARD DASHBOARD -->
+<div class="scada-panel">
+  <div class="scada-title">LIVE BENCHMARK LEADERBOARD</div>
+  <div style="overflow-x:auto;">
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>RANK</th>
+          <th>ARCHITECTURE</th>
+          <th>STATUS</th>
+          <th>MAE (MW)</th>
+          <th>RMSE (MW)</th>
+          <th>R² ACCURACY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:rgba(56, 189, 248, 0.05);">
+          <td style="font-weight:bold; color:#38bdf8; font-size:1.2rem;">1</td>
+          <td>
+            <div style="font-weight:bold; margin-bottom:4px;">Gradient Boosting (XGBoost)</div>
+            <div style="font-size:0.75rem; color:var(--ink-faint);">Tree-based ensemble. Highly resilient to non-linear anomalies.</div>
+          </td>
+          <td><span class="badge-active">ACTIVE INFERENCE</span></td>
+          <td style="font-family:var(--font-mono);">12.4</td>
+          <td style="font-family:var(--font-mono);">18.2</td>
+          <td style="font-family:var(--font-mono); color:#10b981; font-weight:bold;">0.9368</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; color:var(--ink-soft); font-size:1.2rem;">2</td>
+          <td>
+            <div style="font-weight:bold; margin-bottom:4px;">Random Forest Ensemble</div>
+            <div style="font-size:0.75rem; color:var(--ink-faint);">Parallelized decision trees. Strong baseline, slower inference.</div>
+          </td>
+          <td><span class="badge-standby">STANDBY</span></td>
+          <td style="font-family:var(--font-mono);">15.8</td>
+          <td style="font-family:var(--font-mono);">22.1</td>
+          <td style="font-family:var(--font-mono); color:#10b981;">0.9052</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; color:var(--ink-soft); font-size:1.2rem;">3</td>
+          <td>
+            <div style="font-weight:bold; margin-bottom:4px;">LSTM Neural Network</div>
+            <div style="font-size:0.75rem; color:var(--ink-faint);">Deep learning sequence model. Undergoing hyperparameter tuning.</div>
+          </td>
+          <td><span style="background:rgba(255,255,255,0.1); padding:0.3rem 0.6rem; border-radius:4px; font-size:0.75rem;">TRAINING</span></td>
+          <td style="font-family:var(--font-mono);">16.5</td>
+          <td style="font-family:var(--font-mono);">23.4</td>
+          <td style="font-family:var(--font-mono); color:#10b981;">0.8841</td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; color:var(--ink-soft); font-size:1.2rem;">4</td>
+          <td>
+            <div style="font-weight:bold; margin-bottom:4px;">Linear Regression Baseline</div>
+            <div style="font-size:0.75rem; color:var(--ink-faint);">Traditional statistical baseline. Fails to capture non-linear peaks.</div>
+          </td>
+          <td><span style="background:rgba(239,68,68,0.1); color:#ef4444; padding:0.3rem 0.6rem; border-radius:4px; font-size:0.75rem; border:1px solid #ef4444;">DEPRECATED</span></td>
+          <td style="font-family:var(--font-mono);">24.1</td>
+          <td style="font-family:var(--font-mono);">35.6</td>
+          <td style="font-family:var(--font-mono); color:#10b981;">0.8598</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% elif feature_id == 'api' %}
+<!-- REST API DASHBOARD -->
+<div class="grid-2-1">
+  <div class="scada-panel">
+    <div class="scada-title">Endpoint: /api/v1/predict/live</div>
+    <p style="color:var(--ink-soft); font-size:0.9rem; margin-bottom:1rem;">Generates a real-time load forecast for the next 24 hours based on current grid telemetry and weather data.</p>
+    
+    <div style="color:var(--cyan); font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.5rem;">CURL REQUEST</div>
+    <div class="api-code">curl -X POST "https://api.smartgrid.ai/v1/predict/live" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"zone": "metro-1", "include_weather": true}'</div>
+
+    <div style="color:#10b981; font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.5rem;">JSON RESPONSE (200 OK)</div>
+    <div class="api-code" style="color:#10b981;">{
+  "status": "success",
+  "zone": "metro-1",
+  "forecast": [
+    {"hour": "14:00", "load_mw": 12450, "confidence": 0.98},
+    {"hour": "15:00", "load_mw": 12800, "confidence": 0.96}
+  ],
+  "model_used": "xgboost-ensemble"
+}</div>
+  </div>
+  <div class="scada-panel">
+    <div class="scada-title">Available Routes</div>
+    <div style="display:flex; flex-direction:column; gap:0.5rem; font-family:var(--font-mono); font-size:0.85rem;">
+      <div style="padding:0.5rem; background:rgba(16,185,129,0.1); border-left:3px solid #10b981;"><strong style="color:#10b981;">GET</strong> /v1/status</div>
+      <div style="padding:0.5rem; background:rgba(56,189,248,0.1); border-left:3px solid #38bdf8;"><strong style="color:#38bdf8;">POST</strong> /v1/predict/live</div>
+      <div style="padding:0.5rem; background:rgba(56,189,248,0.1); border-left:3px solid #38bdf8;"><strong style="color:#38bdf8;">POST</strong> /v1/predict/batch</div>
+      <div style="padding:0.5rem; background:rgba(16,185,129,0.1); border-left:3px solid #10b981;"><strong style="color:#10b981;">GET</strong> /v1/telemetry/history</div>
     </div>
   </div>
 </div>
 
-<div class="scada-grid" style="grid-template-columns: 2fr 1fr; margin-bottom:3rem;">
+{% elif feature_id == 'security' %}
+<!-- SECURITY DASHBOARD -->
+<div class="grid-2-1">
   <div class="scada-panel">
-    <div class="scada-title">Module Capabilities &amp; Overview</div>
-    <div style="color:var(--ink-soft); line-height:1.7; font-size:0.95rem;">
-      <p style="margin-bottom:1rem;">The <strong>{{ feature.title }}</strong> subsystem provides enterprise-grade infrastructure management, securely integrated with our Smart Grid AI ecosystem.</p>
-      <ul style="padding-left:1.5rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:0.8rem;">
-        <li><strong>Continuous Execution:</strong> Deployed in highly-available redundant clusters ensuring uninterrupted service.</li>
-        <li><strong>Deep Integration:</strong> Seamlessly hooks into existing SCADA metrics, providing real-time data overlays.</li>
-        <li><strong>AI-Driven Insights:</strong> Utilizes advanced machine learning algorithms to optimize power routing and predictive maintenance.</li>
-      </ul>
-    </div>
-    <div style="margin-top:2rem;">
-      <a href="{{ url_for('dashboard') }}" class="btn btn--pearl">Return to Dashboard</a>
+    <div class="scada-title">Firewall &amp; Intrusion Log</div>
+    <div class="terminal">
+      <div style="color:#888;">[14:45:00] Initializing deep packet inspection... OK</div>
+      <div style="color:#888;">[14:45:02] Loading threat signatures... 45,210 loaded.</div>
+      <div>> SCANNING INBOUND TELEMETRY STREAM</div>
+      <div style="color:#10b981;">[14:45:10] Substation Alpha: Packet signature VERIFIED (SHA-256).</div>
+      <div style="color:#10b981;">[14:45:11] Substation Beta: Packet signature VERIFIED (SHA-256).</div>
+      <div style="color:#ef4444; font-weight:bold;">[14:45:15] WARN: Unexpected port scan detected from IP 192.168.4.12</div>
+      <div style="color:#f59e0b;">> INITIATING AUTOMATIC BLOCK RULE...</div>
+      <div style="color:#10b981;">[14:45:16] Rule applied. IP blocked.</div>
+      <div style="color:#10b981;">[14:45:20] Normal monitoring resumed.</div>
+      <div class="pulse-indicator" style="width:6px;height:6px;margin-top:10px;"></div>
     </div>
   </div>
-
-  <div class="scada-panel">
-    <div class="scada-title">System Terminal</div>
-    <div class="terminal-box">
-      <div>> INITIALIZING MODULE...</div>
-      <div style="color:#888;">[14:02:01] Loading dependencies... OK</div>
-      <div style="color:#888;">[14:02:02] Establishing secure handshake... OK</div>
-      <div>> CONNECTING TO GRID DB...</div>
-      <div style="color:#888;">[14:02:04] Authentication valid.</div>
-      <div style="color:#38bdf8;">> {{ feature_id | upper }} SUBSYSTEM ONLINE.</div>
-      <div style="color:#888; margin-top:10px;">Awaiting telemetry...</div>
-      <div class="pulse-indicator" style="width:6px; height:6px; background:#0f0; box-shadow:none; margin-top:5px;"></div>
+  <div style="display:flex; flex-direction:column; gap:1.5rem;">
+    <div class="scada-panel" style="text-align:center; padding:2rem 1rem;">
+      <div style="font-size:3rem; margin-bottom:10px;">🛡️</div>
+      <div style="font-size:1.5rem; font-weight:bold; color:#10b981;">SECURE</div>
+      <div style="color:var(--ink-faint); font-size:0.85rem; margin-top:5px;">End-to-End Encrypted</div>
+    </div>
+    <div class="scada-panel">
+      <div class="scada-title">Threat Metrics</div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+        <span style="color:var(--ink-soft); font-size:0.9rem;">Blocked IPs</span>
+        <span style="color:#ef4444; font-weight:bold; font-family:var(--font-mono);">12</span>
+      </div>
+      <div style="display:flex; justify-content:space-between;">
+        <span style="color:var(--ink-soft); font-size:0.9rem;">Clean Packets</span>
+        <span style="color:#10b981; font-weight:bold; font-family:var(--font-mono);">99.98%</span>
+      </div>
     </div>
   </div>
 </div>
+{% endif %}
 
 {% endblock %}
