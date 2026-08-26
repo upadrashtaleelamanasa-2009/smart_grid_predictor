@@ -219,8 +219,47 @@
 <div class="grid-2">
   <div class="scada-panel">
     <div class="scada-title">Temperature vs. Load Curve</div>
-    <div style="height:200px; display:flex; align-items:center; justify-content:center; border:1px dashed rgba(255,255,255,0.1); border-radius:8px;">
-      <div style="color:var(--ink-faint); font-family:var(--font-mono);">[ Interactive Scatter Plot Loading... ]</div>
+    <div style="height:200px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.05); border-radius:8px; background: rgba(0,0,0,0.2); padding:10px;">
+      <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+  <!-- Grid lines -->
+  <line x1="40" y1="160" x2="380" y2="160" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <line x1="40" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="40" y1="80" x2="380" y2="80" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="40" y1="40" x2="380" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="40" y1="20" x2="40" y2="160" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  
+  <!-- Labels -->
+  <text x="20" y="45" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">18k</text>
+  <text x="20" y="85" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">16k</text>
+  <text x="20" y="125" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">14k</text>
+  <text x="20" y="165" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">12k</text>
+  
+  <text x="100" y="180" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">25°C</text>
+  <text x="200" y="180" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">30°C</text>
+  <text x="300" y="180" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace">35°C</text>
+  
+  <!-- Trendline -->
+  <line x1="60" y1="140" x2="360" y2="30" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,4"/>
+  
+  <!-- Scatter Points (Trending upwards) -->
+  <circle cx="70" cy="130" r="3" fill="#38bdf8" opacity="0.8"><animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/></circle>
+  <circle cx="85" cy="145" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="100" cy="115" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="120" cy="125" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="140" cy="95" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="150" cy="105" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="170" cy="80" r="3" fill="#38bdf8" opacity="0.8"><animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/></circle>
+  <circle cx="190" cy="95" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="210" cy="70" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="220" cy="85" r="3" fill="#38bdf8" opacity="0.8"/>
+  <circle cx="240" cy="55" r="3" fill="#ef4444" opacity="0.9"><animate attributeName="r" values="3;5;3" dur="1.5s" repeatCount="indefinite"/></circle>
+  <circle cx="260" cy="65" r="3" fill="#ef4444" opacity="0.9"/>
+  <circle cx="280" cy="40" r="3" fill="#ef4444" opacity="0.9"/>
+  <circle cx="300" cy="50" r="3" fill="#ef4444" opacity="0.9"/>
+  <circle cx="320" cy="25" r="3" fill="#ef4444" opacity="0.9"/>
+  <circle cx="330" cy="35" r="3" fill="#ef4444" opacity="0.9"/>
+  <circle cx="350" cy="20" r="3" fill="#ef4444" opacity="0.9"><animate attributeName="r" values="3;6;3" dur="1s" repeatCount="indefinite"/></circle>
+</svg>
     </div>
   </div>
   <div class="scada-panel">
