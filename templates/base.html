@@ -37,30 +37,8 @@
     {% if user is mapping and active_page != 'login' %}
     <nav class="nav__rail" aria-label="Primary">
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
-      
-      <!-- FEATURES DROPDOWN MENU -->
-      <div class="nav-dropdown" id="features-dropdown">
-        <button class="nav-dropdown-btn {{ 'is-active' if active_page in ['prediction', 'analytics', 'anomalies', 'bess', 'simulator', 'dashboard'] else '' }}" type="button" onclick="toggleFeaturesDropdown(event)">
-          Features <span style="font-size:0.6rem; margin-left:2px;">▼</span>
-        </button>
-        <div class="nav-dropdown-content">
-          <a href="#" class="dropdown-item {{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">
-            <span class="item-icon">✨</span>
-            <div>
-              <div class="item-title">Predictor Engine</div>
-              <div class="item-sub">Real-time ML demand forecasting</div>
-            </div>
-          </a>
-          <a href="{{ url_for('analytics') }}" class="dropdown-item {{ 'is-active' if active_page == 'analytics' else '' }}">
-            <span class="item-icon">📊</span>
-            <div>
-              <div class="item-title">Load Analytics</div>
-              <div class="item-sub">Exploratory data analysis</div>
-            </div>
-          </a>
-          <a href="{{ url_for('anomalies') }}" class="dropdown-item {{ 'is-active' if active_page == 'anomalies' else '' }}">
-            <span class="item-icon">🛡️</span>
-            <div>
+      <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
+
       <!-- ⚡ ADVANCED GRID MODULES HOVER DROPDOWN MENU -->
       <div class="nav-dropdown" id="adv-modules-dropdown">
         <button class="nav-dropdown-btn {{ 'is-active' if active_page in ['analytics', 'bess', 'anomalies', 'simulator'] else '' }}" type="button" onclick="toggleAdvModules(event)">
@@ -93,6 +71,57 @@
             <div>
               <div class="item-title">Weather Stress Simulator</div>
               <div class="item-sub">Heatwave &amp; Surge Failure Tester</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- FEATURES DROPDOWN MENU -->
+      <div class="nav-dropdown" id="features-dropdown">
+        <button class="nav-dropdown-btn {{ 'is-active' if active_page and active_page.startswith('feature_') else '' }}" type="button" onclick="toggleFeaturesDropdown(event)">
+          Features <span style="font-size:0.6rem; margin-left:2px;">▼</span>
+        </button>
+        <div class="nav-dropdown-content">
+          <a href="{{ url_for('feature', feature_id='predictor') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_predictor' else '' }}">
+            <span class="item-icon">✨</span>
+            <div>
+              <div class="item-title">Predictor Engine</div>
+              <div class="item-sub">Real-time ML demand forecasting</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='analytics') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_analytics' else '' }}">
+            <span class="item-icon">📊</span>
+            <div>
+              <div class="item-title">Load Analytics</div>
+              <div class="item-sub">Exploratory data analysis</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='weather') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_weather' else '' }}">
+            <span class="item-icon">⚡</span>
+            <div>
+              <div class="item-title">Weather Correlation</div>
+              <div class="item-sub">Multi-factor impact analysis</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='leaderboard') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_leaderboard' else '' }}">
+            <span class="item-icon">👥</span>
+            <div>
+              <div class="item-title">Model Leaderboard</div>
+              <div class="item-sub">Benchmark comparison table</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='api') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_api' else '' }}">
+            <span class="item-icon" style="font-family:var(--font-mono);">&lt;/&gt;</span>
+            <div>
+              <div class="item-title">REST API Docs</div>
+              <div class="item-sub">FastAPI endpoints &amp; swagger</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='security') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_security' else '' }}">
+            <span class="item-icon">🛡️</span>
+            <div>
+              <div class="item-title">Smart Grid Security</div>
+              <div class="item-sub">Enterprise dataset integrity</div>
             </div>
           </a>
         </div>
