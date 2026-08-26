@@ -814,32 +814,32 @@ def feature(feature_id):
         'predictor': {
             'title': 'Predictor Engine',
             'desc': 'Real-time ML demand forecasting powered by XGBoost & Random Forest.',
-            'icon': 'âœ¨'
+            'icon': '⚡'
         },
         'analytics': {
             'title': 'Load Analytics',
             'desc': 'Exploratory data analysis, 24-hour demand curves & peak load heatmaps.',
-            'icon': 'ðŸ“Š'
+            'icon': '📊'
         },
         'weather': {
             'title': 'Weather Correlation',
             'desc': 'Multi-factor impact analysis incorporating temperature, humidity & wind speed.',
-            'icon': 'âš¡'
+            'icon': '🌡️'
         },
         'leaderboard': {
             'title': 'Model Leaderboard',
             'desc': 'Benchmark comparison table across MAE, RMSE, MSE, and R-squared accuracy.',
-            'icon': 'ðŸ‘¥'
+            'icon': '🏆'
         },
         'api': {
             'title': 'REST API Docs',
             'desc': 'FastAPI endpoints documentation, swagger schemas & curl examples.',
-            'icon': '</>'
+            'icon': '💻'
         },
         'security': {
             'title': 'Smart Grid Security',
             'desc': 'Enterprise dataset integrity checking and telemetry validation.',
-            'icon': 'ðŸ›¡ï¸'
+            'icon': '🛡️'
         }
     }
     if not u:
