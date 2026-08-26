@@ -806,5 +806,47 @@ def api_export_users_csv():
     return Response(buf.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment;filename=registered_users_database.csv"})
 
+
+@app.route('/feature/<feature_id>')
+def feature(feature_id):
+    u = session.get('user')
+    valid_features = {
+        'predictor': {
+            'title': 'Predictor Engine',
+            'desc': 'Real-time ML demand forecasting powered by XGBoost & Random Forest.',
+            'icon': '✨'
+        },
+        'analytics': {
+            'title': 'Load Analytics',
+            'desc': 'Exploratory data analysis, 24-hour demand curves & peak load heatmaps.',
+            'icon': '📊'
+        },
+        'weather': {
+            'title': 'Weather Correlation',
+            'desc': 'Multi-factor impact analysis incorporating temperature, humidity & wind speed.',
+            'icon': '⚡'
+        },
+        'leaderboard': {
+            'title': 'Model Leaderboard',
+            'desc': 'Benchmark comparison table across MAE, RMSE, MSE, and R² accuracy.',
+            'icon': '👥'
+        },
+        'api': {
+            'title': 'REST API Docs',
+            'desc': 'FastAPI endpoints documentation, swagger schemas & curl examples.',
+            'icon': '</>'
+        },
+        'security': {
+            'title': 'Smart Grid Security',
+            'desc': 'Enterprise dataset integrity checking and telemetry validation.',
+            'icon': '🛡️'
+        }
+    }
+    if feature_id not in valid_features:
+        return redirect(url_for('home'))
+    f_data = valid_features[feature_id]
+    return render_template('feature_detail.html', feature=f_data, feature_id=feature_id, user=u, active_page='feature_' + feature_id)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

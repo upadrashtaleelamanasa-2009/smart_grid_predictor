@@ -566,9 +566,9 @@ body::after {
 .metric-label { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em; color: var(--emerald); text-transform: uppercase; }
 
 .stat-grid { display: grid; gap: 0.7rem; }
-.stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
-.stat-grid-3 { grid-template-columns: repeat(3, 1fr); }
-.stat-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.stat-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.stat-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.stat-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
 .stat-box {
   background: rgba(15,23,42,0.92);
   border: 1px solid var(--border);

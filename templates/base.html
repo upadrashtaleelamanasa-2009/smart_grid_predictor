@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3"/>
 {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -38,6 +38,57 @@
     <nav class="nav__rail" aria-label="Primary">
       <a href="{{ url_for('home') }}" class="{{ 'is-active' if active_page == 'home' else '' }}">Home</a>
       <a href="#" class="{{ 'is-active' if active_page == 'prediction' else '' }}" onclick="navPrediction(event)">Predictor</a>
+
+      <!-- FEATURES DROPDOWN MENU -->
+      <div class="nav-dropdown" id="features-dropdown">
+        <button class="nav-dropdown-btn {{ 'is-active' if active_page and active_page.startswith('feature_') else '' }}" type="button" onclick="toggleFeaturesDropdown(event)">
+          Features <span style="font-size:0.6rem; margin-left:2px;">▼</span>
+        </button>
+        <div class="nav-dropdown-content">
+          <a href="{{ url_for('feature', feature_id='predictor') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_predictor' else '' }}">
+            <span class="item-icon">✨</span>
+            <div>
+              <div class="item-title">Predictor Engine</div>
+              <div class="item-sub">Real-time ML demand forecasting</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='analytics') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_analytics' else '' }}">
+            <span class="item-icon">📊</span>
+            <div>
+              <div class="item-title">Load Analytics</div>
+              <div class="item-sub">Exploratory data analysis</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='weather') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_weather' else '' }}">
+            <span class="item-icon">⚡</span>
+            <div>
+              <div class="item-title">Weather Correlation</div>
+              <div class="item-sub">Multi-factor impact analysis</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='leaderboard') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_leaderboard' else '' }}">
+            <span class="item-icon">👥</span>
+            <div>
+              <div class="item-title">Model Leaderboard</div>
+              <div class="item-sub">Benchmark comparison table</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='api') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_api' else '' }}">
+            <span class="item-icon" style="font-family:var(--font-mono);">&lt;/&gt;</span>
+            <div>
+              <div class="item-title">REST API Docs</div>
+              <div class="item-sub">FastAPI endpoints &amp; swagger</div>
+            </div>
+          </a>
+          <a href="{{ url_for('feature', feature_id='security') }}" class="dropdown-item {{ 'is-active' if active_page == 'feature_security' else '' }}">
+            <span class="item-icon">🛡️</span>
+            <div>
+              <div class="item-title">Smart Grid Security</div>
+              <div class="item-sub">Enterprise dataset integrity</div>
+            </div>
+          </a>
+        </div>
+      </div>
 
       <!-- ⚡ ADVANCED GRID MODULES HOVER DROPDOWN MENU -->
       <div class="nav-dropdown" id="adv-modules-dropdown">
@@ -275,7 +326,21 @@ function toggleProfileModal(e) {
     modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
   }
 }
+
+function toggleFeaturesDropdown(e) {
+    if (e) e.stopPropagation();
+    const dropdown = document.getElementById('features-dropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('active');
+    }
+    const adv = document.getElementById('adv-modules-dropdown');
+    if (adv) adv.classList.remove('active');
+}
+
 function toggleAdvModules(e) {
+    const fdrop = document.getElementById('features-dropdown');
+    if (fdrop) fdrop.classList.remove('active');
+
   if (e) e.stopPropagation();
   const dropdown = document.getElementById('adv-modules-dropdown');
   if (dropdown) {

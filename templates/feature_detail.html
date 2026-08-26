@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set show_sidebar = true %}
+{% block title %}{{ feature.title }} - Smart Grid AI{% endblock %}
+
+{% block content %}
+<section class="feature-detail-header" style="padding: 3rem 2rem; background: linear-gradient(145deg, rgba(10, 14, 26, 0.45), rgba(6, 9, 18, 0.4)); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: var(--radius-lg); backdrop-filter: blur(18px) saturate(140%); margin-bottom: 2rem;">
+  <div style="display:flex; align-items:center; gap: 1.5rem; margin-bottom: 1.5rem;">
+    <div style="width: 72px; height: 72px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-family: var(--font-mono);">
+      {{ feature.icon }}
+    </div>
+    <div>
+      <h1 style="font-size: 2.2rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--ink);">{{ feature.title }}</h1>
+      <div style="font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em;">SMART GRID AI FEATURE</div>
+    </div>
+  </div>
+  <p style="font-size: 1.1rem; color: var(--ink-soft); line-height: 1.6; max-width: 800px;">
+    {{ feature.desc }}
+  </p>
+</section>
+
+<section class="feature-content card" style="padding: 2.5rem; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: var(--radius-md);">
+  <h2 style="font-size: 1.4rem; font-weight: 500; margin-bottom: 1.2rem; color: var(--ink);">Purpose &amp; Capabilities</h2>
+  <div style="color: var(--ink-faint); line-height: 1.7; font-size: 0.95rem;">
+    {% if feature_id == 'predictor' %}
+      <p style="margin-bottom: 1rem;">The <strong>Predictor Engine</strong> is the core machine learning module of the Smart Grid AI platform. It utilizes advanced ensemble methods, specifically XGBoost and Random Forest, to analyze historical telemetry and forecast future electricity demand with high precision.</p>
+      <p>By predicting peak loads before they happen, grid operators can proactively spin up auxiliary generators, manage battery storage, and prevent unexpected blackouts.</p>
+    {% elif feature_id == 'analytics' %}
+      <p style="margin-bottom: 1rem;">The <strong>Load Analytics</strong> module provides deep, exploratory data analysis of substation performance. It visualizes 24-hour demand curves and peak load heatmaps across multiple city zones.</p>
+      <p>This allows grid engineers to easily identify which zones (such as industrial sectors or residential areas) are drawing the most power at any given hour, ensuring infrastructure is adequately maintained.</p>
+    {% elif feature_id == 'weather' %}
+      <p style="margin-bottom: 1rem;">The <strong>Weather Correlation</strong> module performs multi-factor impact analysis by integrating real-time and forecasted weather data—including temperature, humidity, and wind speed—directly into the demand models.</p>
+      <p>Since extreme weather events heavily influence human behavior (e.g., cranking up air conditioning during a heatwave), this module ensures predictions remain accurate even during volatile climate conditions.</p>
+    {% elif feature_id == 'leaderboard' %}
+      <p style="margin-bottom: 1rem;">The <strong>Model Leaderboard</strong> is an evaluation dashboard that benchmarks the performance of various machine learning algorithms against live grid data.</p>
+      <p>It displays a comprehensive comparison table tracking Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), Mean Squared Error (MSE), and R² accuracy, ensuring operators always know which model is performing best.</p>
+    {% elif feature_id == 'api' %}
+      <p style="margin-bottom: 1rem;">The <strong>REST API Docs</strong> provide developers with comprehensive endpoints to interact with the Smart Grid AI programmatically.</p>
+      <p>Powered by FastAPI, it includes auto-generated Swagger UI schemas, cURL examples, and robust documentation for integrating our demand forecasting into third-party enterprise systems.</p>
+    {% elif feature_id == 'security' %}
+      <p style="margin-bottom: 1rem;">The <strong>Smart Grid Security</strong> module is built to protect the integrity of the grid's operational data. It performs enterprise dataset integrity checking and telemetry validation.</p>
+      <p>By sanitizing incoming sensor data and detecting anomalous data injections, it ensures that the AI predictor engine is never fed compromised data that could lead to dangerous load shedding decisions.</p>
+    {% endif %}
+  </div>
+  
+  <div style="margin-top: 2.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+    <a href="{{ url_for('home') }}" class="btn btn--pearl">Back to Home</a>
+  </div>
+</section>
+{% endblock %}
