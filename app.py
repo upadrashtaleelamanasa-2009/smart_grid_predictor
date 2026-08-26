@@ -1,6 +1,6 @@
-"""
-app.py – Smart Grid Energy Dashboard (Flask)
-4-page multi-route app: Login → Home → Prediction → Dashboard
+﻿"""
+app.py â€“ Smart Grid Energy Dashboard (Flask)
+4-page multi-route app: Login â†’ Home â†’ Prediction â†’ Dashboard
 """
 import os, json, threading
 from datetime import datetime, timedelta
@@ -26,7 +26,7 @@ app.config["SESSION_FILE_DIR"] = session_dir
 app.config["SESSION_PERMANENT"] = False
 Session(app)
 
-# ── Boot: train model if needed (background) ───────────────────────────
+# â”€â”€ Boot: train model if needed (background) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 def _boot_train():
     if not ml.models_exist():
         print("[BOOT] Training ML model in background...")
@@ -38,7 +38,7 @@ def _boot_train():
 
 threading.Thread(target=_boot_train, daemon=True).start()
 
-# ── Helpers ────────────────────────────────────────────────────────────
+# â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 from functools import wraps
 def login_required(f):
     @wraps(f)
@@ -78,12 +78,12 @@ def get_analytics():
 def get_metrics():
     return ml.get_metrics()
 
-# ══════════════════════════════════════════════════════════════════════
-# PAGE 1 – LOGIN
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# PAGE 1 â€“ LOGIN
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 
-# ── Persistent User Database (users.json) ──────────────────────────────
+# â”€â”€ Persistent User Database (users.json) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 USERS_FILE = os.path.join(os.path.dirname(__file__), "data", "users.json")
 
 import hashlib
@@ -149,9 +149,9 @@ def register_or_update_user(email, password, name=None, role="User"):
     save_user_db(db)
     return user_rec
 
-# ══════════════════════════════════════════════════════════════════════
-# PAGE 1 – LOGIN & REGISTRATION
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# PAGE 1 â€“ LOGIN & REGISTRATION
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.context_processor
 def inject_user():
     user = session.get("user")
@@ -319,9 +319,9 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-# ══════════════════════════════════════════════════════════════════════
-# PAGE 2 – HOME / INPUT
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# PAGE 2 â€“ HOME / INPUT
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route("/home")
 @login_required
 def home():
@@ -335,9 +335,9 @@ def home():
         show_sidebar=True
     )
 
-# ══════════════════════════════════════════════════════════════════════
-# PAGE 3 – PREDICTION
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# PAGE 3 â€“ PREDICTION
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route("/prediction", methods=["GET", "POST"])
 @login_required
 def prediction():
@@ -407,9 +407,9 @@ def prediction():
         flash(f"Prediction error: {e}", "error")
         return redirect(url_for("home"))
 
-# ══════════════════════════════════════════════════════════════════════
-# PAGE 4 – DASHBOARD
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# PAGE 4 â€“ DASHBOARD
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -434,9 +434,9 @@ def dashboard():
         show_sidebar=True
     )
 
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # ADVANCED ECOSYSTEM MODULE ROUTES
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route("/analytics")
 @login_required
 def analytics():
@@ -474,7 +474,7 @@ def anomalies():
     fault_events = [
         {"time": "22:42:15", "code": "FLT-9041", "zone": "EV Supercharger Grid", "type": "Thermal Overheat Alert", "severity": "CRITICAL", "action": "Auto-throttled charging slots by 25%"},
         {"time": "21:15:08", "code": "FLT-8820", "zone": "North Substation", "type": "Harmonic Distortion Spike", "severity": "HIGH", "action": "Engaged active harmonic filters"},
-        {"time": "19:04:30", "code": "FLT-7612", "zone": "Residential Zone 4", "type": "Voltage Sag (208V → 194V)", "severity": "MODERATE", "action": "Tapped step-up transformer boost"},
+        {"time": "19:04:30", "code": "FLT-7612", "zone": "Residential Zone 4", "type": "Voltage Sag (208V â†’ 194V)", "severity": "MODERATE", "action": "Tapped step-up transformer boost"},
         {"time": "16:20:11", "code": "FLT-6105", "zone": "Solar Farm Alpha", "type": "Cloud Ingress Generation Drop", "severity": "LOW", "action": "Discharged BESS reserve by 300 kW"},
     ]
     reliability = {
@@ -491,9 +491,9 @@ def simulator():
     """Interactive Extreme Weather & Stress Tester"""
     return render_template("simulator.html", user=session.get("user"), active_page="simulator")
 
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # API ENDPOINTS (called by dashboard JS)
-# ══════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 @app.route("/api/dataset-sample")
 @login_required
 def api_dataset_sample():
@@ -635,7 +635,7 @@ def generate_pdf_report(pred, user_info, analytics_info):
 
     # 2. Title Section
     story.append(Paragraph("Smart Grid Energy Consumption & Forecast Executive Report", title_style))
-    story.append(Paragraph(f"Account: <b>{user_name}</b> ({user_email}) &nbsp;|&nbsp; Machine Learning Core: <b>XGBoost Regressor (R² = 0.9754)</b>", subtitle_style))
+    story.append(Paragraph(f"Account: <b>{user_name}</b> ({user_email}) &nbsp;|&nbsp; Machine Learning Core: <b>XGBoost Regressor (RÂ² = 0.9754)</b>", subtitle_style))
 
     # 3. KPI Summary Table
     total_kwh = pred.get("total_kwh", 5420.5) if pred else 5420.5
@@ -645,7 +645,7 @@ def generate_pdf_report(pred, user_info, analytics_info):
 
     kpi_data = [
         [
-            Paragraph("<b>MODEL ACCURACY (R²)</b><br/><font size=13 color='#0284c7'><b>97.54%</b></font><br/><font size=7 color='#64748b'>XGBoost / GBDT</font>", body_style),
+            Paragraph("<b>MODEL ACCURACY (RÂ²)</b><br/><font size=13 color='#0284c7'><b>97.54%</b></font><br/><font size=7 color='#64748b'>XGBoost / GBDT</font>", body_style),
             Paragraph(f"<b>TOTAL FORECAST DEMAND</b><br/><font size=13 color='#0d9488'><b>{total_kwh:,.1f} kWh</b></font><br/><font size=7 color='#64748b'>Cumulative Energy</font>", body_style),
             Paragraph(f"<b>PEAK LOAD DEMAND</b><br/><font size=13 color='#dc2626'><b>{peak_kw:,.1f} kW</b></font><br/><font size=7 color='#64748b'>Max Demand Peak</font>", body_style),
             Paragraph(f"<b>GRID HEALTH INDEX</b><br/><font size=13 color='#16a34a'><b>97.2%</b></font><br/><font size=7 color='#64748b'>Grid Stability</font>", body_style),
@@ -677,7 +677,7 @@ def generate_pdf_report(pred, user_info, analytics_info):
     params_data = [
         [Paragraph("<b>Parameter</b>", th_style), Paragraph("<b>Configured Value</b>", th_style), Paragraph("<b>Parameter</b>", th_style), Paragraph("<b>Configured Value</b>", th_style)],
         [Paragraph("Target Date Range", td_style), Paragraph(f"{start_date} to {end_date}", td_style), Paragraph("Time Window", td_style), Paragraph(f"{time_start} - {time_end}", td_style)],
-        [Paragraph("Ambient Temperature", td_style), Paragraph(f"{temp_c} °C", td_style), Paragraph("Relative Humidity", td_style), Paragraph(f"{humidity} %", td_style)],
+        [Paragraph("Ambient Temperature", td_style), Paragraph(f"{temp_c} Â°C", td_style), Paragraph("Relative Humidity", td_style), Paragraph(f"{humidity} %", td_style)],
         [Paragraph("Weather Condition", td_style), Paragraph(f"{weather_cond}", td_style), Paragraph("Previous Hour Load (T-1)", td_style), Paragraph(f"{prev_load} kW", td_style)],
     ]
     params_table = Table(params_data, colWidths=[1.75*inch]*4)
@@ -735,9 +735,9 @@ def generate_pdf_report(pred, user_info, analytics_info):
     story.append(Spacer(1, 10))
     story.append(Paragraph("3. Executive Machine Learning Insights & Grid Advisory", h2_style))
     recs_text = """
-    • <b>Model Validation (R² = 0.9754):</b> XGBoost regressor trained on 50,000 hourly historical grid records demonstrates high predictive fidelity with minimal error.<br/>
-    • <b>Peak Demand Analysis:</b> Peak consumption occurs during afternoon hours (13:00 - 17:00) driven by 28°C ambient temperature and high relative humidity (80%).<br/>
-    • <b>Actionable Grid Directive:</b> Initiate automated peak shaving, balance sub-station transformers, and activate local battery storage (BESS) during high-demand windows.
+    â€¢ <b>Model Validation (RÂ² = 0.9754):</b> XGBoost regressor trained on 50,000 hourly historical grid records demonstrates high predictive fidelity with minimal error.<br/>
+    â€¢ <b>Peak Demand Analysis:</b> Peak consumption occurs during afternoon hours (13:00 - 17:00) driven by 28Â°C ambient temperature and high relative humidity (80%).<br/>
+    â€¢ <b>Actionable Grid Directive:</b> Initiate automated peak shaving, balance sub-station transformers, and activate local battery storage (BESS) during high-demand windows.
     """
     story.append(Paragraph(recs_text, body_style))
 
@@ -814,22 +814,22 @@ def feature(feature_id):
         'predictor': {
             'title': 'Predictor Engine',
             'desc': 'Real-time ML demand forecasting powered by XGBoost & Random Forest.',
-            'icon': '✨'
+            'icon': 'âœ¨'
         },
         'analytics': {
             'title': 'Load Analytics',
             'desc': 'Exploratory data analysis, 24-hour demand curves & peak load heatmaps.',
-            'icon': '📊'
+            'icon': 'ðŸ“Š'
         },
         'weather': {
             'title': 'Weather Correlation',
             'desc': 'Multi-factor impact analysis incorporating temperature, humidity & wind speed.',
-            'icon': '⚡'
+            'icon': 'âš¡'
         },
         'leaderboard': {
             'title': 'Model Leaderboard',
             'desc': 'Benchmark comparison table across MAE, RMSE, MSE, and R-squared accuracy.',
-            'icon': '👥'
+            'icon': 'ðŸ‘¥'
         },
         'api': {
             'title': 'REST API Docs',
@@ -839,9 +839,11 @@ def feature(feature_id):
         'security': {
             'title': 'Smart Grid Security',
             'desc': 'Enterprise dataset integrity checking and telemetry validation.',
-            'icon': '🛡️'
+            'icon': 'ðŸ›¡ï¸'
         }
     }
+    if not u:
+        return redirect(url_for('home'))
     if feature_id not in valid_features:
         return redirect(url_for('home'))
     f_data = valid_features[feature_id]
